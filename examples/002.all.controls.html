@@ -1,0 +1,94 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <meta charset="utf-8" />
+    <link href="../sdk/third/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+
+    <!-- THEME CSS -->
+    <link href="../sdk/third/css/essentials.css" rel="stylesheet"/>
+    <link href="../sdk/third/css/layout-dark.css" rel="stylesheet"/>
+    <link href="../sdk/third/jstree/themes/proton/style.min.css" rel="stylesheet"/>
+    <link href="../sdk/viz/ui/default.css" rel="stylesheet" type="text/css" />
+
+    <script src="../sdk/third/jquery-1.10.2.min.js"></script>
+    <script src="../sdk/third/bootstrap.min.js"></script>
+    <script src="../sdk/third/jstree/jstree.min.js"></script>
+
+    <script src="../sdk/viz/bimviz.js"></script>
+
+    <script src="../sdk/viz/ui/DefaultMessageControl.js"></script>
+    <script src="../sdk/viz/ui/DefaultToolBar.js"></script>
+    <script src="../sdk/viz/ui/DefaultFileControl.js"></script>
+    <script src="../sdk/viz/ui/DefaultSpaceControl.js"></script>
+    <script src="../sdk/viz/ui/DefaultDomainControl.js"></script>
+    <script src="../sdk/viz/ui/DefaultPropertyControl.js"></script>
+    <script src="../sdk/viz/ui/DefaultSearchControl.js"></script>
+    <script src="../sdk/viz/ui/DefaultMarkControl.js"></script>
+    <script src="../sdk/viz/ui/DefaultMarkSimpleListControl.js"></script>
+    <script src="../sdk/viz/ui/DefaultBuildingStoreyControl.js"></script>
+
+</head>
+<body >
+    
+        <div id="viewport"> </div>
+        <div id="messages"></div>
+
+    <script>
+
+        var projId = "";
+
+        var bimEngine = new BIMVIZ.RenderEngine({
+            projectId: projId,
+            renderDomId: 'viewport',
+            ip: "",
+            port: ,
+            key: '',
+            resizeMode: 'fullpage',
+            resourcePath:'../sdk/viz/data/'
+        });
+
+        // 消息输出控件，包括调试信息，进度信息
+        var msgControl = new BIMVIZ.UI.DefaultMessageControl(bimEngine, 'messages');
+
+        // 工具栏
+        var toolbar = new BIMVIZ.UI.DefaultToolBar(bimEngine);
+
+        // 添加文件控件
+        var fileControl = new BIMVIZ.UI.DefaultFileControl("文件", "fa-file-o");
+        toolbar.addControl(fileControl);
+      
+        // 添加场景树控件
+        var spaceControl = new BIMVIZ.UI.DefaultSpaceControl("场景树", "fa-tree");
+        toolbar.addControl(spaceControl);
+
+        // 添加类型控件
+        var domainControl = new BIMVIZ.UI.DefaultDomainControl("类型", "fa-map-o");
+        toolbar.addControl(domainControl);
+
+        // 添加属性控件
+        var propertyControl = new BIMVIZ.UI.DefaultPropertyControl("属性", "fa-info-circle");
+        toolbar.addControl(propertyControl);
+
+        // 添加搜索控件
+        var searchControl = new BIMVIZ.UI.DefaultSearchControl("搜索", "fa-search");
+        toolbar.addControl(searchControl);
+
+        // 添加标注控件
+        // 或者可以调用仅显示列表的简化版本 BIMVIZ.UI.DefaultMarkSimpleListControl
+        var markControl = new BIMVIZ.UI.DefaultMarkControl("标注", "fa-map-marker");
+        toolbar.addControl(markControl);
+
+        // 添加楼层控件
+        var storeyControl = new BIMVIZ.UI.DefaultBuildingStoreyControl("楼层", "fa-list");
+        toolbar.addControl(storeyControl);
+
+
+        // 开始加载数据
+        bimEngine.start();
+
+       
+    </script>
+</body>
+</html>

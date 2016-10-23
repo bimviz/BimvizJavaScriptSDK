@@ -1,0 +1,110 @@
+﻿body{
+    margin: 0px;
+	overflow: hidden;
+    font-family: '微软雅黑','Microsoft YaHei',Arial !important;
+}
+
+label{
+    margin-top: 5px; 
+}
+
+a:hover, a:focus{
+    color:#fff;
+    text-decoration: none;
+}
+
+.bimviz_gradbackground {
+    background: white; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(red, yellow); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(red, yellow); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(red, yellow); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#3499FF,#C7E3FF); /* Standard syntax */
+}
+
+.bimviz_singlebackground {
+    background: white; /* For browsers that do not support gradients */
+}
+
+.bimviz_singlebackgroundblack {
+    background: black; /* For browsers that do not support gradients */
+}
+
+.bimviz_progress_div {
+    color: #3499FF;
+    bottom: 50px;
+    width: 100%;
+    font-size: 3em;
+    font-variant: small-caps;
+    font-weight: bold;
+    position: absolute;
+    z-index: 100;
+    text-align: center;
+    text-shadow: #000 0px 0px 1px;
+    display: none;
+}
+
+.bimviz_shadow {
+    -moz-box-shadow: 0px 0px 2px #000;
+    -webkit-box-shadow: 0px 0px 2px #000;
+    box-shadow: 0px 0px 2px #000;
+}
+
+.bimviz_progressbar_div {
+    text-align: center;
+    background: white;
+    width: 250px;
+    height: 10px;
+}
+
+.bimviz_progressbar_step {
+    background: #3499FF;
+    width: 0px;
+    height: 10px;
+}
+
+.bimviz_toolbar{
+    position:absolute;
+    left:0px; 
+    top:0px;
+    z-index:99999;
+    padding: 0;
+}
+
+
+.bimviz_toolbar_buttons{
+  margin: 10px;
+}
+
+
+.bimviz_toolbar_panel{
+    background-color:rgba(0, 0, 0, 0.66);
+    border:1px solid #cacaca;
+    height: 100%;
+    display:none;
+    color: #ffffff;
+    overflow:auto;
+}
+
+.list-item-font{  
+    width:100%;    
+    overflow:hidden; /*不显示超过对象宽度的内容*/  
+    text-overflow:ellipsis; /*当对象内文本溢出时显示省略标记（...）*/  
+    white-space:nowrap; /*限制在一行内显示所有文本*/  
+    color: #ffffff;
+    text-decoration: none;
+} 
+
+.list-item-fontsmall{  
+    font-size:12px;
+    color: #fcfcfc;
+    text-decoration: none;
+} 
+
+.resultSelectedBackground{
+    background-color:#333333;
+}
+
+.table_propset{
+    background-color:#444444;
+}
+

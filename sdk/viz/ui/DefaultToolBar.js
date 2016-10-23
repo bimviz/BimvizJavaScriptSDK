@@ -1,0 +1,142 @@
+
+BIMVIZ.UI.ControlIdCount = 1;
+BIMVIZ.UI.DefaultControl = function(name, iconClass){
+	Object.defineProperty( this, 'id', { value: BIMVIZ.UI.ControlIdCount ++ } );
+
+	this.name = name;
+	this.iconClass = iconClass;
+	this.parentDiv = null;
+	this.engine = null;
+};
+
+BIMVIZ.UI.DefaultControl.prototype = {
+	constructor : BIMVIZ.UI.DefaultControl,
+
+	onProjectLoaded:function(project){
+
+	},
+
+	onResize : function(left, top, height){
+
+	},
+
+	visible : function () {
+        return !this.parentDiv.is(":hidden");
+    },
+
+	show : function (visible) {
+        if (visible) {
+            this.parentDiv.show();
+        }
+        else {
+            this.parentDiv.hide();
+        }
+    },
+
+    engine : function(){
+    	return this.engine;
+    },
+};
+
+BIMVIZ.UI.HelloControl = function(name, iconClass){
+	BIMVIZ.UI.DefaultControl.call(this, name, iconClass);
+};
+
+BIMVIZ.UI.HelloControl.prototype = Object.create(BIMVIZ.UI.DefaultControl.prototype);
+BIMVIZ.UI.HelloControl.constructor = BIMVIZ.UI.HelloControl;
+
+BIMVIZ.UI.DefaultToolBar = function(bimEngine){
+	var controls = [];
+	var _this = this;
+	var container = null;
+	var buttonContainer = null;
+	var panelContainer = null;
+	var parentContainer = null;
+	var buttonTemplate =  '<a title="{0}" href="#" id="{1}"><i class="ico-light ico-rounded ico-hover fa {2} fa-4x" style="font-size:30px;"></i></a>';
+    
+    function init() {
+    	var div = '<div id = "bv_DefaultToolBar" class="bimviz_toolbar">\
+    		<div id="bv_DefaultToolBar_Button" class="bimviz_toolbar_buttons">\
+    		</div>\
+    		<div id="bv_DefaultToolBar_Panel">\
+    		</div>\
+    	</div>';
+    	
+    	parentContainer = $('#'+bimEngine.ContainerId);
+    	parentContainer.append(div);
+
+    	container = $('#bv_DefaultToolBar');
+    	buttonContainer = $('#bv_DefaultToolBar_Button');
+    	panelContainer =  $('#bv_DefaultToolBar_Panel');
+
+    	$(window).resize(onsize);
+        onsize();
+
+        bimEngine.addListener(BIMVIZ.EVENT.ProjectOverviewLoaded, onProjectLoaded);
+    };
+
+    function onProjectLoaded(evt){
+    	var name = evt.name;
+        var data = evt.args;
+
+        controls.forEach(function (item) {
+            item.onProjectLoaded(data);
+        });
+
+        onsize();
+    };
+
+    function onsize() {
+        var width = parentContainer.width();
+        var height = parentContainer.height();
+
+        container.css('top', '0px');
+        container.css('height', height+"px");
+
+        var buttonsHeight = buttonContainer.height();
+        var panelTop = buttonsHeight;
+        var panelHeight = height - buttonsHeight;
+
+ 		panelContainer.css('width', '400px');
+        panelContainer.css('height', panelHeight + "px");
+        panelContainer.css("top", panelTop + "px");
+    };
+
+    init();
+
+    this.getControlButtonId = function(id){
+    	return "bv_DefaultToolBar_Button_"+id;
+    };
+
+    this.getControlPanelId = function(id){
+    	return "bv_DefaultToolBar_Panel_"+id;
+    };
+
+    this.addControl = function(control){
+    	var name = control.name;
+    	var buttonId = this.getControlButtonId(control.id);
+    	var icon = control.iconClass;
+
+    	var buttonHtml = buttonTemplate.format(name, buttonId, icon);
+    	buttonContainer.append(buttonHtml);
+
+    	var panelId = this.getControlPanelId(control.id);
+    	var panelHtml = '<div id="'+panelId+'"  class="bimviz_toolbar_panel padding-20"></div>';
+    	panelContainer.append(panelHtml);
+
+    	$('#'+buttonId).click(function(){
+    		controls.forEach(function(item){
+    			if(item.id==control.id)
+    				return;
+
+    			item.show(false);
+    		});
+
+    		control.show(!control.visible());
+    	});
+
+    	control.engine = bimEngine;
+    	control.parentDiv = $('#'+panelId);
+    	controls.push(control);
+    };
+};
