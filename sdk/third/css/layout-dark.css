@@ -297,6 +297,7 @@ ul.side-nav .list-group-item {
 .form-control {
 	border-color:#666;
 	background-color: rgba(255,255,255,0.05);
+	color:#fff !important;
 }
 .form-control:focus {
 	border-color:#999;

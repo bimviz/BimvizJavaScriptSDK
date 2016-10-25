@@ -16,7 +16,7 @@ BIMVIZ.UI.DefaultMarkControl.prototype.onProjectLoaded = function(project){
     var workMode = CreateMode.None;
     var lastClickItem = null;
     var markers = [];
-    var markerpath = "images/markers/";
+    var markerpath = scope.engine.ResourcePath;
     var markerDetailDialog = null;
 
     function init(){
@@ -101,7 +101,7 @@ BIMVIZ.UI.DefaultMarkControl.prototype.onProjectLoaded = function(project){
 
         var defaulticon = markerpath + "arts-crafts.png";
         if (item.icon) {
-            defaulticon = scope.engine.ResourcePath + item.icon;
+            defaulticon = markerpath + item.icon;
         }
         var text = template.format(item.id, item.title, item.description, defaulticon);
         $container.append(text);
@@ -171,8 +171,9 @@ BIMVIZ.UI.DefaultMarkControl.prototype.onProjectLoaded = function(project){
     };
 
     this.onDelete = function(id){
-        scope.engine.removeMarker(id);
-        $('.bv_markeritem[rel=' + id + ']').remove();
+        scope.engine.removeMarker(id, function(){
+            $('.bv_markeritem[rel=' + id + ']').remove();
+        });
     };
 
     init();
