@@ -4,6 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title></title>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1, user-scalable=no" />
     <link href="../sdk/third/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 
     <!-- THEME CSS -->
@@ -37,13 +38,13 @@
 
     <script>
 
-        var projId = "";
+          var projId = "";
 
         var bimEngine = new BIMVIZ.RenderEngine({
             projectId: projId,
             renderDomId: 'viewport',
             ip: "",
-            port: ,
+            port: 0,
             key: '',
             resizeMode: 'fullpage',
             resourcePath:'../sdk/viz/data/'
