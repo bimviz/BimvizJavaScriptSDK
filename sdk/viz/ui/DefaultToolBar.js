@@ -58,7 +58,7 @@ BIMVIZ.UI.DefaultToolBar = function(bimEngine){
     	var div = '<div id = "bv_DefaultToolBar" class="bimviz_toolbar">\
     		<div id="bv_DefaultToolBar_Button" class="bimviz_toolbar_buttons">\
     		</div>\
-    		<div id="bv_DefaultToolBar_Panel">\
+    		<div id="bv_DefaultToolBar_Panel" hidden>\
     		</div>\
     	</div>';
     	
@@ -89,11 +89,11 @@ BIMVIZ.UI.DefaultToolBar = function(bimEngine){
     function onsize() {
         var width = parentContainer.width();
         var height = parentContainer.height();
+		var buttonsHeight = buttonContainer.height();
 
         container.css('top', '0px');
-        container.css('height', height+"px");
+        container.css('height', buttonsHeight+"px");
 
-        var buttonsHeight = buttonContainer.height();
         var panelTop = buttonsHeight;
         var panelHeight = height - buttonsHeight;
 
@@ -132,7 +132,16 @@ BIMVIZ.UI.DefaultToolBar = function(bimEngine){
     			item.show(false);
     		});
 
-    		control.show(!control.visible());
+			var visible = !control.visible();
+			if(visible){
+				control.show(true);
+				panelContainer.show();
+			}
+    		else{
+				control.show(false);
+				panelContainer.hide();
+			}
+			
     	});
 
     	control.engine = bimEngine;
