@@ -1,9 +1,14 @@
 ﻿BIMVIZ.UI.DefaultMessageControl = function(bimEngine, containerDiv) {
 
+    function onConnectServer(evt){
+        $('#bv_div_connecting').show();
+    }
+
     function onProjectLoaded(evt) {
         var name = evt.name;
         var data = evt.args;
 
+        $('#bv_div_connecting').hide();
         $('#bv_div_progress').show();
     }
 
@@ -49,6 +54,9 @@
                     <div id="bv_div_bar" class="bimviz_shadow bimviz_progressbar_step"></div>\
                 </div>\
             </center>\
+        </div>\
+        <div id="bv_div_connecting" class="bimviz_progress_div" hidden>\
+            <span id="bv_div_message">Connecting ...</span>\
         </div>';
 
     $('#' + containerDiv).html(html);
@@ -57,4 +65,5 @@
     bimEngine.addListener(BIMVIZ.EVENT.DataServerConnected, onDataServerConnected);
     bimEngine.addListener(BIMVIZ.EVENT.OnShowDebugInfo, onShowDebugInfo);
     bimEngine.addListener(BIMVIZ.EVENT.OnLoadProgressStep, onLoadProgress);
+    bimEngine.addListener(BIMVIZ.EVENT.OnConnectServer, onConnectServer);
 }
