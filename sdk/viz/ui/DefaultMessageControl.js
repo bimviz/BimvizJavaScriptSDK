@@ -21,7 +21,6 @@
         var data = evt.args;
         if (data.current == data.total) {
             $('#bv_div_loadmessages').hide();
-            $('#bv_div_debugMessage').hide();
             $('#bv_div_progress').hide();
         }
         else {

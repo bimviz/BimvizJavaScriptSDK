@@ -93,7 +93,8 @@ BIMVIZ.UI.DefaultMarkSimpleListControl.prototype.onProjectLoaded = function(proj
         var data = evt.args;
         var marker = data.userdata;
        
-        scope.engine.animateMarker(marker.id);
+        // remove this line, since $('.bv_markeritem[rel=' + item.id + '] .bv_marker_href').click will call
+        // scope.engine.animateMarker(marker.id);
 
         $('.bv_markeritem[rel=' + marker.id + '] a').trigger('click');
     }
