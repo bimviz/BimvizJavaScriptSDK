@@ -85,6 +85,9 @@
         var storeyControl = new BIMVIZ.UI.DefaultBuildingStoreyControl("楼层", "fa-list");
         toolbar.addControl(storeyControl);
 
+        // 添加漫游控制控件
+        var roamingControl = new BIMVIZ.UI.DefaultRoamingSettingControl("漫游控制", "fa-send");
+        toolbar.addControl(roamingControl);
 
         // 开始加载数据
         bimEngine.start();
