@@ -1,0 +1,44 @@
+# 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
+# File Created: 24.03.2017 17:49:22
+
+newmtl Material__27
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.9880 0.9880 0.9880
+	Kd 0.9880 0.9880 0.9880
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka soil_ground.jpg
+	map_Kd soil_ground.jpg
+
+newmtl Material__26
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.9880 0.9880 0.9880
+	Kd 0.9880 0.9880 0.9880
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka soil_ground.jpg
+	map_Kd soil_ground.jpg
+
+newmtl Material__25
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.9880 0.9880 0.9880
+	Kd 0.9880 0.9880 0.9880
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka Grass-green.jpg
+	map_Kd Grass-green.jpg

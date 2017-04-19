@@ -17,6 +17,12 @@
         $('#bv_div_loadmessages').html('<div>Connected to server.</div>');
     }
 
+    function onDataServerConnectedError(evt) {
+        var msg = evt.args;
+        $('#bv_div_loadmessages').show();
+        $('#bv_div_loadmessages').html('<div>'+msg+'</div>');
+    }
+
     function onLoadProgress(evt) {
         var data = evt.args;
         if (data.current == data.total) {
@@ -43,7 +49,7 @@
             <div id="bv_div_loadmessages">\
                 <div>Loading...</div>\
             </div>\
-            <div id="bv_div_debugMessage">\
+            <div id="bv_div_debugMessage" style="float:right">\
             </div>\
         </div>\
         <div id="bv_div_progress" class="bimviz_progress_div">\
@@ -62,6 +68,7 @@
 
     bimEngine.addListener(BIMVIZ.EVENT.ProjectOverviewLoaded, onProjectLoaded);
     bimEngine.addListener(BIMVIZ.EVENT.DataServerConnected, onDataServerConnected);
+    bimEngine.addListener(BIMVIZ.EVENT.DataServerConnectedError, onDataServerConnectedError);
     bimEngine.addListener(BIMVIZ.EVENT.OnShowDebugInfo, onShowDebugInfo);
     bimEngine.addListener(BIMVIZ.EVENT.OnLoadProgressStep, onLoadProgress);
     bimEngine.addListener(BIMVIZ.EVENT.OnConnectServer, onConnectServer);

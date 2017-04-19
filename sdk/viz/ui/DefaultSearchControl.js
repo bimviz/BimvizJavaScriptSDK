@@ -18,7 +18,7 @@ BIMVIZ.UI.DefaultSearchControl.prototype.onProjectLoaded = function(project){
                     <div class="input-group">\
                         <a class="input-group-addon glink"><i class="fa fa-bars"></i> 楼层</a>\
                         <a class="input-group-addon glink"><i class="fa fa-text-height"></i> 类型</a>\
-                        <input class="form-control"  style="color:white" placeholder="请输入词语" id="bv_searchtext" value="wall" />\
+                        <input class="form-control"  style="color:white" placeholder="请输入词语" id="bv_searchtext" value="门" />\
                         <span class="input-group-btn">\
                             <button class="btn btn-default" id="bv_btnSearchBarSearch">搜索</button>\
                         </span>\
@@ -37,7 +37,12 @@ BIMVIZ.UI.DefaultSearchControl.prototype.onProjectLoaded = function(project){
 
     function showResult(result, text) {
         var summarydiv = $('#bv_searchsummary');
-        summarydiv.html('关键词:"'+text+'", 搜索到'+result.list.length+'个构件');
+        if(result.list.length<result.total){
+            summarydiv.html('为您搜索到 '+result.total+' 项结果, 显示匹配最前的 '+result.list.length+' 项');
+        }
+        else{
+            summarydiv.html('为您搜索到 '+result.list.length+' 项结果');
+        }
 
         var container = $('#bv_searchitems');
         container.html('');

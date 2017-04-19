@@ -47,6 +47,10 @@ BIMVIZ.UI.DefaultPropertyControl.prototype.onProjectLoaded = function(project){
 
         var proptr = '<tr><td>GlobalId</td><td><span>' + element.GlobalId + '</span></td></tr>';
         body.append(proptr);
+
+        var buinessKey = scope.engine.globalIdToBussinessKey(element.GlobalId);
+        proptr = '<tr><td>BusinessKey</td><td><span>' + buinessKey + '</span></td></tr>';
+        body.append(proptr);
     };
 
     function popupList(body, sets) {
