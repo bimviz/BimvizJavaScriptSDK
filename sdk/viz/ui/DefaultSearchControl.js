@@ -18,7 +18,7 @@ BIMVIZ.UI.DefaultSearchControl.prototype.onProjectLoaded = function(project){
                     <div class="input-group">\
                         <a class="input-group-addon glink"><i class="fa fa-bars"></i> 楼层</a>\
                         <a class="input-group-addon glink"><i class="fa fa-text-height"></i> 类型</a>\
-                        <input class="form-control"  style="color:white" placeholder="请输入词语" id="bv_searchtext" value="门" />\
+                        <input class="form-control"  style="color:white" placeholder="请输入词语" id="bv_searchtext" value="wall 2F" />\
                         <span class="input-group-btn">\
                             <button class="btn btn-default" id="bv_btnSearchBarSearch">搜索</button>\
                         </span>\

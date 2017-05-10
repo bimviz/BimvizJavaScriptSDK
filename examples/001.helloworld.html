@@ -31,20 +31,22 @@
 
     <script>
 
-		var projId = "";
+		var projId = "";//填入项目的ID
 
         var bimEngine = new BIMVIZ.RenderEngine({
             projectId: projId,
             renderDomId: 'viewport',
-            ip: "cloud.bimviz.io",
-            port: 10001,
-            key: '',
+            ip: "",//填入部署的服务器IP地址或域名，BimViz Cloud公有云用“cloud.bimviz.io”
+            port: ,//填入部署安装时设定的服务端口号，BimViz Cloud公有云用“10001”
+            key: '',//填入您邮件收到的Key地址
             resizeMode: 'fullpage',
 			resourcePath:'../sdk/viz/data/'
         });
 
+		// 消息输出控件，包括调试信息，进度信息
         var msgControl = new BIMVIZ.UI.DefaultMessageControl(bimEngine, 'messages');
 
+		// 开始加载数据
         bimEngine.start();
 
        
