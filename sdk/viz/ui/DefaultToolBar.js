@@ -148,4 +148,17 @@ BIMVIZ.UI.DefaultToolBar = function(bimEngine){
     	control.parentDiv = $('#'+panelId);
     	controls.push(control);
     };
+
+    this.addButton = function(name, icon, callback){
+
+        var buttonId = this.getControlButtonId(BIMVIZ.UI.ControlIdCount++);
+        var buttonHtml = buttonTemplate.format(name, buttonId, icon);
+        buttonContainer.append(buttonHtml);
+
+        $('#'+buttonId).click(function(){
+            if(callback){
+                callback();
+            }            
+        });
+    };
 };

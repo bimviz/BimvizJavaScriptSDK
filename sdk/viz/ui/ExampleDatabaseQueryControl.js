@@ -73,7 +73,17 @@ function ExampleDatabaseQueryControl(engine)
         
 	});
 
-	$('#bv_btnQueryExampleSavRestorColor').click(function(){
+	$('#bv_btnQueryExampleRestorColor').click(function(){
 
+		if(_this.resultList){
+			var len = _this.resultList.list.length;
+	        for (var i = 0; i < len; i++) {
+	            var item = _this.resultList.list[i];
+	            var key = item.Element.GlobalId;
+
+	           	engine.resetElementRGBA(key);
+	        }
+		}
+        
 	});
 }

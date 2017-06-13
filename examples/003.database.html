@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1, user-scalable=no" />
+    <link href="../sdk/third/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+
+    <!-- THEME CSS -->
+    <link href="../sdk/third/css/essentials.css" rel="stylesheet"/>
+    <link href="../sdk/third/css/layout-dark.css" rel="stylesheet"/>
+    <link href="../sdk/third/jstree/themes/proton/style.min.css" rel="stylesheet"/>
+    <link href="../sdk/viz/ui/default.css" rel="stylesheet" type="text/css" />
+
+    <script src="../sdk/third/jquery-1.10.2.min.js"></script>
+    <script src="../sdk/third/jquery-ui.min.js"></script>
+    <script src="../sdk/third/bootstrap.min.js"></script>
+    <script src="../sdk/third/jstree/jstree.min.js"></script>
+    <script src="../sdk/third/jquery-slider/jquery-ui-slider-pips.min.js"></script>
+    
+
+    <script src="../sdk/viz/bimviz.js"></script>
+    
+    <script src="../sdk/viz/ui/DefaultMessageControl.js"></script>
+    <script src="../sdk/viz/ui/DefaultToolBar.js"></script>
+    <script src="../sdk/viz/ui/ExampleDatabaseQueryControl.js"></script>
+    
+</head>
+<body >
+<!--background-color:rgba(1, 1, 1, 0.66) -->
+        <div id="viewport"></div>
+        <div id="messages"></div>
+        <div id="queryDataBaseDiv" hidden style="position: absolute;left: 100px;top:100px;width: 80%;height: 600px;background: white;background-color:rgba(1, 1, 1, 0.76)" class="panel">
+            <div class="input-group">
+                        <input class="form-control"  style="color:white" placeholder="请输入词语" id="bv_QueryExampleSearchtext" value="((txtvalue like '%沙发%') & (name='floor' and txtvalue like '1f%'))" />
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" id="bv_btnQueryExampleSearch">搜索</button>
+                            <button class="btn btn-default" id="bv_btnQueryExampleSetHightliht">设置颜色</button>
+                            <button class="btn btn-default" id="bv_btnQueryExampleRestorColor">恢复颜色</button>
+                        </span>
+            </div>
+            <div  id="bv_divQueryExampleSearchSummary" style="color: white;margin:10px;"></div>
+            <div style="overflow-y: auto;height: 500px;">
+                    <div  class="table-responsive">
+                   <table class="table table-bordered"">
+                       <thead>
+                            <tr>
+                                <th style="width: 80px">序号</th>
+                                <th style="width: 250px">Id</th>
+                                <th style="width: 200px">名称</th>
+                                <th style="width: 200px">类型</th>
+                                <th style="width: 100px">位置</th>
+                                <th>属性查询结果</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bv_divQueryExampleSearchResult">
+                            <tr>
+                                <td>{0}</td>
+                                <td>{1}</td>
+                                <td>{2}</td>
+                                <td>{3}</td>
+                                <td>{4}</td>
+                                <td>{5}</td>
+                            </tr>
+                        </tbody>
+                   </table>
+                </div>
+            </div>
+            
+        </div>
+    <script>
+
+        var projId = "";
+
+        var pid = getQueryString('pid');
+        if(pid){
+            projId = pid;
+        }
+
+        var bimEngine = new BIMVIZ.RenderEngine({
+            projectId: projId,
+            renderDomId: 'viewport',
+            ip: "",
+            port: , 
+            key: '',
+            resizeMode: 'fullpage',
+            resourcePath:'../sdk/viz/data/'
+        });
+
+        // 消息输出控件，包括调试信息，进度信息
+        var msgControl = new BIMVIZ.UI.DefaultMessageControl(bimEngine, 'messages');
+
+        // 工具栏
+        var toolbar = new BIMVIZ.UI.DefaultToolBar(bimEngine);
+
+		// 查询分析控件
+        var queryControl = new ExampleDatabaseQueryControl(bimEngine);
+        toolbar.addButton("分析查询", "fa-database", function(){
+            queryControl.toggle();
+        });
+
+        // 开始加载数据
+        bimEngine.start();
+		
+    </script>
+</body>
+</html>

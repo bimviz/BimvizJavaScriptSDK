@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1, user-scalable=no" />
+    <link href="../../sdk/third/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+
+    <!-- THEME CSS -->
+    <link href="../../sdk/third/css/essentials.css" rel="stylesheet"/>
+    <link href="../../sdk/third/css/layout-dark.css" rel="stylesheet"/>
+    <link href="../../sdk/third/jstree/themes/proton/style.min.css" rel="stylesheet"/>
+    <link href="../../sdk/viz/ui/default.css" rel="stylesheet" type="text/css" />
+
+    <script src="../../sdk/third/jquery-1.10.2.min.js"></script>
+    <script src="../../sdk/third/jquery-ui.min.js"></script>
+    <script src="../../sdk/third/bootstrap.min.js"></script>
+    <script src="../../sdk/third/jstree/jstree.min.js"></script>
+    <script src="../../sdk/third/jquery-slider/jquery-ui-slider-pips.min.js"></script>
+    
+    <script src="../../sdk/viz/bimviz.js"></script>
+    <script src="../../sdk/viz/restapi/projectmanager.js"></script>
+    
+</head>
+<body style=" background-color: black;margin: 50px;">
+    <div style="font-size: 20px;color: white;">
+        <div id="bimtree" style="padding:20px;overflow: auto;height: 600px;width: 500px;background-color: 0xDDDDDD;border:1px white solid;">
+
+        </div>
+    </div>
+    <script>
+
+    function treeUiDataFromServerJsonObjectTree(floors){
+
+        var jsonData = [];
+        for(var i=0, iLength = floors.length; i<iLength; i++){
+            var floor = floors[i]; // {Id, GlobalId, Name, IfcType}
+            var floorObj = {
+                id: floor.Id,
+                text: floor.Name,
+                level:'Floor'
+            };
+
+            jsonData.push(floorObj);
+
+            if(floor.GroupList && floor.GroupList.length > 0){
+                var typeGroups = floor.GroupList;
+                var typeGroupJsonDataList = [];
+
+                for(var j=0, jLength=typeGroups.length; j<jLength; j++){
+                    var typeGroup = typeGroups[j]; // {Id, GlobalId, Name, IfcType}
+                    var typeGroupObj = {
+                        id: typeGroup.GlobalId,
+                        text: typeGroup.Name,
+                        level:'TypeGroup'
+                    };
+
+                    typeGroupJsonDataList.push(typeGroupObj);
+
+                    if(typeGroup.ElementNodes && typeGroup.ElementNodes.length > 0){
+                        var elements = typeGroup.ElementNodes;
+                        var elementJsonDataList = [];
+                        for(var k=0, kLength=elements.length; k<kLength; k++){
+                            var element = elements[k]; // {Id, GlobalId, Name, IfcType, Floor, FloorId}
+                            var elementObj = {
+                                id: element.GlobalId,
+                                text: element.Name + ":" + element.Floor,
+                                level:'Element'
+                            };
+
+                            elementJsonDataList.push(elementObj);
+                        }
+
+                        typeGroupObj.children = elementJsonDataList;
+                    }
+                }
+            
+                floorObj.children = typeGroupJsonDataList;
+            }
+        }
+
+        return jsonData;
+    };
+
+    $(document).ready(function(){
+	
+		var pid = getQueryString('pid');
+		if(pid){
+			var projectManager = new BIMVIZ.ProjectManager({
+				ip: "",
+				port: , 
+				key: '',
+				debug:true
+			});
+
+			projectManager.getProjectBimTree(pid, function(result){
+				if(result){
+					var container = $('#bimtree');
+                    var jsonData = treeUiDataFromServerJsonObjectTree(result.spaces);
+                    container.jstree({
+                        'core': {
+                            'data': jsonData,
+                            "themes": {
+                                'name': 'proton',
+                                'dots': true
+                            }
+                        }
+                    });
+
+                    container.on("select_node.jstree", function (e, data) {
+                        var id = data.node.id;
+                        if (data.node.original.level == "Element") {
+                           
+                        }
+
+                    });
+				}
+			});
+		}
+    });
+
+    </script>
+</body>
+</html>
