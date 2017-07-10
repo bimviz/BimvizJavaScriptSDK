@@ -74,15 +74,12 @@
         var projId = "";
 
         var pid = getQueryString('pid');
-        if(pid){
-            projId = pid;
-        }
 
         var bimEngine = new BIMVIZ.RenderEngine({
             projectId: projId,
             renderDomId: 'viewport',
-            ip: "localhost",
-            port: 7005, 
+            ip: "",
+            port: , 
             key: '',
             resizeMode: 'fullpage',
             resourcePath:'../sdk/viz/data/'
