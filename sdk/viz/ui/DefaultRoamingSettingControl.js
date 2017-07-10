@@ -22,15 +22,11 @@ BIMVIZ.UI.DefaultRoamingSettingControl.prototype.onProjectLoaded = function (pro
         </div>\
         <hr>\
         <div class="padding-10 input-group">\
-            <span  class="input-group-btn">\
-                <button id="bv_unhideall" class="btn btn-default"><i class="fa fa-history"></i>重置</button>\
-            </span>\
-            <span  class="input-group-btn">\
-                 <button id="bv_hideunselected" class="btn btn-default"><i class="fa fa-clone"></i>隐藏未选中</button>\
-            </span>\
-             <span  class="input-group-btn">\
-                <button id="bv_hideselected" class="btn btn-default"><i class="fa fa-eye-slash"></i>隐藏选中</button>\
-            </span>\
+            <label class="switch switch-default switch-round">\
+                    <input type="checkbox" checked="" id="bv_pickGrayScene">\
+                    <span class="switch-label" data-on="YES" data-off="NO"></span>\
+                    <span>选中构件时场景全部透明</span>\
+            </label>\
         </div>\
         <hr>\
         <div class="padding-10 input-group">\
@@ -74,20 +70,16 @@ BIMVIZ.UI.DefaultRoamingSettingControl.prototype.onProjectLoaded = function (pro
         scope.engine.setKeyControlMovementSpeed(value * rate);
     });
 
-    $("#bv_hideselected").click(function (e) {        
-        scope.engine.setSelectedElementsVisible(false);
-    });
-
-    $("#bv_hideunselected").click(function (e) {
-        scope.engine.setUnSelectedElementsVisible(false);
-    });
-
-    $("#bv_unhideall").click(function (e) {       
-        scope.engine.resetElementsVisibleToBeforeSelect();
-    });
-
-     $("#bv_pickWithCameraMove").change(function () {
+    $("#bv_pickWithCameraMove").change(function () {
         var ch = $(this).prop("checked");
-        scope.engine.setPickWithCameraMove(ch);
+         scope.engine.SelectSettings.cameraMove = ch;
     });
+
+    $("#bv_pickGrayScene").change(function () {
+        var ch = $(this).prop("checked");
+         scope.engine.SelectSettings.grayScene = ch;
+    });
+
+    $("#bv_pickGrayScene").prop("checked", scope.engine.SelectSettings.grayScene);
+    $("#bv_pickWithCameraMove").prop("checked", scope.engine.SelectSettings.cameraMove);
 };

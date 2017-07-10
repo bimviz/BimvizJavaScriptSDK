@@ -43,14 +43,44 @@ BIMVIZ.UI.DefaultPropertyControl.prototype.onProjectLoaded = function(project){
         var body = container.find("table tbody");
         body.html('');
 
-        popupList(body, element.PropertySets);
-
-        var proptr = '<tr><td>GlobalId</td><td><span>' + element.GlobalId + '</span></td></tr>';
-        body.append(proptr);
 
         var buinessKey = scope.engine.globalIdToBussinessKey(element.GlobalId);
-        proptr = '<tr><td>BusinessKey</td><td><span>' + buinessKey + '</span></td></tr>';
-        body.append(proptr);
+
+        var systemSets = [];
+        var systemSet = {
+            Name:'Common Property',
+            PropertyList:[
+                {
+                    Name:'GlobalId',
+                    NominalValue:element.GlobalId
+                },
+                {
+                    Name:'Name',
+                    NominalValue:element.Name,
+                },
+                {
+                    Name:'IfcType',
+                    NominalValue:element.IfcType,
+                },
+                {
+                    Name:'Floor',
+                    NominalValue:element.Floor,
+                },
+                {
+                    Name:'FileName',
+                    NominalValue:element.FileName,
+                },
+                {
+                    Name:'BusinessKey',
+                    NominalValue:buinessKey?buinessKey:"",
+                },
+            ]
+        };
+
+        systemSets.push(systemSet);
+
+        popupList(body, systemSets);
+        popupList(body, element.PropertySets);
     };
 
     function popupList(body, sets) {

@@ -10,10 +10,24 @@ BIMVIZ.UI.DefaultSpaceControl.prototype.onProjectLoaded = function(project){
 
 	var scope = this;
 	var bimScene = project.bimScene;
+    var highlightMgr = scope.engine.getHighlightManager();
+
+    var html = '<div id="bv_spaceBar" class="padding-20 border-bottom-1" style="width:100%;height:70px;background-color:rgba(0, 0, 0, 0.7);">\
+                <div class="pull-left">\
+                    <a class="btn" id="bv_space_clear"><i class="fa fa-history"></i> 清空</a>\
+                </div>\
+            </div>\
+            <div class="padding-20">\
+                <div id="bv_spaceTree"></div>\
+            </div>';
+
+    this.parentDiv.html(html);
+    this.parentDiv.addClass("nopadding-left nopadding-right").removeClass("padding-20");
+    var treecontainer = $('#bv_spaceTree');
+    var uitree = null;
 
 	function create() {
-		var container = scope.parentDiv;
-        container.jstree({
+        treecontainer.jstree({
             'core': {
                 'data': function (node, cb) {
                     onLoadChildNodes(node, cb);
@@ -23,18 +37,45 @@ BIMVIZ.UI.DefaultSpaceControl.prototype.onProjectLoaded = function(project){
                     "dots": true
                 }
             },
-            'plugins': ["wholerow"],
+            'plugins': ["wholerow", "checkbox"],
+            'checkbox': {
+                "keep_selected_style" : false,
+                'tie_selection' : false
+              },
         });
 
-        container.on("select_node.jstree", function (e, data) {
-            var id = data.node.id;
-            //  var treenode = treenodes[id];
-            if (data.node.original.level == "Element") {
-                scope.engine.selectElementFromClientUI(id);
+        uitree = treecontainer.jstree(true);
+        treecontainer.on("check_node.jstree", function (e, data) {
+            var bimnode = bimScene.FindNode(data.node.id);
+            collectElements(bimnode, true);
+
+            if(bimnode.Level == "Element"){
+                scope.engine.flyToElement(bimnode.Id);
             }
+        });
+
+        treecontainer.on("uncheck_node.jstree", function (e, data) {
+             var bimnode = bimScene.FindNode(data.node.id);
+            collectElements(bimnode, false);
 
         });
     };
+
+    function collectElements(node, highlight){
+        if(node.Level == "Element"){
+            if(highlight==true){
+                highlightMgr.highlightElement(node.Id);
+            }
+            else{
+                highlightMgr.unHighlightElement(node.Id);
+            }
+        }
+        else{
+            node.Children.forEach(function(subnode, index){
+                collectElements(subnode, highlight);
+            });
+        }
+    }
 
     function onLoadChildNodes(nodeinfo, callback) {
         var element = bimScene.FindNode(nodeinfo.id);
@@ -47,9 +88,8 @@ BIMVIZ.UI.DefaultSpaceControl.prototype.onProjectLoaded = function(project){
                     text: childnode.Name,
                     id: childnode.Id,
                     children: childnode.Children.length > 0,
-                    level: childnode.Level,
                     state: {
-                        checked: true
+                        checked: false
                     }
                 });
             }
@@ -60,4 +100,9 @@ BIMVIZ.UI.DefaultSpaceControl.prototype.onProjectLoaded = function(project){
     };
 
     create();
+
+    $('#bv_space_clear').click(function (e) {
+        uitree.uncheck_all(true);
+        highlightMgr.clearHighlightElementList();
+    });
 };

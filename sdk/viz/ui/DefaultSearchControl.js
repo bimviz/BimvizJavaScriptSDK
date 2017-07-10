@@ -12,7 +12,7 @@ BIMVIZ.UI.DefaultSearchControl.prototype.onProjectLoaded = function(project){
     
     var scope = this;
     var container = this.parentDiv;
-
+    var highlightMgr = scope.engine.getHighlightManager();
 
     var searchhtml = '<div id="bv_searchbar" class="padding-10">\
                     <div class="input-group">\
@@ -109,8 +109,11 @@ BIMVIZ.UI.DefaultSearchControl.prototype.onProjectLoaded = function(project){
             var parent = $(this).parents('.bv_resultitem');
             var id = parent.attr('rel');
 
-            if(id)
-                bimEngine.selectElementFromClientUI(id);
+            if(id){
+                highlightMgr.clearHighlightElementList();
+                highlightMgr.highlightElement(id);
+                bimEngine.flyToElement(id);
+            }
 
             parent.addClass("resultSelectedBackground");
             scope.lastClickItem = parent;

@@ -66,7 +66,7 @@ a:hover, a:focus{
     position:absolute;
     left:0px; 
     top:0px;
-    z-index:99999;
+    z-index:9999;
     padding: 0;
 }
 
@@ -108,3 +108,56 @@ a:hover, a:focus{
     background-color:#444444;
 }
 
+
+.bimviz_disabled{
+    pointer-events:none;
+    opacity:0.7;
+}
+
+.bimviz_camera_bookmark_item{
+    float:left;
+    margin: 20px 10px 5px 10px;
+}
+
+.bimviz_camera_bookmark_item_img{
+    border:1px solid  #eee;
+    position:relative;width:200px;height:110px;
+}
+
+.bimviz_camera_bookmark_item_img span{ 
+    opacity: 0.2;
+    background-color: #000;
+    position: absolute;
+    bottom: 0px;
+    display: block;
+    width: 100%;
+    padding: 5px;
+    text-align: right;
+}
+
+.bimviz_camera_bookmark_item_img span i{ 
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+
+.bimviz_camera_bookmark_item_img:hover{
+    border:1px dotted   #fff;
+}
+
+.bimviz_camera_bookmark_item_img:hover span{ 
+    opacity: 0.8;
+    background-color: #000;
+}
+
+.bimviz_camera_bookmark_item_span{
+    margin-top: 5px;
+    text-align: center !important;
+}
+
+.bimviz_camera_bookmark_startpanel{
+    float:left;
+    margin: 20px 0px 20px 20px;
+}
+
+.ui-dialog { z-index: 10000 !important ;}

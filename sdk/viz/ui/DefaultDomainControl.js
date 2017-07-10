@@ -10,6 +10,22 @@ BIMVIZ.UI.DefaultDomainControl.prototype.onProjectLoaded = function(project){
     var container = this.parentDiv;
     container.html('');
 
+    var buttonDiv = '<div class="border-bottom-1 padding-20" class="padding-20 border-bottom-1" style="width:100%;height:70px;background-color:rgba(0, 0, 0, 0.7);">\
+                <div class="pull-left">\
+                    <a class="btn" id="bv_domain_check_all"><i class="fa fa-check-square-o"></i> 全选</a>\
+                    <a class="btn" id="bv_domain_uncheck_all"><i class="fa fa-square-o"></i> 清空</a>\
+                    <a class="btn" id="bv_domain_anticheck"><i class="fa fa-clone"></i> 反选</a>\
+                </div>\
+            </div>\
+            <div class="padding-20 nopadding-top">\
+                <div id="bv_domainTree"></div>\
+            </div>';
+
+    this.parentDiv.append(buttonDiv);
+    this.parentDiv.addClass("nopadding-left nopadding-right").removeClass("padding-20");
+    
+    var treecontainer = $('#bv_domainTree');
+
     var template = '\
                  <div class="border-bottom-1 bv_domainitem" rel="{0}" style="padding:10px 10px;">\
                             <div class="row padding-0">\
@@ -62,7 +78,7 @@ BIMVIZ.UI.DefaultDomainControl.prototype.onProjectLoaded = function(project){
 
             var text = template.format(key, name, meshnumber, defaulticon);
 
-            container.append(text);
+            treecontainer.append(text);
         }
 
     }
@@ -72,6 +88,31 @@ BIMVIZ.UI.DefaultDomainControl.prototype.onProjectLoaded = function(project){
         var type = $(this).parents('.bv_domainitem').attr("rel");
         var ch = $(this).prop("checked");
         scope.engine.showType(type, ch);
+    });
+
+    $('#bv_domain_check_all').click(function (e) {
+        $(".bv_domaincheckbox").each(function(item){
+            var type = $(this).parents('.bv_domainitem').attr("rel");
+            $(this).prop("checked", true);
+            scope.engine.showType(type, true);
+        });
+    });
+
+    $('#bv_domain_uncheck_all').click(function (e) {
+        $(".bv_domaincheckbox").each(function(item){
+            var type = $(this).parents('.bv_domainitem').attr("rel");
+            $(this).prop("checked", false);
+            scope.engine.showType(type, false);
+        });
+    });
+
+    $('#bv_domain_anticheck').click(function (e) {
+        $(".bv_domaincheckbox").each(function(item){
+            var type = $(this).parents('.bv_domainitem').attr("rel");
+            var ch = !$(this).prop("checked");
+            $(this).prop("checked", ch);
+            scope.engine.showType(type, ch);
+        });
     });
 	
 };

@@ -124,7 +124,8 @@ BIMVIZ.UI.DefaultToolBar = function(bimEngine){
     	var panelHtml = '<div id="'+panelId+'"  class="bimviz_toolbar_panel padding-20"></div>';
     	panelContainer.append(panelHtml);
 
-    	$('#'+buttonId).click(function(){
+    	$('#'+buttonId).click(function(e){
+            e.preventDefault();
     		controls.forEach(function(item){
     			if(item.id==control.id)
     				return;
@@ -155,7 +156,8 @@ BIMVIZ.UI.DefaultToolBar = function(bimEngine){
         var buttonHtml = buttonTemplate.format(name, buttonId, icon);
         buttonContainer.append(buttonHtml);
 
-        $('#'+buttonId).click(function(){
+        $('#'+buttonId).click(function(e){
+            e.preventDefault();
             if(callback){
                 callback();
             }            
