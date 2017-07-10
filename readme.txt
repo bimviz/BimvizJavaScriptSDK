@@ -6,5 +6,5 @@ For development, you can also visit http://cloud.bimviz.io
 
 The current version is V1.5.5
 
-ChangeLog£º
+ChangeLog:
 http://cloud.bimviz.io:8088/help/2017/07/10/changlog-1-5-5/
