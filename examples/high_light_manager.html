@@ -1,0 +1,172 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1, user-scalable=no" />
+    <link href="../sdk/third/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+
+    <!-- THEME CSS -->
+    <link href="../sdk/third/css/essentials.css" rel="stylesheet" />
+    <link href="../sdk/third/css/layout-dark.css" rel="stylesheet" />
+    <link href="../sdk/third/jstree/themes/proton/style.min.css" rel="stylesheet" />
+    <link href="../sdk/viz/ui/default.css" rel="stylesheet" type="text/css" />
+    <link href="../sdk/third/css/jquery-ui-1.10.4.custom.css" rel="stylesheet" />
+    <link href="../sdk/third/toolbar/jquery.toolbar.css" rel="stylesheet" />
+
+    <script src="../sdk/third/jquery-1.10.2.min.js"></script>
+    <script src="../sdk/third/jquery-ui.min.js"></script>
+    <script src="../sdk/third/jquery-dialog.js"></script>
+    <script src="../sdk/third/bootstrap.min.js"></script>
+    <script src="../sdk/third/jstree/jstree.js"></script>
+    <script src="../sdk/third/jquery-slider/jquery-ui-slider-pips.min.js"></script>
+    <script src="../sdk/third/toolbar/jquery.toolbar.js"></script>
+
+    <script src="../sdk/viz/bimviz.js"></script>
+    <script src="../sdk/viz/ui/DefaultMessageControl.js"></script>
+
+</head>
+<body>
+
+    <div id="viewport"> </div>
+    <div id="messages"></div>
+
+    <script>
+
+        var projId = "";
+        var bimEngine = new BIMVIZ.RenderEngine({
+            projectId: projId,
+            renderDomId: 'viewport',
+            ip: "",
+            port: ,
+            key: '',
+            resizeMode: 'fullpage',
+            resourcePath: '../sdk/viz/data/'
+        });
+
+        var msgControl = new BIMVIZ.UI.DefaultMessageControl(bimEngine, 'messages');
+        bimEngine.start();
+        initUI();
+
+        function initUI(){
+            var parentContainer = null;
+            parentContainer = $('#'+bimEngine.ContainerId);
+
+            var tablehtml = '<div id="bv_div_property_container" class="bimviz_toolbar" style="top:20px;left:20px;width:270px;height:auto;background-color:rgba(1, 1, 1, 0.5);">\
+                <div class="pull-left" style="margin-top:5px;margin-left:15px">\
+                    <span style="color:white"> 请先在场景中选择相应数量构件，然后操作如下按钮。 </span>\
+                </div>\
+                <div class="pull-left">\
+                    <a class="btn" id="bv_dvc_setHighlight"><i class="fa fa-history"></i> 高亮一个构件</a>\
+                    <a class="btn" id="bv_dvc_clearHighlight"><i class="fa fa-history"></i> 恢复一个构件</a>\
+                    <a class="btn" id="bv_dvc_setMultiHightlight"><i class="fa fa-history"></i> 高亮多个构件</a>\
+                    <a class="btn" id="bv_dvc_clearMultiHightlight"><i class="fa fa-history"></i> 恢复多个构件</a>\
+                    <a class="btn" id="bv_dvc_getHighlightElements"><i class="fa fa-history"></i> 获取高亮列表</a>\
+                    <a class="btn" id="bv_dvc_resetAllElements"><i class="fa fa-history"></i> 恢复所有构件</a>\
+                    <a class="btn" id="bv_dvc_toggleHighlight"><i class="fa fa-history"></i> 切换高亮和普通模式</a>\
+                </div>\
+                <div class="pull-left" style="margin-top:5px;margin-left:15px">\
+                    <label id="bv_dvc_message" style="color:white"></label>\
+                </div>\
+            </div>';
+
+            parentContainer.append(tablehtml);
+        }
+
+        var highlightElementId;
+        var highlightElementIds;
+
+        //高亮一个构件
+        function highlightElement(gid) {
+            bimEngine.getHighlightManager().highlightElement(gid);
+        }
+
+        //恢复构件为普通显示模式
+        function unHighlightElement(gid) {
+            bimEngine.getHighlightManager().unHighlightElement(gid);
+        }
+
+        //高亮一个构件列表
+        function highlightElementList(list) {
+            bimEngine.getHighlightManager().highlightElementList(list);
+        }
+
+        //恢复一个构件列表为普通模式
+        function unHighlightElementList(list) {
+            bimEngine.getHighlightManager().unHighlightElementList(list);
+        }
+
+        //切换构件的高亮显示模式和普通模式
+        function toggleHighlightElement(gid) {
+            bimEngine.getHighlightManager().toggleHighlightElement(gid);
+        }
+
+        //获取高亮构件列表
+        function getHighlightElementList() {
+            return bimEngine.getHighlightManager().getHighlightElementList();
+        }
+
+        //清空当前所有高亮构件，恢复普通显示模式
+        function clearHighlightElementList() {
+            bimEngine.getHighlightManager().clearHighlightElementList();
+        }
+
+        //高亮选中构件
+        $('#bv_dvc_setHighlight').click(function (e) {            
+            if (highlightElementId) {
+                highlightElement(highlightElementId);
+            }
+        });
+
+        //取消高亮第一个构件
+        $('#bv_dvc_clearHighlight').click(function (e) {
+            var elements = getHighlightElementList();
+            highlightElementId = elements && elements.length > 0 ? elements[0] : null;
+
+            if (highlightElementId) {
+                unHighlightElement(highlightElementId);
+            }
+        });
+
+        //高亮多个构件
+        $('#bv_dvc_setMultiHightlight').click(function (e) {
+            if (highlightElementIds) {
+                highlightElementList(highlightElementIds);
+            }
+        });
+
+        //取消高亮多个构件
+        $('#bv_dvc_clearMultiHightlight').click(function (e) {
+            highlightElementIds = getHighlightElementList();
+            if (highlightElementIds) {
+                unHighlightElementList(highlightElementIds);
+            }
+        });
+
+        //获取高亮构件列表
+        $('#bv_dvc_getHighlightElements').click(function (e) {
+            highlightElementIds = getHighlightElementList();
+            if (highlightElementIds && highlightElementIds.length > 0) {
+                var text = "高亮构件数为：" + highlightElementIds.length;
+                $('#bv_dvc_message').text(text);
+            }
+        });
+
+        //清楚所有高亮构件
+        $('#bv_dvc_resetAllElements').click(function (e) {
+            clearHighlightElementList();
+        });
+
+        //切换构件的高亮显示模式和普通模式
+        $('#bv_dvc_toggleHighlight').click(function (e) {
+            var elements = getHighlightElementList();
+            highlightElementId = elements && elements.length > 0 ? elements[0] : highlightElementId;
+
+            if (highlightElementId) {
+                toggleHighlightElement(highlightElementId);
+            }
+        });
+    </script>
+</body>
+</html>

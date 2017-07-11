@@ -1,0 +1,171 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1, user-scalable=no" />
+    <link href="../sdk/third/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+
+    <!-- THEME CSS -->
+    <link href="../sdk/third/css/essentials.css" rel="stylesheet" />
+    <link href="../sdk/third/css/layout-dark.css" rel="stylesheet" />
+    <link href="../sdk/third/jstree/themes/proton/style.min.css" rel="stylesheet" />
+    <link href="../sdk/viz/ui/default.css" rel="stylesheet" type="text/css" />
+    <link href="../sdk/third/css/jquery-ui-1.10.4.custom.css" rel="stylesheet" />
+    <link href="../sdk/third/toolbar/jquery.toolbar.css" rel="stylesheet" />
+
+    <script src="../sdk/third/jquery-1.10.2.min.js"></script>
+    <script src="../sdk/third/jquery-ui.min.js"></script>
+    <script src="../sdk/third/jquery-dialog.js"></script>
+    <script src="../sdk/third/bootstrap.min.js"></script>
+    <script src="../sdk/third/jstree/jstree.js"></script>
+    <script src="../sdk/third/jquery-slider/jquery-ui-slider-pips.min.js"></script>
+    <script src="../sdk/third/toolbar/jquery.toolbar.js"></script>
+
+    <script src="../sdk/viz/bimviz.js"></script>
+    <script src="../sdk/viz/ui/DefaultMessageControl.js"></script>
+
+</head>
+<body>
+
+    <div id="viewport"> </div>
+    <div id="messages"></div>
+
+    <script>
+
+        var projId = "";
+        var bimEngine = new BIMVIZ.RenderEngine({
+            projectId: projId,
+            renderDomId: 'viewport',
+            ip: "",
+            port: ,
+            key: '',
+            resizeMode: 'fullpage',
+            resourcePath: '../sdk/viz/data/'
+        });
+
+        var msgControl = new BIMVIZ.UI.DefaultMessageControl(bimEngine, 'messages');
+        bimEngine.start();
+        initUI();
+
+        function initUI(){
+            var parentContainer = null;
+            parentContainer = $('#'+bimEngine.ContainerId);
+
+            var tablehtml = '<div id="bv_div_property_container" class="bimviz_toolbar" style="top:20px;left:20px;width:270px;height:auto;background-color:rgba(1, 1, 1, 0.5);">\
+                <div class="pull-left">\
+                    <a class="btn" id="bv_dvc_createViewpoint"><i class="fa fa-history"></i> 创建相机书签</a>\
+                    <a class="btn" id="bv_dvc_getViewpoints"><i class="fa fa-history"></i> 相机书签列表</a>\
+                    <a class="btn" id="bv_dvc_updateViewpoint"><i class="fa fa-history"></i> 更新相机书签</a>\
+                    <a class="btn" id="bv_dvc_deleteViewpoint"><i class="fa fa-history"></i> 删除相机书签</a>\
+                </div>\
+                <div class="pull-left" style="margin-top:5px;margin-left:15px">\
+                    <label id="bv_dvc_message" style="color:white"></label>\
+                </div>\
+            </div>';
+
+            parentContainer.append(tablehtml);
+        }
+
+        //创建相机书签
+        function create(bookmark, callback) {
+            bimEngine.getCameraBookmarkManager().create(bookmark, callback);
+        }
+
+        //获取相机书签对象数组
+        function getList(callback) {
+            bimEngine.getCameraBookmarkManager().getList(callback);
+        }
+
+        //更新相机书签
+        function update(bookmark, isUpdatePosition, callback) {
+            bimEngine.getCameraBookmarkManager().update(bookmark, isUpdatePosition, callback);
+        }
+
+        //删除相机书签
+        function deleteBookmark(id, callback) {
+            bimEngine.getCameraBookmarkManager().delete(id, callback);
+        }
+
+        //获取相机位置
+        function getCameraPosition() {
+            return bimEngine.getCameraPosition();
+        }
+
+        //获取相机观察点
+        function getCameraTarget() {
+            return bimEngine.getCameraTarget();
+        }
+
+        //获取当前场景截图
+        function getSnapShot(width, height, callback) {
+            bimEngine.getSnapShot(width, height, callback);
+        }
+
+        //相机视点飞到某个位置
+        function flyFromTo(position, target) {
+            bimEngine.flyFromTo(position, target);
+        }
+
+        //创建相机书签
+        $('#bv_dvc_createViewpoint').click(function (e) {            
+            getSnapShot(200, 100, function (url) {
+                var pos = getCameraPosition();
+                var target = getCameraTarget();
+
+                var item = new BIMVIZ.CameraBookmark("viewpoint", "viewpoint", url, pos, target);
+                create(item, function (bookmark) {
+                    $('#bv_dvc_message').text("新建相机书签名称为：" + bookmark.name);
+                });
+            });            
+        });
+
+        //获取相机书签对象数组，并跳转到第一个相机书签
+        $('#bv_dvc_getViewpoints').click(function (e) {
+            getList(function (success, list) {
+                if (success && list.length > 0) {
+                    flyFromTo(list[0].position, list[0].target);
+
+                    $('#bv_dvc_message').text("相机书签个数为：" + list.length);
+                }
+            });
+        });
+
+        //更新相机书签
+        $('#bv_dvc_updateViewpoint').click(function (e) {
+            getList(function (success, list) {
+                if (success && list.length > 0) {
+                    getSnapShot(200, 100, function (url) {
+                        var item = list[0];
+                        var pos = getCameraPosition();
+                        var target = getCameraTarget();
+
+                        item.name = "viewpoint12";
+                        item.description = "viewpoint12";
+                        item.imageurl = url;
+                        item.position = pos;
+                        item.target = target;
+
+                        update(item, true, function () {
+                            $('#bv_dvc_message').text("更新相机书签名称为：" + item.name);
+                        });
+                    });
+                }
+            });
+        });
+
+        //删除相机书签
+        $('#bv_dvc_deleteViewpoint').click(function (e) {
+            getList(function (success, list) {
+                if (success && list.length > 0) {
+                    deleteBookmark(list[0].id, function () {
+                        $('#bv_dvc_message').text("删除的相机书签名称为：" + list[0].name);
+                    });
+                }
+            });
+        });
+        
+    </script>
+</body>
+</html>

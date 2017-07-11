@@ -1,0 +1,81 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1, user-scalable=no" />
+    <link href="../sdk/third/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+
+    <!-- THEME CSS -->
+    <link href="../sdk/third/css/essentials.css" rel="stylesheet" />
+    <link href="../sdk/third/css/layout-dark.css" rel="stylesheet" />
+    <link href="../sdk/third/jstree/themes/proton/style.min.css" rel="stylesheet" />
+    <link href="../sdk/viz/ui/default.css" rel="stylesheet" type="text/css" />
+    <link href="../sdk/third/css/jquery-ui-1.10.4.custom.css" rel="stylesheet" />
+    <link href="../sdk/third/toolbar/jquery.toolbar.css" rel="stylesheet" />
+
+    <script src="../sdk/third/jquery-1.10.2.min.js"></script>
+    <script src="../sdk/third/jquery-ui.min.js"></script>
+    <script src="../sdk/third/jquery-dialog.js"></script>
+    <script src="../sdk/third/bootstrap.min.js"></script>
+    <script src="../sdk/third/jstree/jstree.js"></script>
+    <script src="../sdk/third/jquery-slider/jquery-ui-slider-pips.min.js"></script>
+    <script src="../sdk/third/toolbar/jquery.toolbar.js"></script>
+
+    <script src="../sdk/viz/bimviz.js"></script>
+    <script src="../sdk/viz/ui/DefaultMessageControl.js"></script>
+
+</head>
+<body>
+
+    <div id="viewport"> </div>
+    <div id="messages"></div>
+
+    <script>
+
+        var projId = "";
+        var bimEngine = new BIMVIZ.RenderEngine({
+            projectId: projId,
+            renderDomId: 'viewport',
+            ip: "",
+            port: ,
+            key: '',
+            resizeMode: 'fullpage',
+            resourcePath: '../sdk/viz/data/'
+        });
+
+        var msgControl = new BIMVIZ.UI.DefaultMessageControl(bimEngine, 'messages');
+        bimEngine.start();
+        initUI();
+
+        function initUI(){
+            var parentContainer = null;
+            parentContainer = $('#'+bimEngine.ContainerId);
+
+            var tablehtml = '<div id="bv_div_property_container" class="bimviz_toolbar" style="top:20px;left:20px;width:230px;height:auto;background-color:rgba(1, 1, 1, 0.5);">\
+                <div class="pull-left" style="margin-top:5px;margin-left:15px">\
+                    <a class="btn" id="bv_dvc_getCameraPosition"><i class="fa fa-history"></i> 获取相机位置</a>\
+                </div>\
+                <div class="pull-left" style="margin-top:5px;margin-left:15px">\
+                    <label id="bv_dvc_message" style="color:white"></label>\
+                </div>\
+            </div>';
+
+            parentContainer.append(tablehtml);
+        }
+
+        //获取相机位置
+        function getCameraPosition() {
+            return bimEngine.getCameraPosition();
+        }
+
+        //获取相机位置
+        $('#bv_dvc_getCameraPosition').click(function (e) {
+            var position = getCameraPosition();
+            $('#bv_dvc_message').text("相机位置：x:" + position.x + " y:" + position.y + " z:" + position.z);
+        });
+
+    </script>
+</body>
+</html>

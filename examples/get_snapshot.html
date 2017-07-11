@@ -1,0 +1,80 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <meta charset="utf-8" />
+    <!-- THEME CSS -->
+    <link href="../sdk/third/css/essentials.css" rel="stylesheet" />
+    <link href="../sdk/third/css/layout-dark.css" rel="stylesheet" />
+    <link href="../sdk/third/jstree/themes/proton/style.min.css" rel="stylesheet" />
+    <link href="../sdk/viz/ui/default.css" rel="stylesheet" type="text/css" />
+    <link href="../sdk/third/css/jquery-ui-1.10.4.custom.css" rel="stylesheet" />
+    <link href="../sdk/third/toolbar/jquery.toolbar.css" rel="stylesheet" />
+
+    <script src="../sdk/third/jquery-1.10.2.min.js"></script>
+    <script src="../sdk/third/jquery-ui.min.js"></script>
+    <script src="../sdk/third/jquery-dialog.js"></script>
+    <script src="../sdk/third/bootstrap.min.js"></script>
+    <script src="../sdk/third/jstree/jstree.js"></script>
+    <script src="../sdk/third/jquery-slider/jquery-ui-slider-pips.min.js"></script>
+    <script src="../sdk/third/toolbar/jquery.toolbar.js"></script>
+
+    <script src="../sdk/viz/bimviz.js"></script>
+    <script src="../sdk/viz/ui/DefaultMessageControl.js"></script>
+
+</head>
+<body>
+
+    <div id="viewport"> </div>
+    <div id="messages"></div>
+
+    <script>
+
+        var projId = "";
+        var bimEngine = new BIMVIZ.RenderEngine({
+            projectId: projId,
+            renderDomId: 'viewport',
+            ip: "",
+            port: ,
+            key: '',
+            resizeMode: 'fullpage',
+            resourcePath: '../sdk/viz/data/'
+        });
+
+        var msgControl = new BIMVIZ.UI.DefaultMessageControl(bimEngine, 'messages');
+        bimEngine.start();
+        initUI();
+
+        function initUI(){
+            var parentContainer = null;
+            parentContainer = $('#'+bimEngine.ContainerId);
+
+            var tablehtml = '<div id="bv_div_property_container" class="bimviz_toolbar" style="top:20px;left:20px;width:230px;height:150px;background-color:rgba(1, 1, 1, 0.5);">\
+                <div class="pull-left" style="margin-top:5px;margin-left:15px">\
+                    <a class="btn" id="bv_dvc_getSnapShot"><i class="fa fa-history"></i> 当前场景截图</a>\
+                </div>\
+                <div style="margin-top:10px;text-align: center;vertical-align: middle;">\
+                    <img id="bv_cameraBookmarkDialog_img" src="" style="width:200px;height:100px;" />\
+                </div>\
+            </div>';
+
+            parentContainer.append(tablehtml);
+        }
+
+        //获取当前场景截图
+        function getSnapShot(width, height, callback) {
+            bimEngine.getSnapShot(width, height, callback);
+        }
+
+        //获取当前场景截图
+        $('#bv_dvc_getSnapShot').click(function (e) {
+            getSnapShot(200, 100, function (url) {
+                var img = document.getElementById('bv_cameraBookmarkDialog_img');
+                img.src = url;
+            });
+        });
+
+    </script>
+</body>
+</html>

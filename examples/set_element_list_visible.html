@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+     <title></title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1, user-scalable=no" />
+    <link href="../sdk/third/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+
+    <!-- THEME CSS -->
+    <link href="../sdk/third/css/essentials.css" rel="stylesheet" />
+    <link href="../sdk/third/css/layout-dark.css" rel="stylesheet" />
+    <link href="../sdk/third/jstree/themes/proton/style.min.css" rel="stylesheet" />
+    <link href="../sdk/viz/ui/default.css" rel="stylesheet" type="text/css" />
+    <link href="../sdk/third/css/jquery-ui-1.10.4.custom.css" rel="stylesheet" />
+    <link href="../sdk/third/toolbar/jquery.toolbar.css" rel="stylesheet" />
+
+    <script src="../sdk/third/jquery-1.10.2.min.js"></script>
+    <script src="../sdk/third/jquery-ui.min.js"></script>
+    <script src="../sdk/third/jquery-dialog.js"></script>
+    <script src="../sdk/third/bootstrap.min.js"></script>
+    <script src="../sdk/third/jstree/jstree.js"></script>
+    <script src="../sdk/third/jquery-slider/jquery-ui-slider-pips.min.js"></script>
+    <script src="../sdk/third/toolbar/jquery.toolbar.js"></script>
+
+    <script src="../sdk/viz/bimviz.js"></script>
+    <script src="../sdk/viz/ui/DefaultMessageControl.js"></script>
+
+</head>
+<body >
+    
+        <div id="viewport"> </div>
+        <div id="messages"></div>
+
+    <script>
+
+        var projId = "";
+        var bimEngine = new BIMVIZ.RenderEngine({
+            projectId: projId,
+            renderDomId: 'viewport',
+            ip: "",
+            port: ,
+            key: '',
+            resizeMode: 'fullpage',
+            resourcePath: '../sdk/viz/data/'
+        });
+
+        var msgControl = new BIMVIZ.UI.DefaultMessageControl(bimEngine, 'messages');
+        bimEngine.start();
+        initUI();        
+       
+        function initUI(){
+            var parentContainer = null;
+            parentContainer = $('#'+bimEngine.ContainerId);    	
+		
+            var tablehtml = '<div id="bv_div_property_container" class="bimviz_toolbar" style="top:20px;left:20px;width:270px;height:80px;background-color:rgba(1, 1, 1, 0.5);">\
+                <div class="pull-left" style="margin-top:5px;margin-left:15px">\
+                    <span style="color:white"> 请先在场景中选择多个构件，然后操作如下按钮。 </span>\
+                </div>\
+                <div class="pull-left">\
+                    <a class="btn" id="bv_dvc_setVisibility"><i class="fa fa-history"></i> 隐藏高亮构件</a>\
+                    <a class="btn" id="bv_dvc_clearVisibility"><i class="fa fa-history"></i> 显示隐藏构件</a>\
+                </div>\
+            </div>';
+
+            parentContainer.append(tablehtml);
+        }
+
+        //隐藏构件列表
+        var hideElementIds = new Array();
+
+        //获取高亮构件列表
+        function getHighlightElements() {            
+            return bimEngine.getHighlightManager().getHighlightElementList();
+        }
+
+        //设置构件列表是否显示
+        function setElementListVisible(elementIds, visible) {
+            bimEngine.setElementListVisible(elementIds, visible);
+        }
+
+        //隐藏高亮的构件
+        $('#bv_dvc_setVisibility').click(function (e) {
+            var elementIds = getHighlightElements();
+            if (elementIds && elementIds.length > 0) {
+                setElementListVisible(elementIds, false);
+               
+                bimEngine.getHighlightManager().clearHighlightElementList()
+                hideElementIds = hideElementIds.concat(elementIds);
+            }            
+        });
+
+        //取消隐藏
+        $('#bv_dvc_clearVisibility').click(function (e) {
+            setElementListVisible(hideElementIds, true);
+        });
+    </script>
+ </body>
+</html>
