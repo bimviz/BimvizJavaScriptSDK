@@ -1,0 +1,156 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1, user-scalable=no" />
+    <link href="../sdk/third/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+
+    <!-- THEME CSS -->
+    <link href="../sdk/third/css/essentials.css" rel="stylesheet" />
+    <link href="../sdk/third/css/layout-dark.css" rel="stylesheet" />
+    <link href="../sdk/third/jstree/themes/proton/style.min.css" rel="stylesheet" />
+    <link href="../sdk/viz/ui/default.css" rel="stylesheet" type="text/css" />
+    <link href="../sdk/third/css/jquery-ui-1.10.4.custom.css" rel="stylesheet" />
+    <link href="../sdk/third/toolbar/jquery.toolbar.css" rel="stylesheet" />
+
+    <script src="../sdk/third/jquery-1.10.2.min.js"></script>
+    <script src="../sdk/third/jquery-ui.min.js"></script>
+    <script src="../sdk/third/jquery-dialog.js"></script>
+    <script src="../sdk/third/bootstrap.min.js"></script>
+    <script src="../sdk/third/jstree/jstree.js"></script>
+    <script src="../sdk/third/jquery-slider/jquery-ui-slider-pips.min.js"></script>
+    <script src="../sdk/third/toolbar/jquery.toolbar.js"></script>
+
+    <script src="../sdk/viz/bimviz.js"></script>
+    <script src="../sdk/viz/restapi/modelprojectmanager.js"></script>
+    <script src="../sdk/viz/restapi/projectbuildmanager.js"></script>
+    <script src="../sdk/viz/restapi/bimvizwebapi.js"></script>
+
+</head>
+<body>
+   
+
+    <div class="panel-body">
+        <div class="row" style="margin-top:20px;">
+            <label id="uploadfilemessage" style="margin-left:10px;color:red;">
+                请按照步骤执行
+            </label>
+        </div>
+
+        <div class="row" style="margin-top:20px;">
+            <label style="margin-left:10px;">
+                <span class="lbl">第一步创建项目</span>
+            </label>
+            <div>
+                <button id="btncreateproject" class="btn btn-success btn-sm" type="button" style="margin-top:5px;height:inherit">创建项目</button>
+            </div>
+        </div>
+            
+
+        <div class="row" style="margin-top:20px;">
+            <label style="margin-left:10px;">
+                <span class="lbl">第二步上传项目模型</span>
+            </label>
+            <div>
+                <input id="uploadfiles" name="file" type="file" style="Border:1px solid #E5E5E5;width:440px;">
+                <button id="btnuploadmodelfiles" class="btn btn-success btn-sm" type="button" style="margin-top:5px;height:inherit">上传模型</button>
+            </div>
+            
+        </div>
+
+        <div class="row" style="margin-top:20px;">
+            <label style="margin-left:10px;">
+                <span class="lbl">第三步编译项目</span>
+            </label>
+            <div>
+                <button id="btnrebuildscene" class="btn btn-success btn-sm" type="button" style="margin-top:5px;height:inherit">编译项目</button>
+            </div>            
+        </div>
+    </div>
+
+    <script>
+
+        var webApi = new BIMVIZ.WebApi({
+            ip: "",//web ip
+            port: ,  //web 端口号
+            key: '' //操作用户的开发key
+        });
+
+        var modelPrjMgr = webApi.getModelProjectManager();
+        var projectBuildMgr = webApi.getProjectBuildManager();
+       
+        var username = ''
+        var projectId = '';
+
+
+        //第一步创建项目
+        function addProject() {
+            var project = new BIMVIZ.ModelProject("项目一", "项目一描述", BIMVIZ.ProjectState.Processing, "");
+
+            //场景设置也可以在创建的时候指定为空
+            var settings = new BIMVIZ.ProjectSettings({
+                BackgroundStyle: BIMVIZ.SceneBackgroundStyle.White,
+                SceneComplex: BIMVIZ.SceneLoadMode.Complete,
+                GroundStyle: BIMVIZ.SceneGroundStyle.GreenLand,
+                SceneDomain: BIMVIZ.SceneDomain.Architectural,
+                ThemeStyle: BIMVIZ.SceneThemeStyle.ModelSelf
+            });
+
+            var projectInfo = new BIMVIZ.ProjectInfo(project, settings);
+            modelPrjMgr.addProject(username, projectInfo, function (result) {
+                if (result.IsSuccess) {
+                    projectId = result.ProjectId;
+                    $('#uploadfilemessage').text(result.Message);
+                }               
+            });
+        }
+
+        //第二步上传项目模型
+        function uploadProjectFiles() {
+            var formData = new FormData();
+            var files = $('#uploadfiles').get(0).files;
+            if (files.length < 1)
+                return;
+
+            for (var i = 0; i < files.length; i++) {
+                formData.append(files[i].name, files[i]);
+            }
+
+            modelPrjMgr.uploadProjectFiles(username, projectId, formData, function (result) {
+                $('#uploadfilemessage').text(result.Message);
+            });
+        }
+
+        //第三部编译项目
+        function rebuildScene() {
+            projectBuildMgr.rebuildScene(username, projectId, BIMVIZ.ProjectSceneBuildCmd.RebuildAll, function (result) {
+                $('#uploadfilemessage').text(result.Message);
+            });
+        }        
+
+        //第四部获取编译状态，该步骤可以省略
+        function getSceneState() {
+            projectBuildMgr.getRebuildSceneState(username, projectId, function (result) {
+                alert(result.Messages);
+            });
+        }
+
+        $('#btncreateproject').on('click', function (e) {
+            $('#uploadfilemessage').text('正在创建项目...');
+            addProject();
+        });
+
+        $('#btnuploadmodelfiles').on('click', function (e) {
+            $('#uploadfilemessage').text('正在上传模型...');
+            uploadProjectFiles();
+        });
+
+        $('#btnrebuildscene').on('click', function (e) {
+            $('#uploadfilemessage').text('正在编译项目...');
+            rebuildScene();
+        });
+    </script>
+</body>
+</html>
