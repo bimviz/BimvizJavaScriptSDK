@@ -75,7 +75,7 @@ BIMVIZ.ModelProjectManager = function (options) {
         });
     }
  
-    this.updateProjectInfo = function (username, projitem, callback) {
+    this.updateProjectInfo = function (username, projitem, callback, uploadProgress) {
         $.ajax({
             url: _this.APIURL + 'UpdateProjectInfo?username=' + username + '&projid=' + projitem.projid + '&name='
                 + projitem.name + '&description=' + projitem.description,
@@ -87,6 +87,16 @@ BIMVIZ.ModelProjectManager = function (options) {
             processData: false,
             error: function (XMLHttpRequest, textStatus, errorThrown) {
                 console.log(textStatus);
+            },
+            xhr: function () {
+                var xhr = new XMLHttpRequest();
+                xhr.upload.addEventListener('progress', function (evt) {
+                    if (uploadProgress) {
+                        uploadProgress(evt, projitem.projid);
+                    }
+                }, false);
+
+                return xhr;
             },
             success: function (result) {
                 callback(result);
@@ -132,7 +142,7 @@ BIMVIZ.ModelProjectManager = function (options) {
         });
     }
 
-    this.uploadProjectFiles = function (username, projectid, fileform, callback) {
+    this.uploadProjectFiles = function (username, projectid, fileform, callback, uploadProgress) {
         $.ajax({
             url: _this.APIURL + 'UploadProjectFiles?username=' + username + '&projid=' + projectid,
             type: 'POST',
@@ -143,6 +153,16 @@ BIMVIZ.ModelProjectManager = function (options) {
             processData: false,
             error: function (XMLHttpRequest, textStatus, errorThrown) {
                 console.log(textStatus);
+            },
+            xhr: function () {
+                var xhr = new XMLHttpRequest();
+                xhr.upload.addEventListener('progress', function (evt) {
+                    if (uploadProgress) {
+                        uploadProgress(evt, projectid);
+                    }
+                }, false);
+
+                return xhr;
             },
             success: function (result) {
                 callback(result);
