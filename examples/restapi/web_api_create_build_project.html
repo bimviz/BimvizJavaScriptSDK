@@ -120,6 +120,11 @@
 
             modelPrjMgr.uploadProjectFiles(username, projectId, formData, function (result) {
                 $('#uploadfilemessage').text(result.Message);
+            }, function(e, prjid){
+                var done = e.position || e.loaded
+                var total = e.totalSize || e.total;
+                var projectId = prjid;
+                $('#uploadfilemessage').text(Math.round(done / total * 100) + '%');
             });
         }
 
