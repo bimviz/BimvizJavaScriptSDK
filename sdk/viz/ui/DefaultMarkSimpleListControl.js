@@ -84,7 +84,9 @@ BIMVIZ.UI.DefaultMarkSimpleListControl.prototype.onProjectLoaded = function(proj
             parent.addClass("resultSelectedBackground");
             lastClickItem = parent;
 
-            scope.engine.animateMarker(id);
+            scope.engine.flyToPosition(item.point, function(){
+                scope.engine.animateMarker(id);
+            });
         });
         markers.push(item);
     }

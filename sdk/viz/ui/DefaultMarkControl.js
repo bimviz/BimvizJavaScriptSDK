@@ -117,7 +117,10 @@ BIMVIZ.UI.DefaultMarkControl.prototype.onProjectLoaded = function(project){
             parent.addClass("resultSelectedBackground");
             lastClickItem = parent;
 
-            scope.engine.animateMarker(id);
+            scope.engine.flyToPosition(item.point, function(){
+                scope.engine.animateMarker(id);
+            });
+            
         });
 
         // For Delete

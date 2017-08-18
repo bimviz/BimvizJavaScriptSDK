@@ -1,5 +1,10 @@
 ﻿BIMVIZ.UI.DefaultMessageControl = function(bimEngine, containerDiv) {
 
+    this.dispose = function(){
+        bimEngine = undefined;
+        $('#' + containerDiv).html('');
+    };
+
     function onConnectServer(evt){
         $('#bv_div_connecting').show();
     }
@@ -45,7 +50,12 @@
         $('#bv_div_debugMessage').html(txt);
     }
 
-    var html = '<div style="position:absolute;right:10px; top:10px;z-index:99999;">\
+    var top = 150;
+    if(bimEngine.startSettings.viewBox && bimEngine.startSettings.viewBox.show ===false){
+        top = 10;
+    }
+
+    var html = '<div style="position:absolute;right:10px; top:'+top+'px;z-index:99999;">\
             <div id="bv_div_loadmessages">\
                 <div>Loading...</div>\
             </div>\

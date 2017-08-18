@@ -161,3 +161,76 @@ a:hover, a:focus{
 }
 
 .ui-dialog { z-index: 10000 !important ;}
+
+
+.bimviz_fixed_clip_item{
+    float:left;
+    margin: 20px 10px 5px 10px;
+}
+
+.bimviz_fixed_clip_item_img{
+    border:1px solid  #eee;
+    position:relative;width:220px;height:110px;
+}
+
+.bimviz_fixed_clip_item_img span{ 
+    opacity: 0.2;
+    background-color: #000;
+    position: absolute;
+    bottom: 0px;
+    display: block;
+    width: 100%;
+    padding: 5px;
+    text-align: right;
+}
+
+.bimviz_fixed_clip_item_img span i{ 
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+
+.bimviz_fixed_clip_item_img:hover{
+    border:1px dotted   #fff;
+}
+
+.bimviz_fixed_clip_item_img:hover span{ 
+    opacity: 0.8;
+    background-color: #000;
+}
+
+.bimviz_fixed_clip_item_span{
+    margin-top: 5px;
+    text-align: center !important;
+}
+
+.bimviz_fixed_clip_startpanel{
+    float:left;
+    margin: 20px 0px 20px 20px;
+}
+
+.bv_viewbox_home{
+    color:#b8c1cd;
+    cursor: pointer;
+    float:right;
+}
+
+.bv_viewbox_home_div a:visited{
+    color:#b8c1cd;
+}
+
+.bv_viewbox_home_div a:active{
+    color:#6e7985;
+}
+
+.bv_viewbox_home_div a:hover{
+    color:#6e7985;
+}
+
+.bv_viewbox_change_text{
+    color:#b8c1cd;
+    cursor: pointer;
+    float:right;
+}
+
+

@@ -12,6 +12,14 @@ BIMVIZ.UI.DefaultControl = function(name, iconClass){
 BIMVIZ.UI.DefaultControl.prototype = {
 	constructor : BIMVIZ.UI.DefaultControl,
 
+    onShow:function(){
+
+    },
+
+    onHide:function(){
+
+    },
+
 	onProjectLoaded:function(project){
 
 	},
@@ -27,14 +35,20 @@ BIMVIZ.UI.DefaultControl.prototype = {
 	show : function (visible) {
         if (visible) {
             this.parentDiv.show();
+            this.onShow();
         }
         else {
             this.parentDiv.hide();
+            this.onHide();
         }
     },
 
     engine : function(){
     	return this.engine;
+    },
+
+    dispose:function(){
+        this.engine = undefined;
     },
 };
 
@@ -163,4 +177,15 @@ BIMVIZ.UI.DefaultToolBar = function(bimEngine){
             }            
         });
     };
+
+    this.dispose = function(){
+        controls.forEach(function(item){
+            item.dispose();
+        });
+
+        controls = undefined;
+
+        container.remove();
+        container = undefined;
+    }
 };
