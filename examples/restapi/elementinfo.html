@@ -61,16 +61,16 @@
             var body = $('#bv_div_property_container').find("table tbody");
             body.html('');
 
-            var pid = 'b4ce27df-18fb-421a-b1c5-272b34ab0c53';
+            var pid = '';
             if (pid) {
                 var projectManager = new BIMVIZ.ProjectManager({
-                    ip: "cloud.bimviz.io",
-                    port: 10001,
-                    key: 'BE3834E1-5CB3-42c1-B522-6863978B3006',
+                    ip: "",
+                    port: ,
+                    key: '',
                     debug: true
                 });
 
-                var elementId = '1rF8Vs5A1C98ZuG$pazKut';
+                var elementId = '$pazKut';
                 projectManager.getElementById(pid, elementId, function (success, element) {
                     if (success) {
                         popupList(body, element.PropertySets);
