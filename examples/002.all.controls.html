@@ -115,6 +115,10 @@
         // 相机书签控件
         var cameraBookmarkControl = new BIMVIZ.UI.DefaultCameraBookmarkControl("相机书签", "fa-camera");
         toolbar.addControl(cameraBookmarkControl);
+		
+		// 相机书签控件
+        var fixedClipControl = new BIMVIZ.UI.DefaultFixedClipControl("常规剖切", "fa fa-columns");
+        toolbar.addControl(fixedClipControl);
 
         // 开始加载数据
         bimEngine.start();
