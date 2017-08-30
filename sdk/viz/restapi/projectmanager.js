@@ -62,4 +62,28 @@ BIMVIZ.ProjectManager = function(parameters) {
             }
         });
     };
+
+    //Get element information from server by element by element's global id and project's id
+    this.getElementById = function (pid, gid, callback) {
+        $.ajax({
+            url: _this.APIURL + 'Project/GetElementById',
+            type: 'GET',
+            headers: _this.RequestHeaders,
+            data: {
+                projId: pid,
+                globalId: gid
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log(textStatus);
+            },
+            success: function (data) {
+                if (data.element) {
+                    callback(true, data.element);
+                }
+                else {
+                    callback(false, data.element);
+                }
+            }
+        });
+    };
 };

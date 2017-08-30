@@ -1,0 +1,84 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1, user-scalable=no" />
+    <link href="../../sdk/third/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+
+    <!-- THEME CSS -->
+    <link href="../../sdk/third/css/essentials.css" rel="stylesheet" />
+    <link href="../../sdk/third/css/layout-dark.css" rel="stylesheet" />
+    <link href="../../sdk/third/jstree/themes/proton/style.min.css" rel="stylesheet" />
+    <link href="../../sdk/viz/ui/default.css" rel="stylesheet" type="text/css" />
+    <link href="../../sdk/third/css/jquery-ui-1.10.4.custom.css" rel="stylesheet" />
+    <link href="../../sdk/third/toolbar/jquery.toolbar.css" rel="stylesheet" />
+
+    <script src="../../sdk/third/jquery-1.10.2.min.js"></script>
+    <script src="../../sdk/third/jquery-ui.min.js"></script>
+    <script src="../../sdk/third/jquery-dialog.js"></script>
+    <script src="../../sdk/third/bootstrap.min.js"></script>
+    <script src="../../sdk/third/jstree/jstree.js"></script>
+    <script src="../../sdk/third/jquery-slider/jquery-ui-slider-pips.min.js"></script>
+    <script src="../../sdk/third/toolbar/jquery.toolbar.js"></script>
+    
+    <script src="../../sdk/viz/bimviz.js"></script>
+    <script src="../../sdk/viz/restapi/projectmanager.js"></script>
+    
+</head>
+<body style="background-color: black;margin: 50px;">
+    <div id="bv_div_property_container" style="overflow: auto;">
+        <table class="table table-no-top">
+            <thead>
+                <tr>
+                    <td style="width:150px;"><b>Name</b></td>
+                    <td style="width:200px;"><b>Value</b></td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="2"><b>None Object Selected</b></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script>
+
+        function popupList(body, sets) {
+            sets.forEach(function (set) {
+                var tr = '<tr class="table_propset"><td colspan=\"2\">' + set.Name + '</td></tr>';
+                body.append(tr);
+                set.PropertyList.forEach(function (prop) {
+                    var proptr = '<tr><td>' + prop.Name + '</td><td><span>' + prop.NominalValue + '</span></td></tr>';
+                    body.append(proptr);
+                });
+            });
+        }
+    
+        $(document).ready(function () {
+
+            var body = $('#bv_div_property_container').find("table tbody");
+            body.html('');
+
+            var pid = '';
+            if (pid) {
+                var projectManager = new BIMVIZ.ProjectManager({
+                    ip: "",
+                    port: ,
+                    key: '',
+                    debug: true
+                });
+
+                var elementId = '$pazKut';
+                projectManager.getElementById(pid, elementId, function (success, element) {
+                    if (success) {
+                        popupList(body, element.PropertySets);
+                    }
+                });
+            }
+        });
+
+    </script>
+</body>
+</html>
