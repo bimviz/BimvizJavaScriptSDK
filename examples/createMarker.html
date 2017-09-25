@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1, user-scalable=no" />
+    <link href="../sdk/third/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+
+    <!-- THEME CSS -->
+    <link href="../sdk/third/css/essentials.css" rel="stylesheet" />
+    <link href="../sdk/third/css/layout-dark.css" rel="stylesheet" />
+    <link href="../sdk/third/jstree/themes/proton/style.min.css" rel="stylesheet" />
+    <link href="../sdk/viz/ui/default.css" rel="stylesheet" type="text/css" />
+    <link href="../sdk/third/css/jquery-ui-1.10.4.custom.css" rel="stylesheet" />
+    <link href="../sdk/third/toolbar/jquery.toolbar.css" rel="stylesheet" />
+
+    <script src="../sdk/third/jquery-1.10.2.min.js"></script>
+    <script src="../sdk/third/jquery-ui.min.js"></script>
+    <script src="../sdk/third/jquery-dialog.js"></script>
+    <script src="../sdk/third/bootstrap.min.js"></script>
+    <script src="../sdk/third/jstree/jstree.js"></script>
+    <script src="../sdk/third/jquery-slider/jquery-ui-slider-pips.min.js"></script>
+    <script src="../sdk/third/toolbar/jquery.toolbar.js"></script>
+
+    <script src="../sdk/viz/bimviz.js"></script>
+
+    <script src="../sdk/viz/ui/DefaultMessageControl.js"></script>
+
+</head>
+<body >
+<div id="messages"></div>
+<div id="viewport"> </div>
+
+
+
+
+<script>
+    var projId = "";
+    var bimEngine = new BIMVIZ.RenderEngine({
+        projectId: projId,
+        renderDomId: 'viewport',
+        ip: "",
+        port:,
+        key: '',
+        resizeMode: 'fullpage',
+        resourcePath:'../sdk/viz/data/',
+        quickBox:"show"
+    });
+
+    var msgControl = new BIMVIZ.UI.DefaultMessageControl(bimEngine, 'messages');
+
+    bimEngine.addListener(BIMVIZ.EVENT.OnSceneLoadCompleted,function(){
+        var createMarkBtn=$("<button id='createMarkBtn' style='padding: 10px;margin: 10px;border: 1px solid #000000;text-align: center;position: absolute;top: 0;left: 0;'>选点创建标注</button>\
+                             <button id='createMarkDefined' style='padding: 10px;margin: 10px;border: 1px solid #000000;text-align: center;position: absolute;top: 50px;left: 0;'>自定义坐标点创建标注</button>\
+                             <div id='inputPannel' style='padding:10px;background:#797979;position: absolute;top: 120px;left: 0;display: none;'>\
+                               <label>请输入坐标点：</label>\
+                               <input id='input' type='text' style='border: 1px solid #000;' value='0,0,0'/><br/>\
+                               <button id='create'style='padding: 10px;margin: 10px;border: 1px solid #000;'>创建</button>\
+                             </div>\
+                             <ul id='markerLists' style='position: absolute;top: 260px;left: 0;list-style-type: none;'></ul>");
+        $("body").append(createMarkBtn);
+
+        var i=0;
+        var arr=[]; // 标注对象数组
+        choosePointCreateMarker();
+        definedCreateMarker();
+
+        // 选点创建标注
+        function choosePointCreateMarker(){
+            $("#createMarkBtn").click(function(){
+                // 从场景中获取用户选中的坐标
+                bimEngine.acquireSpacePoint(function(data){
+                    i++;
+                    var id=new Date().getTime();
+                    var point=data.point;
+                    // 创建marker
+                    var marker=createMark(id,i,point);
+                    var list=$("<li id='"+id+"'style='padding:10px;margin:5;border:1px solid #000;'>"+marker.title+"</li>");
+                    $("#markerLists").append(list);
+                    arr.push(marker);
+                });
+            });
+        }
+
+        // 自定义坐标点创建标注
+        function definedCreateMarker(){
+            $("#create").click(function(){
+                i++;
+                var id=new Date().getTime();
+                var pointStr= $("#input").val().split(","); // -6423.4150390625,-10143.734375,6688.30859375
+                var pointArr=[];
+                for(var j=0;j<pointStr.length;j++){
+                    pointArr.push(parseFloat(pointStr[i]));
+                }
+                var point = new THREE.Vector3(pointArr[0], pointArr[1], pointArr[2]);
+                var marker=createMark(id,i,point);
+                console.log(marker);
+                var list=$("<li id='"+id+"'style='padding:10px;margin:5;border:1px solid #000;'>"+marker.title+"</li>");
+                $("#markerLists").append(list);
+                arr.push(marker);
+            });
+        }
+
+        $("#createMarkDefined").click(function(){
+            var inputPannel=$("#inputPannel");
+            if(inputPannel.css("display")=="none"){
+                inputPannel.css("display","block");
+            }else{
+                inputPannel.css("display","none");
+            }
+        });
+
+        // 选择标注，相机飞到标注点
+        $("#markerLists").on("click","li",function(){
+            var domEleID=$(this).attr("id");
+            for(var i=0;i<arr.length;i++){
+                if(arr[i].id==domEleID){
+                    bimEngine.flyToPosition(arr[i].point);
+                }
+            }
+        });
+    });
+    bimEngine.start();
+
+    // 创建marker函数
+    function createMark(id,i,point){
+        var marker=new BIMVIZ.Entity.Marker(id,"images/markers/2.png",point,"marker"+i,"marker"+i,"marker"+i);
+        // 创建marker
+        bimEngine.createMarker(marker, function(){
+            bimEngine.showMarker(id, true);
+        });
+        return marker;
+    }
+</script>
+</body>
+</html>
