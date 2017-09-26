@@ -1,0 +1,108 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1, user-scalable=no" />
+    <link href="../sdk/third/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+
+    <!-- THEME CSS -->
+    <link href="../sdk/third/css/essentials.css" rel="stylesheet" />
+    <link href="../sdk/third/css/layout-dark.css" rel="stylesheet" />
+    <link href="../sdk/third/jstree/themes/proton/style.min.css" rel="stylesheet" />
+    <link href="../sdk/viz/ui/default.css" rel="stylesheet" type="text/css" />
+    <link href="../sdk/third/css/jquery-ui-1.10.4.custom.css" rel="stylesheet" />
+    <link href="../sdk/third/toolbar/jquery.toolbar.css" rel="stylesheet" />
+
+    <script src="../sdk/third/jquery-1.10.2.min.js"></script>
+    <script src="../sdk/third/jquery-ui.min.js"></script>
+    <script src="../sdk/third/jquery-dialog.js"></script>
+    <script src="../sdk/third/bootstrap.min.js"></script>
+    <script src="../sdk/third/jstree/jstree.js"></script>
+    <script src="../sdk/third/jquery-slider/jquery-ui-slider-pips.min.js"></script>
+    <script src="../sdk/third/toolbar/jquery.toolbar.js"></script>
+
+    <script src="../sdk/viz/bimviz.js"></script>
+    <script src="../sdk/viz/ui/DefaultMessageControl.js"></script>
+    <script src="../sdk/viz/restapi/projectmanager.js"></script>
+
+</head>
+<body >
+    
+        <div id="viewport"> </div>
+        <div id="messages"></div>
+
+        <div style="position: absolute;left:10px;top: 10px;">
+            <ol id="projectlist">
+
+            </ol>
+        </div>
+    <script>
+        var ip = '';
+        var port = ;
+        var devkey = '';
+        var bimEngine = undefined;
+
+        function loadPrject(projId) {
+            bimEngine = new BIMVIZ.RenderEngine({
+                projectId: projId,
+                renderDomId: 'viewport',
+                ip: ip,
+                port: port,
+                key: devkey,
+                resizeMode: 'fullpage',
+                resourcePath: '../sdk/viz/data/',
+                axis: {
+                    show:false //是否显示坐标轴
+                },
+                quickBar: {
+                    show:true //是否启动右键快捷方式
+                }
+            });
+
+            bimEngine.start();
+        }
+
+        function disposeProject() {
+            if (bimEngine) {
+                bimEngine.dispose();
+                bimEngine = undefined;
+            }
+        }
+
+        function changeProject(projId) {
+            //先dispose之前的场景
+            disposeProject();
+            //再加载选中的项目
+            loadPrject(projId);
+        }
+
+        function listAllProjects() {
+            var projectManager = new BIMVIZ.ProjectManager({
+                ip: ip,
+                port: port,
+                key: devkey,
+                debug: true
+            });
+            projectManager.getAllProjects(function (result) {
+                if (result) {
+                    var container = $('#projectlist');
+                    container.html('');
+                    result.forEach(function (item, index) {
+                        var row = '<li class="lists" id="'+item.Guid+'">'+item.Name+'</a></li>';
+                        container.append(row);
+                    });
+                }
+            });
+        }
+        listAllProjects();
+
+
+        $("#projectlist").on("click","li",function(){
+            var id=$(this).attr("id");
+            changeProject(id);
+        });
+    </script>
+</body>
+</html>
