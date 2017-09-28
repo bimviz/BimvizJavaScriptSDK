@@ -48,12 +48,21 @@
 
     var msgControl = new BIMVIZ.UI.DefaultMessageControl(bimEngine, 'messages');
 
-
-    bimEngine.addListener(BIMVIZ.EVENT.OnSceneLoadCompleted,function(){
+    var elementIdArr=[];  // 构件ID数组
+    bimEngine.addListener(BIMVIZ.EVENT.ProjectOverviewLoaded,function(){
+        var elementId;
+        // 更改选中构件的颜色并设置透明度
 		 bimEngine.addListener(BIMVIZ.EVENT.OnPickElement,function(evt){
-            // 更改选中构件的颜色并设置透明度
-            bimEngine.changeElementRGBA(evt.args.elementId,[0.0,0.0,1.0,0.5]);
+             elementId=evt.args.elementId;
+             elementIdArr.push(elementId);
+             // 重置上一个构件Id的颜色和透明度
+             bimEngine.resetElementRGBA(elementIdArr[elementIdArr.length-2]);
+             bimEngine.changeElementRGBA(elementId,[0.0,0.0,1.0,0.5]);
         });
+        // 保存上一个构件Id
+        bimEngine.addListener(BIMVIZ.EVENT.OnElementsUnSelected,function(){
+            elementIdArr=[elementIdArr[elementIdArr.length-1]];
+        })
 	});
     bimEngine.start();
 
