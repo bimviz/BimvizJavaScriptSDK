@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1, user-scalable=no" />
+    <link href="../sdk/third/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+
+    <!-- THEME CSS -->
+    <link href="../sdk/third/css/essentials.css" rel="stylesheet" />
+    <link href="../sdk/third/css/layout-dark.css" rel="stylesheet" />
+    <link href="../sdk/third/jstree/themes/proton/style.min.css" rel="stylesheet" />
+    <link href="../sdk/viz/ui/default.css" rel="stylesheet" type="text/css" />
+    <link href="../sdk/third/css/jquery-ui-1.10.4.custom.css" rel="stylesheet" />
+    <link href="../sdk/third/toolbar/jquery.toolbar.css" rel="stylesheet" />
+
+    <script src="../sdk/third/jquery-1.10.2.min.js"></script>
+    <script src="../sdk/third/jquery-ui.min.js"></script>
+    <script src="../sdk/third/jquery-dialog.js"></script>
+    <script src="../sdk/third/bootstrap.min.js"></script>
+    <script src="../sdk/third/jstree/jstree.js"></script>
+    <script src="../sdk/third/jquery-slider/jquery-ui-slider-pips.min.js"></script>
+    <script src="../sdk/third/toolbar/jquery.toolbar.js"></script>
+
+    <script src="../sdk/viz/bimviz.js"></script>
+
+    <script src="../sdk/viz/ui/DefaultMessageControl.js"></script>
+
+</head>
+<body >
+
+<div id="viewport"> </div>
+<div id="messages"></div>
+
+<script>
+    var projId = "";
+
+    var bimEngine = new BIMVIZ.RenderEngine({
+        projectId: projId,
+        renderDomId: 'viewport',
+        ip: "",
+        port:,
+        key: '',
+        resizeMode: 'fullpage',
+        resourcePath:'../sdk/viz/data/'
+    });
+
+    var msgControl = new BIMVIZ.UI.DefaultMessageControl(bimEngine, 'messages');
+
+    bimEngine.start();
+
+    // 场景加载成功后，添加一个直升机模型
+    bimEngine.addListener(BIMVIZ.EVENT.ProjectOverviewLoaded,function(){
+        var path="../sdk/viz/data/models/uh60/";
+        var objname="uh60.obj";
+        var mtlname="uh60.mtl";
+        bimEngine.add3dModelObj(path,objname,mtlname,false,function(model){
+            model.position.x += 10000; // x方向平移10000mm
+            model.rotation.z = Math.PI; // 绕z方向旋转180度
+            model.scale.x *= 600; // x方向放大600倍
+            model.scale.y *= 600; // y方向放大600倍
+            model.scale.z *= 600; // z方向放大600倍
+            bimEngine.requestOneUpdate(); // 参数改变后，请求刷新场景
+        });
+    });
+
+
+
+</script>
+</body>
+</html>
+<!---->

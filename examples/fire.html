@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1, user-scalable=no" />
+    <link href="../sdk/third/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+
+    <!-- THEME CSS -->
+    <link href="../sdk/third/css/essentials.css" rel="stylesheet" />
+    <link href="../sdk/third/css/layout-dark.css" rel="stylesheet" />
+    <link href="../sdk/third/jstree/themes/proton/style.min.css" rel="stylesheet" />
+    <link href="../sdk/viz/ui/default.css" rel="stylesheet" type="text/css" />
+    <link href="../sdk/third/css/jquery-ui-1.10.4.custom.css" rel="stylesheet" />
+    <link href="../sdk/third/toolbar/jquery.toolbar.css" rel="stylesheet" />
+
+    <script src="../sdk/third/jquery-1.10.2.min.js"></script>
+    <script src="../sdk/third/jquery-ui.min.js"></script>
+    <script src="../sdk/third/jquery-dialog.js"></script>
+    <script src="../sdk/third/bootstrap.min.js"></script>
+    <script src="../sdk/third/jstree/jstree.js"></script>
+    <script src="../sdk/third/jquery-slider/jquery-ui-slider-pips.min.js"></script>
+    <script src="../sdk/third/toolbar/jquery.toolbar.js"></script>
+
+    <script src="../sdk/viz/bimviz.js"></script>
+
+    <script src="../sdk/viz/ui/DefaultMessageControl.js"></script>
+
+</head>
+<body >
+
+<div id="viewport"> </div>
+<div id="messages"></div>
+
+<script>
+    var projId = "";
+
+    var bimEngine = new BIMVIZ.RenderEngine({
+        projectId: projId,
+        renderDomId: 'viewport',
+        ip: "",
+        port:,
+        key: '',
+        resizeMode: 'fullpage',
+        resourcePath:'../sdk/viz/data/'
+    });
+
+    var msgControl = new BIMVIZ.UI.DefaultMessageControl(bimEngine, 'messages');
+
+    bimEngine.addListener(BIMVIZ.EVENT.OnSceneLoadCompleted,function(evt){
+        var tml="<button id='btn' style='border: 1px solid #000;border-radius: 5px;padding: 5px;position: absolute;left: 10px;top: 10px;'>点击触发 OnPickElement 事件</button><div id='note' style='padding: 15px;position: absolute;left: 10px;top: 50px;'></div>";
+        $("body").append(tml);
+        bimEngine.addListener(BIMVIZ.EVENT.OnPickElement,function(evt){
+            console.log(evt);
+        });
+        var evts={
+            name:"OnPickElement1",
+            args:{
+                ifctype: "IfcRoof",
+                elementId: "753c87f6-14a0-4c24-88f8-43fee4f6ec76-0003a241",
+                point: {x: -2835.295166015625, y: -9927.7314453125, z: 6775.57861328125},
+                distance: 33962.828125
+            }
+        }
+        $("body").on("click",$('#btn'),function(){
+            bimEngine.fire(BIMVIZ.EVENT.OnPickElement,evts);
+            $("body").find("#note").html("evts对象会传入OnPickElement事件的evt.args中，详细信息查看控制台");
+        });
+    });
+
+    bimEngine.start();
+
+
+</script>
+</body>
+</html>
+<!---->
