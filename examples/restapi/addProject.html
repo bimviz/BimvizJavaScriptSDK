@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1, user-scalable=no" />
+    <link href="../../sdk/third/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+
+    <!-- THEME CSS -->
+    <link href="../../sdk/third/css/essentials.css" rel="stylesheet" />
+    <link href="../../sdk/third/css/layout-dark.css" rel="stylesheet" />
+    <link href="../../sdk/third/jstree/themes/proton/style.min.css" rel="stylesheet" />
+    <link href="../../sdk/viz/ui/default.css" rel="stylesheet" type="text/css" />
+    <link href="../../sdk/third/css/jquery-ui-1.10.4.custom.css" rel="stylesheet" />
+    <link href="../../sdk/third/toolbar/jquery.toolbar.css" rel="stylesheet" />
+
+    <script src="../../sdk/third/jquery-1.10.2.min.js"></script>
+    <script src="../../sdk/third/jquery-ui.min.js"></script>
+    <script src="../../sdk/third/jquery-dialog.js"></script>
+    <script src="../../sdk/third/bootstrap.min.js"></script>
+    <script src="../../sdk/third/jstree/jstree.js"></script>
+    <script src="../../sdk/third/jquery-slider/jquery-ui-slider-pips.min.js"></script>
+    <script src="../../sdk/third/toolbar/jquery.toolbar.js"></script>
+
+    <script src="../../sdk/viz/bimviz.js"></script>
+    <script src="../../sdk/viz/restapi/modelprojectmanager.js"></script>
+    <script src="../../sdk/viz/restapi/projectbuildmanager.js"></script>
+    <script src="../../sdk/viz/restapi/bimvizwebapi.js"></script>
+
+    <style>
+        .note{
+            margin: 10px;
+            padding: 50px;
+            color: red;
+        }
+        #btncreateproject{
+            background: #23282D;
+            border-radius: 10px;
+            padding: 10px;
+            margin: 10px;
+            color: #fff;
+        }
+    </style>
+
+</head>
+<body>
+
+<div class="note"></div>
+<button id="btncreateproject">创建项目</button>
+
+<script>
+    var webApi = new BIMVIZ.WebApi({
+        ip: "",//web ip，公有云试用：cloud.bimviz.io
+        port: ,  //web 端口号，公有云试用：80
+        key: '' //操作用户的开发key，公有云试用key
+    });
+
+    // 获取模型项目管理器
+    var modelprojetmanager=webApi.getModelProjectManager();
+
+    var username="";
+
+    // 创建项目
+    function createproject(){
+        // 项目基本信息
+        var project=new BIMVIZ.ModelProject("项目1","项目1",0,"");
+
+        // 项目场景设置信息
+        var settings=new BIMVIZ.ProjectSettings({
+            BackgroundStyle:BIMVIZ.SceneBackgroundStyle.Black, // 场景背景风格
+            SceneComplex:BIMVIZ.SceneLoadMode.Complete, // 场景模型加载方式
+            ThemeStyle:BIMVIZ.SceneThemeStyle.ModelSelt, // 场景配色主题风格
+            GroundStyle:BIMVIZ.SceneGroundStyle.None, // 场景地表
+            SceneDomain:BIMVIZ.SceneDomain.Architectural// 场景主要构成
+        });
+
+        // 项目的基本信息和场景设置信息
+        var projectinfo=new BIMVIZ.ProjectInfo(project,settings);
+
+        modelprojetmanager.addProject(username,projectinfo,function(result){
+            alert(result.Message);
+            if(result.IsSuccess){
+                $(".note").html("");
+            }
+        });
+    }
+
+    $("#btncreateproject").click(function(){
+        $(".note").html("正在创建项目...");
+        createproject();
+    });
+
+</script>
+
+</body>
+</html>
