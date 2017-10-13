@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1, user-scalable=no" />
+    <link href="../../sdk/third/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+
+    <!-- THEME CSS -->
+    <link href="../../sdk/third/css/essentials.css" rel="stylesheet" />
+    <link href="../../sdk/third/css/layout-dark.css" rel="stylesheet" />
+    <link href="../../sdk/third/jstree/themes/proton/style.min.css" rel="stylesheet" />
+    <link href="../../sdk/viz/ui/default.css" rel="stylesheet" type="text/css" />
+    <link href="../../sdk/third/css/jquery-ui-1.10.4.custom.css" rel="stylesheet" />
+    <link href="../../sdk/third/toolbar/jquery.toolbar.css" rel="stylesheet" />
+
+    <script src="../../sdk/third/jquery-1.10.2.min.js"></script>
+    <script src="../../sdk/third/jquery-ui.min.js"></script>
+    <script src="../../sdk/third/jquery-dialog.js"></script>
+    <script src="../../sdk/third/bootstrap.min.js"></script>
+    <script src="../../sdk/third/jstree/jstree.js"></script>
+    <script src="../../sdk/third/jquery-slider/jquery-ui-slider-pips.min.js"></script>
+    <script src="../../sdk/third/toolbar/jquery.toolbar.js"></script>
+
+    <script src="../../sdk/viz/bimviz.js"></script>
+    <script src="../../sdk/viz/restapi/modelprojectmanager.js"></script>
+    <script src="../../sdk/viz/restapi/projectbuildmanager.js"></script>
+    <script src="../../sdk/viz/restapi/BimVizWebApi.js"></script>
+
+</head>
+<body>
+
+<div class="updateInfo" style="width: 315px;border: 1px solid #DDDDDD;padding: 15px;margin: 20px;">
+    <p style="color: #1980B6;font-weight: bold;">更新项目基本信息</p>
+    <p>
+        <label style="color:#666666">ID：</label>
+        <input type="text" id="ID"/>
+    </p>
+    <p>
+        <label style="color:#666666">名称：</label>
+        <input type="text" id="name"/>
+    </p>
+    <p>
+        <label style="color:#666666">描述:</label>
+        <input type="text" id="description"/>
+    </p>
+    <p>
+        <label style="color:#666666">缩略图:</label>
+        <input id="files" type="file" name="file" style="border: 1px solid #A9A9A9;"/>
+    </p>
+    <button id="updateBtn" style="background: #22A9C7;border-radius: 5px;padding: 5px 10px;color: #fff">更新</button>
+</div>
+
+<script>
+    var webApi = new BIMVIZ.WebApi({
+        ip:"", //web ip，公有云试用：cloud.bimviz.io
+        port:,   //web 端口号，公有云试用：80
+        key:""  //操作用户的开发key，公有云试用key
+    });
+
+    // 获取项目管理器
+    var modelprojetmanager=webApi.getModelProjectManager();
+
+    var username="shenxiaoshuang";
+
+    $("#updateBtn").click(function(){
+        var fileform=new FormData();
+        var files=$("#files").get(0).files; // 获取上传的多个文件（即文件列表列表）
+        if (files.length==0)
+            return;
+
+        for (var i = 0; i < files.length; i++) {
+            fileform.append(files[i].name, files[i]);
+        }
+
+        var projitem={
+            name:$("#name").val(),
+            projid:$("#ID").val(),
+            description:$("#description").val(),
+            fileform:fileform
+        };
+
+        modelprojetmanager.updateProjectInfo(username,projitem,function(result){
+            alert(result.Message);
+        });
+    });
+
+</script>
+
+</body>
+</html>
