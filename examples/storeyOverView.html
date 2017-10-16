@@ -53,7 +53,9 @@
     var msgControl = new BIMVIZ.UI.DefaultMessageControl(bimEngine, 'messages');
 
     bimEngine.addListener(BIMVIZ.EVENT.ProjectOverviewLoaded,function(evt){
-        bimEngine.addListener(BIMVIZ.EVENT.OnSceneLoadCompleted,function(e){
+        var modelCenter = evt.args.center;
+        bimEngine.setLookFrom(BIMVIZ.BoxPosition.TopCenter, true);
+        bimEngine.addListener(BIMVIZ.EVENT.OnSceneLoadCompleted,function(){
             var template="<div style='position: absolute;left: 0;top: 0;'> \
                           <ul id='pannel' style='list-style-type:none;width: 200px;'></ul>\
                       </div>";
@@ -67,24 +69,25 @@
             });
             $("#pannel").on("click","li",function(){
                 hideAll();
-                var id=parseInt($(this).html());
+                var index=$(this).index();
                 // 显示楼层
-                bimEngine.showBuildingStorey(id,true);
+                bimEngine.showBuildingStorey(index+1,true);
 
-                var centerX=storeyBoxs[id-1].X+storeyBoxs[id-1].SizeX/2;
-                var centerY=storeyBoxs[id-1].Y+storeyBoxs[id-1].SizeY/2;
-                var centerZ=storeyBoxs[id-1].Z+storeyBoxs[id-1].SizeZ/2;
+                var centerX = storeyBoxs[index].X + storeyBoxs[index].SizeX / 2 - modelCenter.X;
+                var centerY = storeyBoxs[index].Y + storeyBoxs[index].SizeY / 2 - modelCenter.Y;
+                var centerZ = storeyBoxs[index].Z + storeyBoxs[index].SizeZ / 2 - modelCenter.Z;
                 var target={  // 楼层中心点，即目标观察点
                     x: centerX,
                     y: centerY,
                     z: centerZ
                 };
-                var positionZ=storeyBoxs[id-1].Z+Math.sqrt(Math.pow(storeyBoxs[id-1].SizeX,2)+Math.pow(storeyBoxs[id-1].SizeY,2))*2;
+                var positionZ=storeyBoxs[index].Z+Math.sqrt(Math.pow(storeyBoxs[index].SizeX,2)+Math.pow(storeyBoxs[index].SizeY,2));
                 var position={
                     x:centerX,
-                    y:centerY,
+                    y:centerY-10,
                     z:positionZ
                 };
+
                 // 相机视点飞到楼层顶部
                 bimEngine.flyFromTo(position,target);
             });
