@@ -26,7 +26,7 @@ BIMVIZ.UI.DefaultRevitDomainControl.prototype.onProjectLoaded = function(project
                 </div>\
             </div>\
             <div class="padding-20 nopadding-top">\
-                <div id="bv_domainTree"></div>\
+                <div id="bv_revitDomainTree"></div>\
             </div>';
     this.parentDiv.append(buttonDiv);
     this.parentDiv.addClass("nopadding-left nopadding-right").removeClass("padding-20");
@@ -62,7 +62,8 @@ BIMVIZ.UI.DefaultRevitDomainControl.prototype.onProjectLoaded = function(project
             }
         }
 
-        var treecontainer = $('#bv_domainTree');
+        var treecontainer = $('#bv_revitDomainTree');
+
         // 构件数组
         var typeElements=[];
 
@@ -93,7 +94,7 @@ BIMVIZ.UI.DefaultRevitDomainControl.prototype.onProjectLoaded = function(project
         };
 
         var scope = this;
-        console.log(typeElements);
+
         // 构件显示/隐藏
         function elementsShowHidde(obj,type,visible){
             for(var i=0;i<obj.length;i++){
@@ -111,24 +112,24 @@ BIMVIZ.UI.DefaultRevitDomainControl.prototype.onProjectLoaded = function(project
             elementsShowHidde(typeElements,type,ch);
         });
 
-        $('#bv_domain_check_all').click(function (e) {
-            $(".bv_domaincheckbox").each(function(item){
+        $('#bv_domain_check_all').click(function () {
+            $(".bv_domaincheckbox").each(function(){
                 var type = $(this).parents('.bv_domainitem').attr("rel");
                 $(this).prop("checked", true);
                 elementsShowHidde(typeElements,type,true);
             });
         });
 
-    $('#bv_domain_uncheck_all').click(function (e) {
-        $(".bv_domaincheckbox").each(function(item){
+    $('#bv_domain_uncheck_all').click(function () {
+        $(".bv_domaincheckbox").each(function(){
             var type = $(this).parents('.bv_domainitem').attr("rel");
             $(this).prop("checked", false);
             elementsShowHidde(typeElements,type,false);
         });
     });
 
-    $('#bv_domain_anticheck').click(function (e) {
-        $(".bv_domaincheckbox").each(function(item){
+    $('#bv_domain_anticheck').click(function () {
+        $(".bv_domaincheckbox").each(function(){
             var type = $(this).parents('.bv_domainitem').attr("rel");
             var ch = !$(this).prop("checked");
             $(this).prop("checked", ch);
