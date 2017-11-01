@@ -173,6 +173,26 @@ BIMVIZ.ModelProjectManager = function (options) {
         });
     }
 
+    this.getProjectFiles = function (username, projectid, callback) {
+        $.ajax({
+            url: _this.APIURL + 'GetProjectFiles',
+            type: 'GET',
+            headers: _this.RequestHeaders,
+            data: {
+                username: username,
+                projid: projectid
+            },
+            contentType: "application/json; charset=utf-8",
+            dataType: 'json',
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log(textStatus);
+            },
+            success: function (files) {
+                callback(files);
+            }
+        });
+    }
+
     this.addProject = function (username, projectinfo, callback) {
         $.ajax({
             url: _this.APIURL + 'Add?username=' + username,
