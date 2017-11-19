@@ -86,4 +86,21 @@ BIMVIZ.ProjectManager = function(parameters) {
             }
         });
     };
+
+    //Get element information from server by element by element's global id and project's id
+    this.getAllSessionDataList = function (callback) {
+        $.ajax({
+            url: _this.APIURL + 'admin/session/all',
+            type: 'GET',
+            headers: _this.RequestHeaders,
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log(textStatus);
+            },
+            success: function (data) {
+                if (data) {
+                    callback(data);
+                }
+            }
+        });
+    };
 };

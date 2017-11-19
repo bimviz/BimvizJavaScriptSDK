@@ -37,6 +37,14 @@ BIMVIZ.UI.DefaultRoamingSettingControl.prototype.onProjectLoaded = function (pro
 			</label>\
         </div>\
         <hr>\
+        <div class="padding-10 input-group">\
+            <label class="switch switch-default switch-round">\
+                    <input type="checkbox" id="bv_pickWithBox">\
+                    <span class="switch-label" data-on="YES" data-off="NO"></span>\
+                    <span>选中构件时显示包围盒</span>\
+            </label>\
+        </div>\
+        <hr>\
         ';
 
     var rate = 10000;
@@ -82,4 +90,9 @@ BIMVIZ.UI.DefaultRoamingSettingControl.prototype.onProjectLoaded = function (pro
 
     $("#bv_pickGrayScene").prop("checked", scope.engine.SelectSettings.grayScene);
     $("#bv_pickWithCameraMove").prop("checked", scope.engine.SelectSettings.cameraMove);
+
+     $("#bv_pickWithBox").change(function () {
+        var ch = $(this).prop("checked");
+         scope.engine.getHighlightManager().setShowBox(ch);
+    });
 };
