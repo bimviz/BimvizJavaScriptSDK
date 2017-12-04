@@ -13,6 +13,10 @@ a:hover, a:focus{
     text-decoration: none;
 }
 
+.bimviz_gridback{
+    background: #323b44;
+}
+
 .bimviz_gradbackground {
     background: white; /* For browsers that do not support gradients */
     background: -webkit-linear-gradient(red, yellow); /* For Safari 5.1 to 6.0 */
@@ -233,4 +237,32 @@ a:hover, a:focus{
     float:right;
 }
 
+.numberCircle {
+    border-radius: 50%;
 
+    width: 36px;
+    height: 36px;
+    padding: 8px;
+
+    text-align: center;
+}
+
+ .relectbox {
+
+    width: 0px;
+    height: 0px;
+    position: absolute;
+    opacity: 0.5;
+    cursor: move;
+    border: dotted black 3px;
+}
+
+.notselectable {
+    -webkit-user-select: none; 
+    -moz-user-select: none;    
+    -khtml-user-select: none;  
+    -ms-user-select: none;    
+
+    -o-user-select: none;
+    user-select: none;  
+}

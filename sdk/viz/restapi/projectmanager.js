@@ -87,7 +87,6 @@ BIMVIZ.ProjectManager = function(parameters) {
         });
     };
 
-    //Get element information from server by element by element's global id and project's id
     this.getAllSessionDataList = function (callback) {
         $.ajax({
             url: _this.APIURL + 'admin/session/all',
@@ -99,6 +98,60 @@ BIMVIZ.ProjectManager = function(parameters) {
             success: function (data) {
                 if (data) {
                     callback(data);
+                }
+            }
+        });
+    };
+    
+    this.exitSession = function (sid, callback) {
+        $.ajax({
+            url: _this.APIURL + 'admin/session/exit',
+            type: 'GET',
+            headers: _this.RequestHeaders,
+            data: {
+                sid: sid
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log(textStatus);
+            },
+            success: function (data) {
+                if (data.success) {
+                    callback();
+                }
+            }
+        });
+    };
+    
+    this.getAllProjectLoadingDataList = function (callback) {
+        $.ajax({
+            url: _this.APIURL + 'admin/projectloading/all',
+            type: 'GET',
+            headers: _this.RequestHeaders,
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log(textStatus);
+            },
+            success: function (data) {
+                if (data) {
+                    callback(data);
+                }
+            }
+        });
+    };
+    
+    this.unloadProject = function (pid, callback) {
+        $.ajax({
+            url: _this.APIURL + 'admin/projectloading/unload',
+            type: 'GET',
+            headers: _this.RequestHeaders,
+            data: {
+                pid: pid
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log(textStatus);
+            },
+            success: function (data) {
+                if (data.success) {
+                    callback();
                 }
             }
         });

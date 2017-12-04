@@ -57,7 +57,7 @@ BIMVIZ.UI.DefaultDatabaseQueryControl.prototype.onProjectLoaded = function(proje
             var key = item.Element.GlobalId;
             var name = item.Element.Name;
             var location = item.BuildingStorey;
-            var typename = item.Element.IfcType.replace(/Ifc/, '');
+            var typename = item.Element.IfcType;
 
             var text = template.format((i+1)+'',key, name, typename, location, item.HitMessage);
 

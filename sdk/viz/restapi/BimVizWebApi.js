@@ -7,14 +7,10 @@
 
     this.KEY = parameters.key;
     this.HOST = "http://" + parameters.ip + ":" + parameters.port;
-    this.RESTHOST="http://" + parameters.ip + ":" + parameters.restport;
     this.TOKEN = "";
-    this.RESTTOKEN="";
 
-    var keytext = parameters.key;
-    this.APIURL = _this.RESTHOST + "/api/";
-
-    function init() {
+    function init()
+    {
         $.ajax({
             cache: false,
             url: _this.HOST + '/api/user/token',
@@ -33,37 +29,14 @@
             }
         });
 
-        $.ajax({
-            cache: false,
-            url: _this.RESTHOST + '/token',
-            type: 'POST',
-            async: false, // Please not to change to 'true'
-            data: {
-                grant_type: 'restapi',
-                username: 'devkey',
-                password: keytext
-            },
-            dataType: 'json',
-            success: function (result) {
-                _this.RESTTOKEN = result.token;
-                console.log("token", _this.RESTTOKEN);
-            },
-            error: function (xhr, textStatus, errorThrown) {
-                console.log("Error:Authorization is not finished. Please check your envirment!");
-            }
-        });
-
-
         modelprojectmgr = new BIMVIZ.ModelProjectManager({
             host: _this.HOST,
-            resthost:_this.RESTHOST,
-            token: _this.TOKEN,
-            resttoken:_this.RESTTOKEN
+            token: _this.TOKEN
         });
 
         projectbuildmgr = new BIMVIZ.ProjectBuildManager({
             host: _this.HOST,
-            token: _this.TOKEN
+            token: _this.TOKEN        
         });
     }
 
@@ -71,9 +44,9 @@
 
     this.getModelProjectManager = function(){
         return modelprojectmgr;
-    };
+    }
 
     this.getProjectBuildManager = function () {
         return projectbuildmgr;
-    };
-};
+    }
+}

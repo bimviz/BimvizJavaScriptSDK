@@ -42,6 +42,7 @@
     <script src="../sdk/viz/ui/DefaultCameraBookmarkControl.js"></script>
     <script src="../sdk/viz/ui/DefaultFixedClipControl.js"></script>
 	<script src="../sdk/viz/ui/DefaultMeasureControl.js"></script>
+	<script src="../sdk/viz/ui/DefaultRectSelectControl.js"></script>
 
 </head>
 <body >
@@ -125,6 +126,10 @@
 		//测量控件
 		var measureControl = new BIMVIZ.UI.DefaultMeasureControl("测量", "fa fa-object-ungroup");
 		toolbar.addControl(measureControl);
+		
+		// 框选控件
+		var rectSelectControl = new BIMVIZ.UI.DefaultRectSelectControl("框选", "fa fa-hand-stop-o");
+		toolbar.addControl(rectSelectControl);
 
         // 开始加载数据
         bimEngine.start();
