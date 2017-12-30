@@ -8,7 +8,7 @@ BIMVIZ.UI.DefaultCameraBookmarkControl.constructor = BIMVIZ.UI.DefaultCameraBook
 
 BIMVIZ.UI.DefaultCameraBookmarkControl.prototype.onProjectLoaded = function(project){
 	var scope = this;
-	var controlId = "bv_camerabookmark_" + scope.engine.id;
+	var controlId = "bv_camerabookmark_" + scope.engine.id; 
 	var adbButtonId = "bv_camerabookmark_add_" + scope.engine.id; 
 	var mgr = scope.engine.getCameraBookmarkManager();
 	var height = 200;
@@ -158,7 +158,7 @@ BIMVIZ.UI.DefaultCameraBookmarkControl.prototype.onProjectLoaded = function(proj
 	     }
 
     function init(){
-    	var controlHtml = '<div id="'+controlId+'" style="overflow-y:scroll;padding-top:7px;padding-bottom:7px;background-color:rgba(0, 0, 0, 0.4);position:absolute;left:10px;bottom:10px;width:500px;height:'+height+'px;">\
+    	var controlHtml = '<div id="'+controlId+'" style="padding-top:7px;padding-bottom:7px;background-color:rgba(0, 0, 0, 0.4);position:absolute;left:10px;bottom:10px;width:500px;height:'+height+'px;">\
                 <div style="padding-top:7px;padding-bottom:7px;border-color:#FFFFFF;border-width:7px;border-style:dashed;border-left:none;border-right:none;">\
 	                <div id="bv_bookmark_itemcontaner" style="overflow-x:auto;background-color:rgba(0, 0, 0, 0.5);">\
 	                	<div class="bimviz_camera_bookmark_startpanel">\

@@ -43,6 +43,7 @@
     <script src="../sdk/viz/ui/DefaultFixedClipControl.js"></script>
 	<script src="../sdk/viz/ui/DefaultMeasureControl.js"></script>
 	<script src="../sdk/viz/ui/DefaultRectSelectControl.js"></script>
+	<script src="../sdk/viz/ui/DefaultHtmlMarkerControl.js"></script>
 
 </head>
 <body >
@@ -130,6 +131,10 @@
 		// 框选控件
 		var rectSelectControl = new BIMVIZ.UI.DefaultRectSelectControl("框选", "fa fa-hand-stop-o");
 		toolbar.addControl(rectSelectControl);
+		
+		// HTML标记控件
+		var htmlMarkerControl = new BIMVIZ.UI.DefaultHtmlMarkerControl("HTML标记","fa fa-flag");
+		toolbar.addControl(htmlMarkerControl);
 
         // 开始加载数据
         bimEngine.start();

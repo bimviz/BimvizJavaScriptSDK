@@ -1,14 +1,24 @@
 BIMVIZ.ProjectManager = function(parameters) {
 	
 	var _this = this;
-    parameters = parameters || {};
+	parameters = parameters || {};
+
+	var url = window.location.href.toLowerCase();
+	var https = url.indexOf("https") >= 0;
+	this.HOST = "http://" + parameters.ip + ":" + parameters.port;
+
+	if (https == true) {
+	    this.HOST = "https://" + parameters.ip + ":" + parameters.port;
+	}
+
 
     this.KEY = parameters.key;
-    this.HOST = "http://" + parameters.ip + ":" + parameters.port;
     this.TOKEN = "";
     this.APIURL = _this.HOST + "/api/";
 
     var keytext = parameters.key;
+    var clinetauth = BIMVIZ.API.createClientCertificate();
+    
     $.ajax({
         cache: false,
         url: _this.HOST + '/token',
@@ -17,7 +27,8 @@ BIMVIZ.ProjectManager = function(parameters) {
         data: {
             grant_type: 'restapi',
             username: 'devkey',
-            password: keytext
+            password: keytext,
+            tokenstamp:clinetauth
         },
         dataType: 'json',
         success: function (result) {
@@ -29,6 +40,7 @@ BIMVIZ.ProjectManager = function(parameters) {
             
         }
     });
+
 
 	this.RequestHeaders = { Authorization: 'bearer ' + _this.TOKEN };
 

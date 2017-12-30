@@ -76,10 +76,32 @@
 
     $('#' + containerDiv).html(html);
 
+    function onLoadingResult(evt){
+        var data = evt.args;
+        $('#bv_div_loadmessages').hide();
+        $('#bv_div_progress').hide();
+        
+        console.log("ALL Memory Need:", (data.sceneMemorySize/1024/1024).toFixed(0), " MB");
+        console.log("Allowed Memory:", (data.maxAllowedSize/1024/1024).toFixed(0), " MB");
+        console.log("Used Memory:", (data.usedMemorySize/1024/1024).toFixed(0), " MB");
+        console.log("Mobile:", data.mobile);
+    };
+
+    function onServerDisconnected(evt){
+        $('#bv_div_connecting span').html("Disconnected...");
+        $('#bv_div_connecting').show();
+
+        setTimeout(function(){
+            $('#bv_div_connecting').hide()
+        },3000)
+    };
+
     bimEngine.addListener(BIMVIZ.EVENT.ProjectOverviewLoaded, onProjectLoaded);
     bimEngine.addListener(BIMVIZ.EVENT.DataServerConnected, onDataServerConnected);
     bimEngine.addListener(BIMVIZ.EVENT.DataServerConnectedError, onDataServerConnectedError);
     bimEngine.addListener(BIMVIZ.EVENT.OnShowDebugInfo, onShowDebugInfo);
     bimEngine.addListener(BIMVIZ.EVENT.OnLoadProgressStep, onLoadProgress);
     bimEngine.addListener(BIMVIZ.EVENT.OnConnectServer, onConnectServer);
+    bimEngine.addListener(BIMVIZ.EVENT.OnLoadingResult, onLoadingResult);
+    bimEngine.addListener(BIMVIZ.EVENT.OnServerDisconnected, onServerDisconnected);
 }

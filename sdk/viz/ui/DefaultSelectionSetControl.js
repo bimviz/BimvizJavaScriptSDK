@@ -67,9 +67,6 @@ BIMVIZ.UI.DefaultSelectionSetControl.prototype.onProjectLoaded = function(projec
         });
 
         selectionSetManager.getList(function(success, list){
-            console.log("getAllSelecionSet", success);
-            console.log(list);
-
             if(success){
                 popupSelectionSets(list);
             }
