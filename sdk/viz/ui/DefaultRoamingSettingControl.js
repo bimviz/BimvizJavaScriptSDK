@@ -10,7 +10,15 @@ BIMVIZ.UI.DefaultRoamingSettingControl.prototype.onProjectLoaded = function (pro
     var container = this.parentDiv;
 
     var interactionhtml = '\
-         <hr>\
+        <hr>\
+        <div class="padding-10 input-group">\
+            <label class="switch switch-default switch-round">\
+                    <input type="checkbox" checked="" id="bv_groundShadow">\
+                    <span class="switch-label" data-on="YES" data-off="NO"></span>\
+                    <span>地面阴影</span>\
+            </label>\
+        </div>\
+        <hr>\
         <div id="bv_panspeed" class="list-item-font padding-10">\
             <div class="margin-bottom-20">\
                 <label for="txtspeed">漫游飞行速度（倍数）</label>\
@@ -233,4 +241,11 @@ BIMVIZ.UI.DefaultRoamingSettingControl.prototype.onProjectLoaded = function (pro
             onExplodeStep(explodeDistanceFactor.factor);
         }
     });
+
+    $("#bv_groundShadow").change(function () {
+        var ch = $(this).prop("checked");
+         scope.engine.setShowGroundShadow(ch);
+    });
+
+    $("#bv_groundShadow").prop("checked", scope.engine.isShowGroundShadow());
 };

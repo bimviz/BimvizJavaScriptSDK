@@ -4,7 +4,7 @@ For more information, please visit http://www.bimviz.io
 
 For development, you can also visit http://cloud.bimviz.io
 
-The current version is V1.6.11
+The current version is V1.6.2
 
 ChangeLog:
-http://cloud.bimviz.io:8088/help/2017/12/30/changelog-v1-6-11/
+http://cloud.bimviz.io:8088/help/2018/01/26/changelog-v1-6-2/
