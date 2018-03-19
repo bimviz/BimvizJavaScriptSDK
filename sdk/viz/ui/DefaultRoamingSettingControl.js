@@ -10,7 +10,7 @@ BIMVIZ.UI.DefaultRoamingSettingControl.prototype.onProjectLoaded = function (pro
     var container = this.parentDiv;
 
     var interactionhtml = '\
-        <hr>\
+        <hr style="margin:5px;">\
         <div class="padding-10 input-group">\
             <label class="switch switch-default switch-round">\
                     <input type="checkbox" checked="" id="bv_groundShadow">\
@@ -18,7 +18,33 @@ BIMVIZ.UI.DefaultRoamingSettingControl.prototype.onProjectLoaded = function (pro
                     <span>地面阴影</span>\
             </label>\
         </div>\
-        <hr>\
+        <hr style="margin:5px;">\
+        <div class="padding-10 input-group">\
+          <div class="row">\
+            <div class="col-md-3" style="padding:10px 0 0 20px;width:60px;">主题\
+           </div>\
+            <div class="col-md-9" style="width:150px;">\
+             <select class="form-control" id="bv_renderTheme">\
+                <option value="Sketch"  selected = "selected">草图</option>\
+                    <option value="AO">环境光影</option>\
+                    <option value="White">白模</option>\
+                    <option value="Pencil">素描</option>\
+                </select>\
+            </div>\
+          </div>\
+           <div class="row" style="margin-top:10px;">\
+            <div class="col-md-3" style="padding:10px 0 0 20px;width:60px;">光照\
+           </div>\
+            <div class="col-md-9" style="width:150px;">\
+             <select class="form-control" id="bv_lightingMode">\
+                <option value="0" >关闭</option>\
+                    <option value="1">稍暗</option>\
+                    <option value="2" selected>明亮</option>\
+                </select>\
+            </div>\
+          </div>\
+        </div>\
+        <hr style="margin:5px;">\
         <div id="bv_panspeed" class="list-item-font padding-10">\
             <div class="margin-bottom-20">\
                 <label for="txtspeed">漫游飞行速度（倍数）</label>\
@@ -248,4 +274,14 @@ BIMVIZ.UI.DefaultRoamingSettingControl.prototype.onProjectLoaded = function (pro
     });
 
     $("#bv_groundShadow").prop("checked", scope.engine.isShowGroundShadow());
+
+    $("#bv_renderTheme").change(function(){
+       var mode = $(this).val();
+       scope.engine.setRenderTheme(mode);
+    });
+
+     $("#bv_lightingMode").change(function(){
+       var mode = $(this).val();
+       scope.engine.setLightingMode(mode);
+    });
 };
