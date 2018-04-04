@@ -6,11 +6,10 @@ BIMVIZ.UI.DefaultDatabaseQueryControl.prototype = Object.create(BIMVIZ.UI.Defaul
 BIMVIZ.UI.DefaultDatabaseQueryControl.constructor = BIMVIZ.UI.DefaultDatabaseQueryControl;
 
 BIMVIZ.UI.DefaultDatabaseQueryControl.prototype.onProjectLoaded = function(project){
-
     var scope = this;
     var controlId = "bv_queryDataBaseDiv_" + scope.engine.id; 
     var control;
-    var sceneContainer = $('#'+bimEngine.ContainerId);
+    var sceneContainer = $('#'+scope.engine.ContainerId);
     var highlightMgr = scope.engine.getHighlightManager();
     var resultList = null;
 
