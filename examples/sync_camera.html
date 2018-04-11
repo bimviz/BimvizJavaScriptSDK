@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1, user-scalable=no" />
+    <link href="../sdk/third/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+
+    <!-- THEME CSS -->
+    <link href="../sdk/third/css/essentials.css" rel="stylesheet" />
+    <link href="../sdk/third/css/layout-dark.css" rel="stylesheet" />
+    <link href="../sdk/third/jstree/themes/proton/style.min.css" rel="stylesheet" />
+    <link href="../sdk/viz/ui/default.css" rel="stylesheet" type="text/css" />
+    <link href="../sdk/third/css/jquery-ui-1.10.4.custom.css" rel="stylesheet" />
+    <link href="../sdk/third/toolbar/jquery.toolbar.css" rel="stylesheet" />
+
+    <script src="../sdk/third/jquery-1.10.2.min.js"></script>
+    <script src="../sdk/third/jquery-ui.min.js"></script>
+    <script src="../sdk/third/jquery-dialog.js"></script>
+    <script src="../sdk/third/bootstrap.min.js"></script>
+    <script src="../sdk/third/jstree/jstree.js"></script>
+    <script src="../sdk/third/jquery-slider/jquery-ui-slider-pips.min.js"></script>
+    <script src="../sdk/third/toolbar/jquery.toolbar.js"></script>
+
+    <script src="../sdk/viz/bimviz.js"></script>
+
+    <script src="../sdk/viz/ui/DefaultMessageControl.js"></script>
+
+</head>
+
+<body >
+    <div>
+        <div id="viewport1" style="background-color: white; width:600px;height:600px;float:left;margin:30px;"></div>
+        <div id="messages1"></div>
+</div>
+
+<div >
+        <div id="viewport2" style="background-color: white; width:600px;height:600px;float:left;margin:30px;"></div>
+        <div id="messages2"></div>
+</div>
+
+    <script>
+
+		var projId = "";
+
+        function create3DDiv(domId, pid, messageDom){
+            var bimEngine = new BIMVIZ.RenderEngine({
+                projectId: pid,
+                renderDomId: domId,
+                ip: "",
+                port: , 
+                key: '',
+                resourcePath:'../sdk/viz/data/',
+                debug:true
+            });
+
+            // 消息输出控件，包括调试信息，进度信息
+            var msgControl = new BIMVIZ.UI.DefaultMessageControl(bimEngine, messageDom);
+
+            // 开始加载数据
+            bimEngine.start();
+
+            return bimEngine;
+
+        };
+
+        var eng1 = create3DDiv('viewport1',"", 'messages1');
+        var eng2 = create3DDiv('viewport2',"", 'messages2');
+
+        function onCanvasUpdated(evt){
+            var position = eng1.getCameraPosition();
+            var target = eng1.getCameraTarget();
+
+			// 动画过程中，不进行同步，避免由于高速动画线程的时钟不同步产生的跳跃现象
+            if(evt.args.animate==false){
+                eng2.lookFromTo(position, target);
+                eng2.requestAnyOneUpdate();
+            }
+
+        }
+
+        eng1.addListener(BIMVIZ.EVENT.OnCustomAnimiationUpdate, onCanvasUpdated);
+
+       
+    </script>
+</body>
+</html>

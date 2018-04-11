@@ -37,6 +37,7 @@ BIMVIZ.UI.DefaultMarkControl.prototype.onProjectLoaded = function(project){
                                     <label>描述：</label><input class="form-control bv_marker_input_desc" type="text" />\
                                     <label>开发数据：</label><input  class="form-control bv_marker_input_userdata" type="text" />\
                                     <label>坐标：</label><input  class="form-control bv_marker_input_position" type="text" />\
+                                    <label>尺寸：</label><input  class="form-control bv_marker_input_size" type="text"  value="1000"/>\
                                     <label>图标：</label>\
                                     <select class="form-control bv_marker_input_icon">\
                                         <option value="images/markers/1.png"  selected = "selected">images/markers/1.png</option>\
@@ -194,7 +195,9 @@ BIMVIZ.UI.MarkerDetailPanel = function(bimEngine, container, parentPanel){
     var inputDesc = container.find('.bv_marker_input_desc');
     var inputUserdata = container.find('.bv_marker_input_userdata');
     var inputPosition = container.find('.bv_marker_input_position');
+    var inputSize = container.find('.bv_marker_input_size');
     var inputIcon = container.find('.bv_marker_input_icon');
+
 
     container.find('.bv_marker_btn_cancel').click(function(){
         scope.hide();
@@ -233,6 +236,7 @@ BIMVIZ.UI.MarkerDetailPanel = function(bimEngine, container, parentPanel){
         scope.marker.description = inputDesc.val();
         scope.marker.userdata = inputUserdata.val();
         scope.marker.icon = inputIcon.val();
+        scope.marker.width = Number(inputSize.val());
 
         if(isCreateMode){
             parentPanel.onAddNew(scope.marker);
@@ -267,6 +271,8 @@ BIMVIZ.UI.MarkerDetailPanel = function(bimEngine, container, parentPanel){
 
     this.hide = function(){ 
         container.hide();
+        bimEngine.getTransformControl().finish();
+        bimEngine.requestAnyOneUpdate();
     };
 
     this.start = function(){
@@ -296,9 +302,20 @@ BIMVIZ.UI.MarkerDetailPanel = function(bimEngine, container, parentPanel){
         inputDesc.val(marker.description);
         inputUserdata.val(marker.userdata);
         inputPosition.val(marker.point.x+","+marker.point.y+","+marker.point.z);
+        inputSize.val(marker.width);
 
         if(marker.icon){
             inputIcon.val(marker.icon);
         }
+
+        if(isCreateMode==false){
+            var control = bimEngine.getTransformControl();
+            control.transform3dMarker(marker.id, function(transoformData){
+                inputPosition.val(transoformData.position.x+","+transoformData.position.y+","+transoformData.position.z);
+                marker.point.copy(transoformData.position);
+            });
+        }
+
+        bimEngine.requestAnyOneUpdate();
     };
 };

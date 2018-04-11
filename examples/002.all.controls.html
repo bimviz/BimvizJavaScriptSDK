@@ -44,6 +44,7 @@
 	<script src="../sdk/viz/ui/DefaultMeasureControl.js"></script>
 	<script src="../sdk/viz/ui/DefaultRectSelectControl.js"></script>
 	<script src="../sdk/viz/ui/DefaultHtmlMarkerControl.js"></script>
+	<script src="../sdk/viz/ui/DefaultCustomVisibilityTreeControl.js"></script>
 
 </head>
 <body >
@@ -136,6 +137,10 @@
 		var htmlMarkerControl = new BIMVIZ.UI.DefaultHtmlMarkerControl("HTML标记","fa fa-flag");
 		toolbar.addControl(htmlMarkerControl);
 
+		// 自定义树
+		var customTreeControl = new BIMVIZ.UI.DefaultCustomVisibilityTreeControl("自定义树", "fa fa-indent");
+		toolbar.addControl(customTreeControl);
+		
         // 开始加载数据
         bimEngine.start();
 
