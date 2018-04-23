@@ -1,0 +1,161 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1, user-scalable=no" />
+    <link href="../sdk/third/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+
+    <!-- THEME CSS -->
+    <link href="../sdk/third/css/essentials.css" rel="stylesheet" />
+    <link href="../sdk/third/css/layout-dark.css" rel="stylesheet" />
+    <link href="../sdk/third/jstree/themes/proton/style.min.css" rel="stylesheet" />
+    <link href="../sdk/viz/ui/default.css" rel="stylesheet" type="text/css" />
+    <link href="../sdk/third/css/jquery-ui-1.10.4.custom.css" rel="stylesheet" />
+    <link href="../sdk/third/toolbar/jquery.toolbar.css" rel="stylesheet" />
+
+    <script src="../sdk/third/jquery-1.10.2.min.js"></script>
+    <script src="../sdk/third/jquery-ui.min.js"></script>
+    <script src="../sdk/third/jquery-dialog.js"></script>
+    <script src="../sdk/third/bootstrap.min.js"></script>
+    <script src="../sdk/third/jstree/jstree.js"></script>
+    <script src="../sdk/third/jquery-slider/jquery-ui-slider-pips.min.js"></script>
+    <script src="../sdk/third/toolbar/jquery.toolbar.js"></script>
+
+    <script src="../sdk/viz/bimviz.js"></script>
+
+    <script src="../sdk/viz/ui/DefaultMessageControl.js"></script>
+
+</head>
+<body >
+    
+        <div id="viewport"></div>
+        <div id="messages"></div>
+
+    <script>;
+        var bimEngine=loadModel();
+        var highlightMgr = bimEngine.getHighlightManager();
+
+        $("body").find(".notselectable img").remove();
+        var rightClickBtn='<a href="#" id="rightClickBtn" class="btn btn-3d btn-teal" data-tag="1" style="display:none">开启</a>';
+        $("body").find(".notselectable").append(rightClickBtn);
+        var html = '<div id="quickBarToolbarButtons2"  class="tool-container tool-bottom toolbar-dark animate-standard" style="opacity: 1; top: 0; left: 0; right: auto; position: absolute; z-index: 120;height: auto;display: none;">\
+                        <div class="tool-items">\
+                            <a class="bv_qbar_resetVisibility_1 tool-item" style="width: 60px;height: 40px;"><i class="fa fa-info"></i><p>构件信息</p></a>\
+                            <a class="bv_qbar_resetVisibility_1 tool-item" style="width: 60px;height: 40px;"><i class="fa fa-play"></i><p>发起任务</p></a>\
+                            <a class="bv_qbar_resetVisibility_1 tool-item" style="width: 60px;height: 40px;"><i class="fa fa-plus"></i><p>添加信息</p></a>\
+                            <a class="bv_qbar_resetVisibility_1 tool-item" style="width: 60px;height: 40px;"><i class="fa fa-th-list"></i><p>信息列表</p></a>\
+                            <a id=hideOthers class="bv_qbar_resetVisibility_1 tool-item" style="width: 60px;height: 40px;"><i class="fa fa-eye-slash"></i><p>隐藏其他</p></a>\
+                            <a id=resetVisibility class="bv_qbar_resetVisibility_1 tool-item" style="width: 60px;height: 40px;"><i class="fa fa-history"></i><p>全部显示</p></a>\
+                        </div>\
+                        <div class="arrow" style="left: 50%; right: 50%;"></div>\
+                    </div>';
+        $("body").append(html);
+
+        $("#rightClickBtn").click(function(){
+        var tag=$(this).attr("data-tag");
+            if(tag==1){
+                $("#rightClickBtn").html("关闭");
+                $("#rightClickBtn").attr("data-tag","0");
+            }else{
+                $("#rightClickBtn").html("开启");
+                $("#rightClickBtn").attr("data-tag","1");
+            }
+        });
+
+        var selectedElementId = null;
+        bimEngine.addListener(BIMVIZ.EVENT.OnPickElement,function(evt){
+            selectedElementId = evt.args.elementId;
+        });
+
+        bimEngine.addListener(BIMVIZ.SYS_EVENT.OnRaySelectNone,function(evt){
+            selectedElementId = null;
+        });
+
+        $('#hideOthers').click(function (e) {
+            highlightMgr.pushHighlighList();
+            var highList = highlightMgr.getHighlightElementList();
+            var bimScene = bimEngine.projectData.bimScene;
+            for (var i = 0, iLen = bimScene.ElementList.length; i < iLen; i++) {
+                var element = bimScene.ElementList[i];
+                if (highList.indexOf(element.Id) >= 0) {
+                    highlightMgr.unHighlightElement(element.Id);
+                }
+                else {
+                    bimEngine.setElementVisible(element.Id, false);
+                }
+            }
+
+            bimEngine.requestOneUpdate();
+        });
+
+        $('#resetVisibility').click(function (e) {
+            var bimScene = bimEngine.projectData.bimScene;
+            for (var i = 0, iLen = bimScene.ElementList.length; i < iLen; i++) {
+                var element = bimScene.ElementList[i];
+                element.Parent.Visible = true;
+                element.Parent.Parent.Visible = true;
+                bimEngine.setElementVisible(element.Id, true);
+                highlightMgr.unHighlightElement(element.Id);
+            }
+
+            bimEngine.requestOneUpdate();
+        });
+
+
+        bimEngine.addListener(BIMVIZ.EVENT.OnLeftButtonClick,function(evt){
+            var mouseEvent = evt.args;
+                var tag=$("#rightClickBtn").attr("data-tag");
+                if(selectedElementId){
+                        var left = mouseEvent.offsetX-240;
+                        var top = mouseEvent.offsetY+14;
+                        var right = $(document).width()-mouseEvent.offsetX-240;
+						
+						if(left<=0){
+                        document.getElementById('quickBarToolbarButtons2').style.cssText += "; left: " + (mouseEvent.offsetX-40) + "px; top: " +top + "px;display:block; width:80px";
+
+						}
+						else if(right<=0){
+                        document.getElementById('quickBarToolbarButtons2').style.cssText += "; left: " + (mouseEvent.offsetX-40) + "px; top: " +top + "px;display:block; width:80px";
+						}
+						
+						else{
+                        document.getElementById('quickBarToolbarButtons2').style.cssText += "; left: " + (mouseEvent.offsetX-200) + "px; top: " +top + "px;display:block; width:480px";
+						}
+                    
+                    selectedElementId = null;
+                }else{
+                    document.getElementById('quickBarToolbarButtons2').style.cssText += "display:none;";
+                }
+        });
+
+        function loadModel(){
+            var projId = "";
+            var bimEngine = new BIMVIZ.RenderEngine({
+                projectId: projId,
+                renderDomId: 'viewport',
+				ip: "",
+				port: ,
+				key: '',
+                resizeMode: 'fullpage',
+                resourcePath:'../sdk/viz/data/',
+                selectSettings:{
+                    grayScene:false,
+                    cameraMove:false
+                },
+				quickBar: {
+                    show:false //是否启动右键快捷方式
+                        }
+				
+            });
+
+            var msgControl = new BIMVIZ.UI.DefaultMessageControl(bimEngine, 'messages');
+            bimEngine.start();
+            return bimEngine;
+        }
+
+
+    </script>
+</body>
+</html>
