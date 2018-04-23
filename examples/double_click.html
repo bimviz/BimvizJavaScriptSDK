@@ -1,0 +1,135 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1, user-scalable=no" />
+    <link href="../sdk/third/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+
+    <!-- THEME CSS -->
+    <link href="../sdk/third/css/essentials.css" rel="stylesheet" />
+    <link href="../sdk/third/css/layout-dark.css" rel="stylesheet" />
+    <link href="../sdk/third/jstree/themes/proton/style.min.css" rel="stylesheet" />
+    <link href="../sdk/viz/ui/default.css" rel="stylesheet" type="text/css" />
+    <link href="../sdk/third/css/jquery-ui-1.10.4.custom.css" rel="stylesheet" />
+    <link href="../sdk/third/toolbar/jquery.toolbar.css" rel="stylesheet" />
+
+    <script src="../sdk/third/jquery-1.10.2.min.js"></script>
+    <script src="../sdk/third/jquery-ui.min.js"></script>
+    <script src="../sdk/third/jquery-dialog.js"></script>
+    <script src="../sdk/third/bootstrap.min.js"></script>
+    <script src="../sdk/third/jstree/jstree.js"></script>
+    <script src="../sdk/third/jquery-slider/jquery-ui-slider-pips.min.js"></script>
+    <script src="../sdk/third/toolbar/jquery.toolbar.js"></script>
+
+    <script src="../sdk/viz/bimviz.js"></script>
+
+    <script src="../sdk/viz/ui/DefaultMessageControl.js"></script>
+
+
+</head>
+<body >
+    
+        <div id="viewport"> </div>
+        <div id="messages"></div>
+
+        <div id="popupDiv" hidden style="position: absolute;right:50px; top:250px; width: 300px;height: 450px;background: white;color: black;z-index: 9999;">
+            <div class="panel panel-default" style="height: 100%">
+                <div class="panel-heading" id="pageDragBar">
+                    <div class="pull-right" style="margin-top: -9px">
+                        <span id="panelMinMax" data-size="normal">
+                            <i class="fa fa-square-o" style="color:#999999;font-size: 20px;margin-right: 10px;"></i>
+                        </span>
+                        <span id="panelClose" style="font-size:25px;color:#999999;">×</span>
+                    </div>
+                    <h2 class="panel-title">信息</h2>
+                </div>
+                <div class="panel-body" style="height:400px;width: 100%;padding: 0;">
+                    <iframe width="300" height="350" src="https://m.baidu.com/" frameborder="0" style="background: #ffffff;"></iframe>
+                </div>
+            </div>
+        </div>
+
+
+        <script>
+
+            var projId = "";
+            var bimEngine = new BIMVIZ.RenderEngine({
+                projectId: projId,
+                renderDomId: 'viewport',
+                ip: "",
+                port: ,
+                key: '',
+                resizeMode: 'fullpage',
+                resourcePath:'../sdk/viz/data/',
+                selectSettings:{
+                    grayScene:false,
+                    cameraMove:false
+                }
+            });
+
+            bimEngine.start();
+
+            var selectedElementId = null;
+            bimEngine.addListener(BIMVIZ.EVENT.OnPickElement,function(evt){
+                selectedElementId = evt.args.elementId;
+            });
+
+            bimEngine.addListener(BIMVIZ.SYS_EVENT.OnRaySelectNone,function(evt){
+                selectedElementId = null;
+            });
+            bimEngine.addListener(BIMVIZ.EVENT.OnDbClickFlyToElementStart,function(evt){
+                selectedElementId = evt.args;
+                if(selectedElementId){
+                    $('#popupDiv').show();
+                }else{
+                    $('#popupDiv').hide();
+                }
+            });
+
+            $( "#popupDiv" ).draggable();
+
+            $("#panelClose").click(function(){
+                $('#popupDiv').hide();
+            });
+            var toLeft=$('#popupDiv').css("left");
+            var toRight=$('#popupDiv').css("right");
+            var toTop=$('#popupDiv').css('top');
+            $("#panelMinMax").click(function(){
+                var size=$(this).attr("data-size");
+                if(size=="normal"){
+                    toLeft=$('#popupDiv').css("left");
+                    toRight=$('#popupDiv').css("right");
+                    toTop=$('#popupDiv').css("top");
+                    var width=$(document).width();
+                    var height=$(document).height();
+                    $('#popupDiv').css({
+                        "width":width,
+                        "height":height,
+                        "left":0,
+                        "top":0
+                    });
+                    $("iframe").attr('src','https://www.baidu.com').css({
+                        "width":width,
+                        "height":height-50
+                    });
+                    $(this).attr("data-size","max").html('<i class="fa fa fa-clone" style="color:#999999;font-size: 20px;margin-right: 10px;"></i>');
+                }else{
+                    $('#popupDiv').css({
+                        "width":300,
+                        "height":450,
+                        "left":toLeft,
+                        "right":toRight,
+                        "top":toTop
+                    });
+                    $("iframe").attr('src','https://m.baidu.com/').css({
+                        "width":300,
+                        "height":350
+                    });
+                    $(this).attr("data-size","normal").html('<i class="fa fa-square-o" style="color:#999999;font-size: 20px;margin-right: 10px;"></i>');
+                }
+            });
+    </script>
+</body>
+</html>
