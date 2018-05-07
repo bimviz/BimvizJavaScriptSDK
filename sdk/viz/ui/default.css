@@ -26,7 +26,8 @@ a:hover, a:focus{
 }
 
 .bimviz_singlebackground {
-    background: white; /* For browsers that do not support gradients */
+    background: white;  /*For browsers that do not support gradients */
+  
 }
 
 .bimviz_singlebackgroundblack {
@@ -265,4 +266,10 @@ a:hover, a:focus{
 
     -o-user-select: none;
     user-select: none;  
+}
+
+
+.disabledui {
+    pointer-events: none;
+    opacity: 0.4;
 }

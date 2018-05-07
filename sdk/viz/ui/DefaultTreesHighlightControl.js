@@ -8,11 +8,13 @@ BIMVIZ.UI.DefaultTreesHighlightControl.constructor = BIMVIZ.UI.DefaultTreesHighl
 
 BIMVIZ.UI.DefaultTreesHighlightControl.prototype.onProjectLoaded = function (project) {
 
+   
     var scope = this;
     var fileTreeNodesDic = [];
     var bimScene = project.bimScene;
     var fileTree = project.sourcetree;
     var highlightMgr = scope.engine.getHighlightManager();
+	var elementCount = 0;
 
     var html = '<ul id="bv_space_tab" class="nav nav-tabs nav-button-tabs">\
                     <li class="active"><a href="#spaceifctreepage" data-toggle="tab">IFC标准树</a></li>\
@@ -26,7 +28,7 @@ BIMVIZ.UI.DefaultTreesHighlightControl.prototype.onProjectLoaded = function (pro
                             </div>\
                         </div>\
                         <div class="padding-20">\
-                            <div id="bv_spaceTree"></div>\
+                            <div id="bv_defaultHightlightTree"></div>\
                         </div>\
                     </div >\
                     <div class="tab-pane fade" id="spacefiletreepage">\
@@ -43,7 +45,7 @@ BIMVIZ.UI.DefaultTreesHighlightControl.prototype.onProjectLoaded = function (pro
 
     this.parentDiv.html(html);
     this.parentDiv.addClass("nopadding-left nopadding-right").removeClass("padding-20");
-    var treecontainer = $('#bv_spaceTree');
+    var treecontainer = $('#bv_defaultHightlightTree');
     var filetreecontainer = $('#bv_orispaceTree');
     var uitree = null;
     var uifiletree = null;
@@ -184,9 +186,15 @@ BIMVIZ.UI.DefaultTreesHighlightControl.prototype.onProjectLoaded = function (pro
         if (treenodes != null) {
             var nodes = [];
             for (var i = 0; i < treenodes.length; i++) {
-                var childnode = treenodes[i];
+				var childnode = treenodes[i];
+				if (childnode.TypeName == "Element" && !project.bimScene.ElementDict[childnode.Id])
+					continue;
+				
+                elementCount = 0;                
+				getNodeElementCount(childnode);
+				var text = childnode.TypeName == "Element" ? "" : " - ("+elementCount+")";
                 nodes.push({
-                    text: childnode.Name,
+                    text: childnode.Name + text,
                     id: childnode.Id,
                     children: childnode.Children.length > 0,
                     state: {
@@ -198,6 +206,16 @@ BIMVIZ.UI.DefaultTreesHighlightControl.prototype.onProjectLoaded = function (pro
             callback(nodes);
         }
     };
+	
+	function getNodeElementCount(node){
+		if (node.TypeName == "Element" && project.bimScene.ElementDict[node.Id]){
+			elementCount++;
+		}else{
+			 node.Children.forEach(function (subnode, index) {
+                getNodeElementCount(subnode);
+            });
+		}
+	}
 
     function onLoadChildNodes(nodeinfo, callback) {
         var element = bimScene.FindNode(nodeinfo.id);
@@ -206,8 +224,21 @@ BIMVIZ.UI.DefaultTreesHighlightControl.prototype.onProjectLoaded = function (pro
             var nodes = [];
             for (var i = 0; i < childs.length; i++) {
                 var childnode = childs[i];
+                var pLenth=childnode.Children.length;
+                var lenthTxt=" - ("+pLenth+")";
+                if(childnode.Children.length==0){
+                    lenthTxt="";
+                }
+                if(childnode.IfcType=="IfcBuildingStorey"){
+                    pLenth=0;
+                    for(var j=0;j<childnode.Children.length;j++){
+                        pLenth=pLenth+childnode.Children[j].Children.length;
+                        lenthTxt=" - ("+pLenth+")";
+                    }
+                }
+                var txt=childnode.Name+lenthTxt;
                 nodes.push({
-                    text: childnode.Name,
+                    text:txt,
                     id: childnode.Id,
                     children: childnode.Children.length > 0,
                     state: {
@@ -215,7 +246,6 @@ BIMVIZ.UI.DefaultTreesHighlightControl.prototype.onProjectLoaded = function (pro
                     }
                 });
             }
-
             callback(nodes);
         }
     };

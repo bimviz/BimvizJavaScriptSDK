@@ -10,9 +10,9 @@ BIMVIZ.UI.DefaultSourceTreeHighlightControl.prototype.onProjectLoaded = function
 
     var scope = this;
     var sourceTreeNodesDic = [];
-    var bimScene = project.bimScene;
     var sourceTree = project.sourcetree;
     var highlightMgr = scope.engine.getHighlightManager();
+	var elementCount = 0;
 
     var html = '<div id="bv_sourceTreeHighlightBar" class="padding-20 border-bottom-1" style="width:100%;height:70px;background-color:rgba(0, 0, 0, 0.7);">\
                 <div class="pull-left">\
@@ -98,6 +98,16 @@ BIMVIZ.UI.DefaultSourceTreeHighlightControl.prototype.onProjectLoaded = function
         }
     }
 
+	function getNodeElementCount(node){
+		if (node.TypeName == "Element" && project.bimScene.ElementDict[node.Id]){
+			elementCount++;
+		}else{
+			 node.Children.forEach(function (subnode, index) {
+                getNodeElementCount(subnode);
+            });
+		}
+	}
+	
     function onLoadSourceTreeChildNodes(nodeinfo, callback) {
         var treenodes;
         if (nodeinfo.id == "#") {
@@ -112,9 +122,15 @@ BIMVIZ.UI.DefaultSourceTreeHighlightControl.prototype.onProjectLoaded = function
         if (treenodes != null) {
             var nodes = [];
             for (var i = 0; i < treenodes.length; i++) {
-                var childnode = treenodes[i];
+				var childnode = treenodes[i];
+				if (childnode.TypeName == "Element" && !project.bimScene.ElementDict[childnode.Id])
+					continue;
+				
+                elementCount = 0;                
+				getNodeElementCount(childnode);
+				var text = childnode.TypeName == "Element" ? "" : " - ("+elementCount+")";
                 nodes.push({
-                    text: childnode.Name,
+                    text: childnode.Name + text,
                     id: childnode.Id,
                     children: childnode.Children.length > 0,
                     state: {

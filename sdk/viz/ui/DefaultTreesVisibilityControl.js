@@ -8,12 +8,14 @@ BIMVIZ.UI.DefaultTreesVisibilityControl.constructor = BIMVIZ.UI.DefaultTreesVisi
 
 BIMVIZ.UI.DefaultTreesVisibilityControl.prototype.onProjectLoaded = function (project) {
 
+    
     var scope = this;
     var fileTreeNodesDic = [];
     var bimScene = project.bimScene;
     var fileTree = project.sourcetree;
     var uitree = null;
     var uifiletree = null;
+	var elementCount = 0;
     var html = '<ul id="bv_visibility_tab" class="nav nav-tabs nav-button-tabs">\
                     <li class="active"><a href="#ifctreepage" data-toggle="tab">IFC标准树</a></li>\
                     <li ><a href="#filetreepage" data-toggle="tab">模型树</a></li>\
@@ -159,13 +161,19 @@ BIMVIZ.UI.DefaultTreesVisibilityControl.prototype.onProjectLoaded = function (pr
         if (treenodes != null) {
             var nodes = [];
             for (var i = 0; i < treenodes.length; i++) {
-                var childnode = treenodes[i];
+				var childnode = treenodes[i];
+				if (childnode.TypeName == "Element" && !project.bimScene.ElementDict[childnode.Id])
+					continue;
+				
+                elementCount = 0;                
+				getNodeElementCount(childnode);
+				var text = childnode.TypeName == "Element" ? "" : " - ("+elementCount+")";
                 nodes.push({
-                    text: childnode.Name,
+                    text: childnode.Name + text,
                     id: childnode.Id,
                     children: childnode.Children.length > 0,
                     state: {
-                        checked: true
+                        checked:  true
                     }
                 });
             }
@@ -173,6 +181,16 @@ BIMVIZ.UI.DefaultTreesVisibilityControl.prototype.onProjectLoaded = function (pr
             callback(nodes);
         }
     };
+
+	function getNodeElementCount(node){
+		if (node.TypeName == "Element" && project.bimScene.ElementDict[node.Id]){
+			elementCount++;
+		}else{
+			 node.Children.forEach(function (subnode, index) {
+                getNodeElementCount(subnode);
+            });
+		}
+	}
 
     function collectElements(node, vis) {
         node.Visible = vis;
@@ -193,8 +211,21 @@ BIMVIZ.UI.DefaultTreesVisibilityControl.prototype.onProjectLoaded = function (pr
             var nodes = [];
             for (var i = 0; i < childs.length; i++) {
                 var childnode = childs[i];
+                var pLenth=childnode.Children.length;
+                var lenthTxt=" - ("+pLenth+")";
+                if(childnode.Children.length==0){
+                    lenthTxt="";
+                }
+                if(childnode.IfcType=="IfcBuildingStorey"){
+                    pLenth=0;
+                    for(var j=0;j<childnode.Children.length;j++){
+                        pLenth=pLenth+childnode.Children[j].Children.length;
+                        lenthTxt=" - ("+pLenth+")";
+                    }
+                }
+                var txt=childnode.Name+lenthTxt;
                 nodes.push({
-                    text: childnode.Name,
+                    text:txt,
                     id: childnode.Id,
                     children: childnode.Children.length > 0,
                     state: {
@@ -202,7 +233,6 @@ BIMVIZ.UI.DefaultTreesVisibilityControl.prototype.onProjectLoaded = function (pr
                     }
                 });
             }
-
             callback(nodes);
         }
     };

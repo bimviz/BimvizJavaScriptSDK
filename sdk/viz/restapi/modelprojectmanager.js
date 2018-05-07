@@ -54,10 +54,7 @@ BIMVIZ.ProjectInfo = function (project, settings) {
 BIMVIZ.ModelProjectManager = function (options) {
     var _this = this;
     this.APIURL = options.host + "/api/project/";
-    this.RESTAPIURL = options.resthost + "/api/";
     this.RequestHeaders = { Authorization: 'bearer ' + options.token };
-    this.RestRequestHeaders = { Authorization: 'bearer ' + options.resttoken };
-
 
     this.getAllProjects = function (username, callback) {
         $.ajax({
@@ -173,26 +170,6 @@ BIMVIZ.ModelProjectManager = function (options) {
         });
     }
 
-    this.getProjectFiles = function (username, projectid, callback) {
-        $.ajax({
-            url: _this.APIURL + 'GetProjectFiles',
-            type: 'GET',
-            headers: _this.RequestHeaders,
-            data: {
-                username: username,
-                projid: projectid
-            },
-            contentType: "application/json; charset=utf-8",
-            dataType: 'json',
-            error: function (XMLHttpRequest, textStatus, errorThrown) {
-                console.log(textStatus);
-            },
-            success: function (files) {
-                callback(files);
-            }
-        });
-    }
-
     this.addProject = function (username, projectinfo, callback) {
         $.ajax({
             url: _this.APIURL + 'Add?username=' + username,
@@ -224,47 +201,4 @@ BIMVIZ.ModelProjectManager = function (options) {
             }
         });
     };
-
-    // Get the bim tree from BIM Files by AJAX
-    this.getProjectBimTree = function(pid, onsuccess){
-        $.ajax({
-            url: _this.RESTAPIURL + 'Project/GetProjectBimTree',
-            type: 'GET',
-            headers: _this.RestRequestHeaders,
-            data: {pid:pid},
-            error: function (XMLHttpRequest, textStatus, errorThrown) {
-                console.log(textStatus);
-            },
-            success: function (result) {
-                onsuccess(result);
-            }
-        });
-    };
-
-    //Get element information from server by element by element's global id and project's id
-    this.getElementById = function (pid, gid, callback) {
-        $.ajax({
-            url: _this.RESTAPIURL + 'Project/GetElementById',
-            type: 'GET',
-            headers: _this.RestRequestHeaders,
-            data: {
-                projId: pid,
-                globalId: gid
-            },
-            error: function (XMLHttpRequest, textStatus, errorThrown) {
-                console.log(textStatus);
-            },
-            success: function (data) {
-                if (data.element) {
-                    callback(true, data.element);
-                }
-                else {
-                    callback(false, data.element);
-                }
-            }
-        });
-    };
-};
-
-
-
+}

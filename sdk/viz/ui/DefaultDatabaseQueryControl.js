@@ -6,10 +6,11 @@ BIMVIZ.UI.DefaultDatabaseQueryControl.prototype = Object.create(BIMVIZ.UI.Defaul
 BIMVIZ.UI.DefaultDatabaseQueryControl.constructor = BIMVIZ.UI.DefaultDatabaseQueryControl;
 
 BIMVIZ.UI.DefaultDatabaseQueryControl.prototype.onProjectLoaded = function(project){
+
     var scope = this;
     var controlId = "bv_queryDataBaseDiv_" + scope.engine.id; 
     var control;
-    var sceneContainer = $('#'+scope.engine.ContainerId);
+    var sceneContainer = $('#'+bimEngine.ContainerId);
     var highlightMgr = scope.engine.getHighlightManager();
     var resultList = null;
 
@@ -115,7 +116,7 @@ BIMVIZ.UI.DefaultDatabaseQueryControl.prototype.onProjectLoaded = function(proje
 
         $('#bv_btnQueryExampleSearch').click(function(){
             var text = $('#bv_QueryExampleSearchtext').val();
-            scope.engine.searchElementsBySql(text, showResult);
+            scope.engine.searchElementsBySqlWhere(text, showResult);
         });
 
         $('#bv_btnQueryExampleSetColor').click(function(){

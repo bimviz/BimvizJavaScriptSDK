@@ -1,6 +1,6 @@
 
 BIMVIZ.UI.DefaultSpaceControl = function(name, iconClass){
-	BIMVIZ.UI.DefaultControl.call(this, name, iconClass);
+    BIMVIZ.UI.DefaultControl.call(this, name, iconClass);
 };
 
 BIMVIZ.UI.DefaultSpaceControl.prototype = Object.create(BIMVIZ.UI.DefaultControl.prototype);
@@ -8,25 +8,25 @@ BIMVIZ.UI.DefaultSpaceControl.constructor = BIMVIZ.UI.DefaultSpaceControl;
 
 BIMVIZ.UI.DefaultSpaceControl.prototype.onProjectLoaded = function(project){
 
-	var scope = this;
-	var bimScene = project.bimScene;
+    var scope = this;
+    var bimScene = project.bimScene;
     var highlightMgr = scope.engine.getHighlightManager();
 
     var html = '<div id="bv_spaceBar" class="padding-20 border-bottom-1" style="width:100%;height:70px;background-color:rgba(0, 0, 0, 0.7);">\
-                <div class="pull-left">\
-                    <a class="btn" id="bv_space_clear"><i class="fa fa-history"></i> 清空</a>\
+                    <div class="pull-left">\
+                        <a class="btn" id="bv_space_clear"><i class="fa fa-history"></i> 清空</a>\
+                    </div>\
                 </div>\
-            </div>\
-            <div class="padding-20">\
-                <div id="bv_spaceTree"></div>\
-            </div>';
+                <div class="padding-20">\
+                    <div id="bv_spaceTree"></div>\
+                </div>';
 
     this.parentDiv.html(html);
     this.parentDiv.addClass("nopadding-left nopadding-right").removeClass("padding-20");
     var treecontainer = $('#bv_spaceTree');
     var uitree = null;
 
-	function create() {
+    function create() {
         treecontainer.jstree({
             'core': {
                 'data': function (node, cb) {
@@ -41,7 +41,7 @@ BIMVIZ.UI.DefaultSpaceControl.prototype.onProjectLoaded = function(project){
             'checkbox': {
                 "keep_selected_style" : false,
                 'tie_selection' : false
-              },
+            },
         });
 
         uitree = treecontainer.jstree(true);
@@ -55,7 +55,7 @@ BIMVIZ.UI.DefaultSpaceControl.prototype.onProjectLoaded = function(project){
         });
 
         treecontainer.on("uncheck_node.jstree", function (e, data) {
-             var bimnode = bimScene.FindNode(data.node.id);
+            var bimnode = bimScene.FindNode(data.node.id);
             collectElements(bimnode, false);
 
         });
@@ -84,8 +84,21 @@ BIMVIZ.UI.DefaultSpaceControl.prototype.onProjectLoaded = function(project){
             var nodes = [];
             for (var i = 0; i < childs.length; i++) {
                 var childnode = childs[i];
+                var pLenth=childnode.Children.length;
+                var lenthTxt=" - ("+pLenth+")";
+                if(childnode.Children.length==0){
+                    lenthTxt="";
+                }
+                if(childnode.IfcType=="IfcBuildingStorey"){
+                    pLenth=0;
+                    for(var j=0;j<childnode.Children.length;j++){
+                        pLenth=pLenth+childnode.Children[j].Children.length;
+                        lenthTxt=" - ("+pLenth+")";
+                    }
+                }
+                var txt=childnode.Name+lenthTxt;
                 nodes.push({
-                    text: childnode.Name,
+                    text:txt,
                     id: childnode.Id,
                     children: childnode.Children.length > 0,
                     state: {
@@ -93,7 +106,6 @@ BIMVIZ.UI.DefaultSpaceControl.prototype.onProjectLoaded = function(project){
                     }
                 });
             }
-
             callback(nodes);
         }
 

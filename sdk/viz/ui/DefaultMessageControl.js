@@ -104,4 +104,6 @@
     bimEngine.addListener(BIMVIZ.EVENT.OnConnectServer, onConnectServer);
     bimEngine.addListener(BIMVIZ.EVENT.OnLoadingResult, onLoadingResult);
     bimEngine.addListener(BIMVIZ.EVENT.OnServerDisconnected, onServerDisconnected);
+    bimEngine.addListener(BIMVIZ.EVENT.OnLoadContinueData, onProjectLoaded);
+
 }

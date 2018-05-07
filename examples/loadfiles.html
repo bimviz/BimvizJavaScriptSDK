@@ -46,6 +46,7 @@
 	<script src="../sdk/viz/ui/DefaultHtmlMarkerControl.js"></script>
 	<script src="../sdk/viz/ui/DefaultFileLoadControl.js"></script>
 
+
 </head>
 <body >
     
@@ -54,7 +55,7 @@
 
     <script>
 
-        var projId = "";
+        var projId = "7d45a4b7-a274-44c8-8925-8a54a1519ec9";
 
         var bimEngine = new BIMVIZ.RenderEngine({
             projectId: projId,
@@ -63,7 +64,12 @@
             port: , 
             key: '',
             resizeMode: 'fullpage',
-            resourcePath:'../sdk/viz/data/'
+            resourcePath:'../sdk/viz/data/',
+			fileload:{
+					enabled:true,
+                    nameList:['Metro高架站.ifc', 'Metro高架-管线综合-so.ifc']
+
+            }
         });
 
         // 消息输出控件，包括调试信息，进度信息
@@ -140,7 +146,7 @@
 		// 文件动态加载控件
 		var customTreeControl = new BIMVIZ.UI.DefaultFileLoadControl("自定义树", "fa fa-files-o");
 		toolbar.addControl(customTreeControl);
-			
+		
         // 开始加载数据
         bimEngine.start();
 

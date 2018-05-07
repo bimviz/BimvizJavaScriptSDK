@@ -19,13 +19,13 @@ BIMVIZ.UI.DefaultVisibilityControl.prototype.onProjectLoaded = function(project)
                 </div>\
             </div>\
             <div class="padding-20">\
-                <div id="bv_visibilityTree"></div>\
+                <div id="bv_DefaultVisibilityTree"></div>\
             </div>';
 
     this.parentDiv.html(html);
     this.parentDiv.addClass("nopadding-left nopadding-right").removeClass("padding-20");
 
-    var treecontainer = $('#bv_visibilityTree');
+    var treecontainer = $('#bv_DefaultVisibilityTree');
     var inAntiCheckMode = false;
 	function create() {
         treecontainer.jstree({
@@ -40,9 +40,9 @@ BIMVIZ.UI.DefaultVisibilityControl.prototype.onProjectLoaded = function(project)
             },
             'plugins': ["wholerow", "checkbox"],
             'checkbox': {
-                "keep_selected_style" : false,
-                'tie_selection' : false
-              },
+                "keep_selected_style": false,
+                'tie_selection': false
+            },
         });
 
         uitree = treecontainer.jstree(true);
@@ -76,8 +76,21 @@ BIMVIZ.UI.DefaultVisibilityControl.prototype.onProjectLoaded = function(project)
             var nodes = [];
             for (var i = 0; i < childs.length; i++) {
                 var childnode = childs[i];
+                var pLenth=childnode.Children.length;
+                var lenthTxt=" - ("+pLenth+")";
+                if(childnode.Children.length==0){
+                    lenthTxt="";
+                }
+                if(childnode.IfcType=="IfcBuildingStorey"){
+                    pLenth=0;
+                    for(var j=0;j<childnode.Children.length;j++){
+                        pLenth=pLenth+childnode.Children[j].Children.length;
+                        lenthTxt=" - ("+pLenth+")";
+                    }
+                }
+                var txt=childnode.Name+lenthTxt;
                 nodes.push({
-                    text: childnode.Name,
+                    text:txt,
                     id: childnode.Id,
                     children: childnode.Children.length > 0,
                     state: {
@@ -85,7 +98,6 @@ BIMVIZ.UI.DefaultVisibilityControl.prototype.onProjectLoaded = function(project)
                     }
                 });
             }
-
             callback(nodes);
         }
 
