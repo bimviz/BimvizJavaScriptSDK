@@ -31,6 +31,70 @@ BIMVIZ.SceneDomain = {
     Rabar: 2
 };
 
+
+BIMVIZ.ColorFilter = {
+    Open: 1,
+    Close: 2
+};
+
+BIMVIZ.TransparentMode = {
+    Theme: 'theme',
+    Auto: 'auto',
+    Custom: 'custom'
+};
+
+BIMVIZ.ColorMode = {
+    Theme: 'theme',
+    Custom: 'custom'
+};
+
+BIMVIZ.GrayScene = {
+    Yes: 1,
+    No: 0
+};
+
+BIMVIZ.PickCameraMove = {
+    Yes: 1,
+    No: 0
+};
+
+BIMVIZ.ShowAxis = {
+    Yes: 1,
+    No: 0
+};
+
+BIMVIZ.ShowViewBox = {
+    Yes: 1,
+    No: 0
+};
+
+BIMVIZ.ViewBoxPath = {
+    Chinese: '/images/viewbox/cn',
+    English: '/images/viewbox/en',
+    XYZ: '/images/viewbox/xyz'
+};
+
+BIMVIZ.ShowQuickBar = {
+    Yes: 1,
+    No: 0
+};
+
+BIMVIZ.GroundShadow = {
+    Yes: 1,
+    No: 0
+};
+
+BIMVIZ.RenderMode = {
+    Sketch: 'Sketch',
+    AO2: 'AO2',
+    AO4: 'AO4'
+};
+
+BIMVIZ.TextureMode = {
+    Color: 1,
+    Texture: 2
+};
+
 BIMVIZ.ModelProject = function (_name, _description, _state, _guid) {
     this.Name = _name;
     this.Description = _description;
@@ -44,6 +108,22 @@ BIMVIZ.ProjectSettings = function (settings) {
     this.ThemeStyle = settings.ThemeStyle;
     this.GroundStyle = settings.GroundStyle;
     this.SceneDomain = settings.SceneDomain;
+    this.ColorFilter = settings.ColorFilter;
+    this.TransparentMode = settings.TransparentMode;
+    this.ColorMode = settings.ColorMode;
+    this.GrayScene = settings.GrayScene;
+    this.PickCameraMove = settings.PickCameraMove;
+    this.ShowAxis = settings.ShowAxis;
+    this.ShowViewBox = settings.ShowViewBox;
+    this.ViewBoxPath = settings.ViewBoxPath;
+    this.ShowQuickBar = settings.ShowQuickBar;
+    this.MaxMemory = settings.MaxMemory;
+    this.MobileMaxMemory = settings.MobileMaxMemory;
+    this.RenderByteSize = settings.RenderByteSize;
+    this.GroundShadow = settings.GroundShadow;
+    this.RenderMode = settings.RenderMode;
+    this.TextureMode = settings.TextureMode;
+    this.LoadFiles = settings.LoadFiles;
 };
 
 BIMVIZ.ProjectInfo = function (project, settings) {
@@ -54,7 +134,10 @@ BIMVIZ.ProjectInfo = function (project, settings) {
 BIMVIZ.ModelProjectManager = function (options) {
     var _this = this;
     this.APIURL = options.host + "/api/project/";
+    this.RESTAPIURL = options.resthost + "/api/";
     this.RequestHeaders = { Authorization: 'bearer ' + options.token };
+    this.RestRequestHeaders = { Authorization: 'bearer ' + options.resttoken };
+
 
     this.getAllProjects = function (username, callback) {
         $.ajax({
@@ -170,6 +253,26 @@ BIMVIZ.ModelProjectManager = function (options) {
         });
     }
 
+    this.getProjectFiles = function (username, projectid, callback) {
+        $.ajax({
+            url: _this.APIURL + 'GetProjectFiles',
+            type: 'GET',
+            headers: _this.RequestHeaders,
+            data: {
+                username: username,
+                projid: projectid
+            },
+            contentType: "application/json; charset=utf-8",
+            dataType: 'json',
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log(textStatus);
+            },
+            success: function (files) {
+                callback(files);
+            }
+        });
+    }
+
     this.addProject = function (username, projectinfo, callback) {
         $.ajax({
             url: _this.APIURL + 'Add?username=' + username,
@@ -201,4 +304,47 @@ BIMVIZ.ModelProjectManager = function (options) {
             }
         });
     };
-}
+
+    // Get the bim tree from BIM Files by AJAX
+    this.getProjectBimTree = function(pid, onsuccess){
+        $.ajax({
+            url: _this.RESTAPIURL + 'Project/GetProjectBimTree',
+            type: 'GET',
+            headers: _this.RestRequestHeaders,
+            data: {pid:pid},
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log(textStatus);
+            },
+            success: function (result) {
+                onsuccess(result);
+            }
+        });
+    };
+
+    //Get element information from server by element by element's global id and project's id
+    this.getElementById = function (pid, gid, callback) {
+        $.ajax({
+            url: _this.RESTAPIURL + 'Project/GetElementById',
+            type: 'GET',
+            headers: _this.RestRequestHeaders,
+            data: {
+                projId: pid,
+                globalId: gid
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log(textStatus);
+            },
+            success: function (data) {
+                if (data.element) {
+                    callback(true, data.element);
+                }
+                else {
+                    callback(false, data.element);
+                }
+            }
+        });
+    };
+};
+
+
+

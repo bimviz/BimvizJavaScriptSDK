@@ -168,4 +168,32 @@ BIMVIZ.ProjectManager = function(parameters) {
             }
         });
     };
+
+    this.resetPerformanceCounter = function(callback){
+        var promise = $.ajax({
+            url: _this.APIURL +'Performance/Reset',
+            type: 'GET',
+            headers: _this.RequestHeaders,
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert("resetPerformanceCounter " + errorThrown);
+            },
+            success: function (result) {
+                callback();
+            }
+        });
+    };
+
+    this.getPerformanceReport = function(callback){
+        var promise = $.ajax({
+            url: _this.APIURL +'Performance/Report',
+            type: 'GET',
+            headers: _this.RequestHeaders,
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert("getPerformanceReport " + errorThrown);
+            },
+            success: function (result) {
+                callback(result);
+            }
+        });
+    };
 };
