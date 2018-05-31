@@ -116,7 +116,7 @@ BIMVIZ.UI.DefaultDatabaseQueryControl.prototype.onProjectLoaded = function(proje
 
         $('#bv_btnQueryExampleSearch').click(function(){
             var text = $('#bv_QueryExampleSearchtext').val();
-            scope.engine.searchElementsBySqlWhere(text, showResult);
+            scope.engine.searchElementsBySql(text, showResult);
         });
 
         $('#bv_btnQueryExampleSetColor').click(function(){
