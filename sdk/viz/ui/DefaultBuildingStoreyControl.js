@@ -55,6 +55,8 @@ BIMVIZ.UI.DefaultBuildingStoreyControl.prototype.onProjectLoaded = function(proj
 
                 bimEngine.resetCameraLook(true);
             }
+
+            scope.engine.showType('IfcSpace', false);
         });
 
     $('.bv_storeyitem a').click(function (e) {
@@ -65,6 +67,8 @@ BIMVIZ.UI.DefaultBuildingStoreyControl.prototype.onProjectLoaded = function(proj
             return;
 
         scope.engine.showBuildingStorey(id, true);
+        scope.engine.showType('IfcSpace', false);
+        
         scope.engine.watchBuildingStorey(id, function () {
             storeys.forEach(function (other) {
                 if (other.Id != id) {

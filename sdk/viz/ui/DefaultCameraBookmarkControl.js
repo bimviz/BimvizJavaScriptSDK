@@ -160,7 +160,7 @@ BIMVIZ.UI.DefaultCameraBookmarkControl.prototype.onProjectLoaded = function(proj
     function init(){
     	var controlHtml = '<div id="'+controlId+'" style="padding-top:7px;padding-bottom:7px;background-color:rgba(0, 0, 0, 0.4);position:absolute;left:10px;bottom:10px;width:500px;height:'+height+'px;">\
                 <div style="padding-top:7px;padding-bottom:7px;border-color:#FFFFFF;border-width:7px;border-style:dashed;border-left:none;border-right:none;">\
-	                <div id="bv_bookmark_itemcontaner" style="overflow-x:auto;background-color:rgba(0, 0, 0, 0.5);">\
+	                <div id="bv_bookmark_itemcontaner" style="overflow-x:auto;background-color:rgba(0, 0, 0, 0.5);height:'+height+'px;">\
 	                	<div class="bimviz_camera_bookmark_startpanel">\
 	                		<a class="btn block '+adbButtonId+'" style="margin-bottom:75px;margin-top:5px;"><i class="fa fa-plus-circle ico-transparent ico-hover ico-lg "></i></a>\
 	                	</div>\

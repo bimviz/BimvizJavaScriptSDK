@@ -89,6 +89,12 @@ BIMVIZ.UI.DefaultToolBar = function(bimEngine){
         bimEngine.addListener(BIMVIZ.EVENT.ProjectOverviewLoaded, onProjectLoaded);
     };
 
+    function hideSpace(){
+         bimEngine.addListener(BIMVIZ.EVENT.OnSceneLoadCompleted, function () {
+            bimEngine.showType('IfcSpace', false);
+        });
+    }
+
     function onProjectLoaded(evt){
     	var name = evt.name;
         var data = evt.args;
@@ -97,6 +103,7 @@ BIMVIZ.UI.DefaultToolBar = function(bimEngine){
             item.onProjectLoaded(data);
         });
 
+        hideSpace();
         onsize();
     };
 

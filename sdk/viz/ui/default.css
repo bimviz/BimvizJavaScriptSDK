@@ -1,11 +1,18 @@
-﻿body{
-    margin: 0px;
+body{
+    margin: 0;
+    padding: 0;
 	overflow: hidden;
-    font-family: '微软雅黑','Microsoft YaHei',Arial !important;
+    font-family: '΢���ź�','Microsoft YaHei',Arial !important;
+}
+
+ul,li,p{
+    margin: 0;
+    padding: 0;
 }
 
 label{
-    margin-top: 5px; 
+    margin-top: 5px;
+
 }
 
 a:hover, a:focus{
@@ -26,8 +33,7 @@ a:hover, a:focus{
 }
 
 .bimviz_singlebackground {
-    background: white;  /*For browsers that do not support gradients */
-  
+    background: white; /* For browsers that do not support gradients */
 }
 
 .bimviz_singlebackgroundblack {
@@ -90,11 +96,30 @@ a:hover, a:focus{
     overflow:auto;
 }
 
+.bimviz_toolbar_panel::-webkit-scrollbar-track
+{
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    background-color: #F5F5F5;
+    border-radius: 10px;
+}
+
+.bimviz_toolbar_panel::-webkit-scrollbar
+{
+    width: 5px;
+    background-color: #F5F5F5;
+}
+
+.planview_panel::-webkit-scrollbar-thumb
+{
+    background-color: #AAA;
+    border-radius: 10px;
+}
+
 .list-item-font{  
-    width:100%;    
-    overflow:hidden; /*不显示超过对象宽度的内容*/  
-    text-overflow:ellipsis; /*当对象内文本溢出时显示省略标记（...）*/  
-    white-space:nowrap; /*限制在一行内显示所有文本*/  
+    width:100%;
+    overflow:hidden; /*����ʾ���������ȵ�����*/  
+    text-overflow:ellipsis; /*���������ı����ʱ��ʾʡ�Ա�ǣ�...��*/  
+    white-space:nowrap; /*������һ������ʾ�����ı�*/  
     color: #ffffff;
     text-decoration: none;
 } 
@@ -240,17 +265,14 @@ a:hover, a:focus{
 
 .numberCircle {
     border-radius: 50%;
-
     width: 36px;
     height: 36px;
     padding: 8px;
-
     text-align: center;
 }
 
  .relectbox {
-
-    width: 0px;
+     width: 0px;
     height: 0px;
     position: absolute;
     opacity: 0.5;
@@ -262,14 +284,605 @@ a:hover, a:focus{
     -webkit-user-select: none; 
     -moz-user-select: none;    
     -khtml-user-select: none;  
-    -ms-user-select: none;    
-
+    -ms-user-select: none;
     -o-user-select: none;
-    user-select: none;  
+    user-select: none;
 }
 
 
-.disabledui {
-    pointer-events: none;
-    opacity: 0.4;
+/*  start  markup */
+.bv_viewbox{
+    z-index: 9998!important;
 }
+
+#markupImgShowWarpper{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 11000;
+    background: rgba(0,0,0,0.7);
+    text-align:center;
+}
+#markupImgShowWarpper i{
+    background-color: rgba(0,0,0,0);
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin: 0;
+}
+
+#markupImgShow{
+    background: white;
+    margin:0 auto;
+    display:block;
+    position:relative;
+    top:50%;
+    left:50%;
+}
+
+#markupPanel{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    z-index: 10000;
+    background: #FFFFFF;
+}
+#markupPanel #PaintLists{
+    position: absolute;
+    left: 0;
+    z-index: 10001;
+    background: #464646;
+}
+
+/* mobile or pc */
+.paint-lists-moblie{
+    width: 100%;
+    bottom: 0;
+}
+.paint-lists-moblie>ul>li{
+    float: left;
+    width: 60px;
+}
+.paint-lists-moblie>ul>li>ul{
+    bottom: 0;
+}
+.paint-lists-moblie .copllese{
+    right: -5px;
+}
+
+.paint-lists-pc{
+    width: 110px;
+    height: 100%;
+    padding-top: 70px;
+    top: 0;
+}
+.paint-lists-pc .copllese{
+    right: 10px;
+}
+.paint-lists-pc>ul>li>ul{
+    top: 0;
+}
+.paint-lists-pc #drawText span{
+    display: inline-block;
+    position: absolute;
+    width: 90px;
+    border-bottom: 1px solid #D0D0D0;
+    left: 10px;
+    bottom: 0;
+}
+/* mobile or pc */
+
+#markupPanel #PaintLists li{
+    position: relative;
+    list-style: none;
+    text-align: center;
+    line-height: 50px;
+}
+
+#markupPanel #PaintLists li:hover{
+    background: #000000;
+    cursor: pointer;
+}
+
+#markupPanel #PaintLists li img{
+    width: 20px;
+    height: 20px;
+}
+#markupPanel #PaintLists .copllese{
+    position: absolute;
+}
+
+#markupPanel #PaintLists #lineSizeIcon{
+    margin-top: 8px;
+    display: inline-block
+}
+#markupPanel #PaintLists .line-size{
+    display: block;
+    width: 20px;
+    height: 7px;
+}
+#markupPanel #PaintLists .line-size:nth-child(1){
+    border-bottom: 1px solid #DDDDDD;
+}
+#markupPanel #PaintLists .line-size:nth-child(2){
+    border-bottom: 2px solid #DDDDDD;
+}
+#markupPanel #PaintLists .line-size:nth-child(3){
+    border-bottom: 3px solid #DDDDDD;
+}
+#markupPanel #PaintLists .line-size:nth-child(4){
+    border-bottom: 4px solid #DDDDDD;
+}
+
+#markupPanelNav{
+    width: 100%;
+    padding: 15px 50px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 10002;
+    background: #464646;
+    border-bottom: 1px solid #E4E4E4;
+}
+#markupPanelNav #saved img{
+    width: 30px;
+    height: 30px;
+}
+#markupPanelNav #markupPanelClose img{
+    width: 20px;
+    height: 20px;
+}
+
+#buttons button{
+    padding: 5px;
+}
+#buttons i{
+    width: 25px !important;
+    height: 25px !important;
+    line-height: 25px !important;
+    margin:0 !important;
+    font-size:24px !important;
+    color: #ffffff;
+}
+
+#PaintLists .copllese i,#PaintLists #pointer i,#PaintLists #drawPencil i,#PaintLists #drawText i,#PaintLists #fontSize i{
+    width: 0 !important;
+    height: 0 !important;
+    line-height: 0 !important;
+    margin: 26px 15px 0 0 !important;
+}
+#PaintLists #drawCircle i{
+    width: 0 !important;
+    height: 0 !important;
+    line-height: 0 !important;
+    margin: 26px 20px 0 0 !important;
+    font-size: 24px;
+}
+#PaintLists .copllese i{
+    font-size: 16px;
+}
+
+#LineTools{
+    display: none;
+    position: absolute;
+    right: -56px;
+    z-index: 10004;
+    background: #464646;
+    border: 1px solid #E4E4E4;
+    padding: 2px;
+}
+#LineTools li{
+    padding: 0 15px;
+}
+#LineTools li img{
+    width: 20px;
+    height: 20px;
+}
+
+#AreaSelection{
+    display: none;
+    position: absolute;
+    right: -56px;
+    z-index: 10004;
+    background: #464646;
+    border: 1px solid #E4E4E4;
+    padding: 2px;
+}
+#AreaSelection li{
+    padding: 0 15px;
+}
+#AreaSelection li img{
+    width: 20px;
+    height: 20px;
+}
+
+#LineSizeTools,#fontSizetools{
+    display: none;
+    position: absolute;
+    right: -58px;;
+    z-index: 10004;
+    background: #464646;
+    border: 1px solid #E4E4E4;
+    padding: 2px;
+}
+#LineSizeTools li{
+    padding: 0 15px;
+}
+#LineSizeTools li span{
+    display: inline-block;
+    width: 20px;
+}
+#LineSizeTools #drawLineSize1 span{
+    border-top: 1px solid #DDDDDD;
+}
+#LineSizeTools #drawLineSize2 span{
+    border-top: 2px solid #DDDDDD;
+}
+#LineSizeTools #drawLineSize3 span{
+    border-top: 3px solid #DDDDDD;
+}
+#LineSizeTools #drawLineSize4 span{
+    border-top: 4px solid #DDDDDD;
+}
+
+.li-dark{
+    background: #000000;
+}
+
+#fontSizetools li{
+    padding: 0 15px;
+    color: #DDDDDD;
+}
+
+.colpick{
+    left:110px !important;
+    top:320px !important;
+    z-index:10001;
+}
+
+#paintingCanvas{
+    height:100%;
+    padding-top:72px;
+
+}
+
+.markup-item-name{
+    width: 230px;
+    margin: 5px 0;
+    color: #ffffff;
+    font-size: 16px;
+    word-break: break-word;
+    padding: 0 20px;
+}
+.markup-item-description{
+    margin: 5px 0;
+    color: #CCD0DB;
+    font-size: 12px;
+    word-break:break-word;
+    padding: 0 20px;
+}
+
+.markup-item-thumbnail{
+    margin-top: 0px;
+}
+
+#markupImgLists{
+    margin-bottom: 20px;
+    padding-top: 25px;
+}
+
+.markup-item-thumbnail-img{
+    position:relative;
+    width: 100%;
+    height: 160px;
+}
+
+.markup-item-thumbnail-img span{ 
+    opacity: 0.2;
+    background-color: #000;
+    position: absolute;
+    bottom: 0px;
+    display: block;
+    width: 100%;
+    padding: 5px;
+    text-align: right;
+}
+
+.markup-item-thumbnail-img span i{ 
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.markup-item-thumbnail-img:hover span{ 
+    opacity: 0.8;
+    background-color: #000;
+}
+
+.markup-item-span{
+    margin-top: 5px;
+    text-align: center !important;
+}
+
+.markupOperate{
+    position: absolute;
+    top:15px;
+    right:15px;
+}
+.markupOperate button{
+    width: 20px;
+    height: 20px;
+    margin: 5px;
+}
+.markupOperate .ico-light{
+    background-color:rgba(0,0,0,0) !important;
+    width: 20% !important;
+    height: 20% !important;
+    line-height: 20px !important;
+    font-size: 20px !important;
+}
+
+#canvasContainer{
+    position: relative;
+    padding:10px;
+    margin:0 auto;
+    overflow: hidden;
+}
+#canvasContainer .text-warpper{
+    width:260px;
+    height:93px;
+    border: 1px dashed #000000;
+    position: absolute;
+    z-index:1000;
+}
+* { touch-action: none; }
+
+#canvasContainer textarea{
+    width: 100%;
+    height: 100%;
+    display: inline-block;
+    background: rgba(0,0,0,0);
+    border: none;
+    padding:8px 8px;
+    resize: none;
+    overflow:hidden;
+}
+#canvasContainer .textarea-button{
+    background: red;
+    display: block;
+    width: 10px;
+    height: 10px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    z-index: 2001;
+    background: rgba(0,0,0,0);
+}
+
+#createMarkupDialogWarpper{
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    background: rgba(0,0,0,0);
+    z-index: 10005;
+}
+
+#createMarkupDialog{
+    width: 400px;
+    padding: 10px 20px;
+    background: #212121;
+    position: absolute;
+    left: 50%;
+    top: 20%;
+    margin-left: -200px;
+    z-index: 100010;
+}
+#createMarkupDialog .createMarkupDialogTitle{
+    color: #ffffff;
+}
+#createMarkupDialog .createmarkupDialogBody{
+    margin-top: 20px;
+}
+#createMarkupDialog .createmarkupDialogBody span,#createMarkupDialog .createmarkupDialogBody input,#createMarkupDialog .createmarkupDialogBody textarea{
+    display: block;
+}
+#createMarkupDialog .createmarkupDialogBody span{
+    color: #ffffff;
+    margin-top: 20px;
+}
+#createMarkupDialog .createmarkupDialogBody input{
+    color: #ffffff;
+    width: 100%;
+    padding: 10px;
+    background: #2C2C2C;
+    border: 1px solid #666666;
+    border-radius: 5px;
+}
+#createMarkupDialog .createmarkupDialogBody textarea{
+    color: #ffffff;
+    width: 100%;
+    padding: 10px;
+    background: #2C2C2C;
+    border: 1px solid #666666;
+    border-radius: 5px;
+}
+#createMarkupDialog .createMarkupDialogFooter{
+    margin-top: 30px;
+    margin-bottom: 10px;
+    float: right;
+}
+#createMarkupDialog .createMarkupDialogFooter button{
+    padding: 10px;
+    color: #ffffff;
+    border-radius: 5px;
+    border: 1px solid #666666;
+}
+#createMarkupDialog .createMarkupDialogFooter button:hover{
+    background: #EBEBEB;
+    color: #1A141E;
+    border: 1px solid #AEAEAE;
+    border-radius: 5px;
+}
+
+#editEleWarpper{
+    position: absolute;
+    left: 0;top: 0;
+    z-index: 10008;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0);
+}
+#editMarkupDialog{
+    width: 400px;
+    padding: 10px 20px;
+    background: #212121;
+    position: absolute;
+    left: 50%;
+    top: 20%;
+    margin-left: -200px;
+    z-index: 10004;
+}
+.editMarkupDialogTitle{
+    color: #ffffff;
+}
+.editMarkupDialogBody{
+    margin-top: 20px;
+}
+#editMarkupDialog .editMarkupDialogBody span,#editMarkupDialog .editMarkupDialogBody input,#editMarkupDialog .editMarkupDialogBody textarea{
+    display: block;
+}
+#editMarkupDialog .editMarkupDialogBody span{
+    color: #ffffff;
+    margin-top: 20px;
+}
+#editMarkupDialog .editMarkupDialogBody input{
+    color: #ffffff;
+    width: 100%;
+    padding: 10px;
+    background: #2C2C2C;
+    border: 1px solid #666666;
+    border-radius: 5px;
+}
+#editMarkupDialog .editMarkupDialogBody textarea{
+    color: #ffffff;
+    width: 100%;
+    padding: 10px;
+    background: #2C2C2C;
+    border: 1px solid #666666;
+    border-radius: 5px;
+}
+#editMarkupDialog .editMarkupDialogFooter{
+    margin-top: 60px;
+    margin-bottom: 10px;
+    float: right;
+}
+#editMarkupDialog .editMarkupDialogFooter button{
+    padding: 10px;
+    color: #ffffff;
+    border-radius: 5px;
+    border: 1px solid #666666;
+}
+#editMarkupDialog .editMarkupDialogFooter button:hover{
+    background: #EBEBEB;
+    color: #1A141E;
+    border: 1px solid #AEAEAE;
+    border-radius: 5px;
+}
+#editMarkupDialog .changeMarkupmarker button{
+    padding: 5px 10px;
+    color: #ffffff;
+    border: 1px solid #666666;
+    border-radius: 5px;
+    margin: 15px 0;
+}
+/*  end  markup */
+
+.planview_panel{
+    position:absolute;
+    left:10px;
+    top:10px;
+    z-index:9999;
+    padding: 0px;
+    background: rgba(0, 0, 0, 0.66);
+    overflow-y: auto;
+    height: inherit;
+}
+
+.planview_panel::-webkit-scrollbar-track
+{
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    background-color: #F5F5F5;
+    border-radius: 10px;
+}
+
+.planview_panel::-webkit-scrollbar
+{
+    width: 5px;
+    background-color: #F5F5F5;
+}
+
+.planview_panel::-webkit-scrollbar-thumb
+{
+    background-color: #AAA;
+    border-radius: 10px;
+}
+
+.planview_panel_nofloat{
+    position:absolute;
+    padding: 0;
+    background: rgba(1, 1, 1, 0.76);
+    overflow-y: auto;
+    height: inherit;
+}
+
+.planview_panel_nofloat::-webkit-scrollbar-track
+{
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    background-color: #F5F5F5;
+    border-radius: 10px;
+}
+
+.planview_panel_nofloat::-webkit-scrollbar
+{
+    width: 5px;
+    background-color: #F5F5F5;
+}
+
+.planview_panel_nofloat::-webkit-scrollbar-thumb
+{
+    background-color: #AAA;
+    border-radius: 10px;
+}
+
+.planview_item{
+    float:left;
+    margin: 10px 10px 5px 10px;
+}
+.planview_item_name{
+    width: 140px;
+    font-size: 13px;
+    color:white;
+    text-align: center;
+    overflow:hidden; /*不显示超过对象宽度的内容*/
+    text-overflow:ellipsis; /*当对象内文本溢出时显示省略标记（...）*/
+    white-space:nowrap; /*限制在一行内显示所有文本*/
+    text-decoration: none;
+    padding-top: 6px;
+}
+.planview_item_thumbnail{
+    position:relative;width:140px;
+}
+
+.planview_item:hover{
+    opacity: 0.8;
+}
+
+.planview_item_thumbnail:hover{
+    border:1px dotted   #fff;
+}
+

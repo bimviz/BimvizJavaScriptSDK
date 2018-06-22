@@ -167,7 +167,8 @@ BIMVIZ.UI.DefaultTreesHighlightControl.prototype.onProjectLoaded = function (pro
         }
         else{
             node.Children.forEach(function(subnode, index){
-                collectElements(subnode, highlight);
+                if (subnode.Level != "Group" || subnode.Name != "IfcSpace")
+                    collectElements(subnode, highlight);
             });
         }
     }
@@ -224,6 +225,9 @@ BIMVIZ.UI.DefaultTreesHighlightControl.prototype.onProjectLoaded = function (pro
             var nodes = [];
             for (var i = 0; i < childs.length; i++) {
                 var childnode = childs[i];
+                if (childnode.Level == "Group" && childnode.Name == "IfcSpace")
+                    continue;
+
                 var pLenth=childnode.Children.length;
                 var lenthTxt=" - ("+pLenth+")";
                 if(childnode.Children.length==0){
@@ -232,6 +236,9 @@ BIMVIZ.UI.DefaultTreesHighlightControl.prototype.onProjectLoaded = function (pro
                 if(childnode.IfcType=="IfcBuildingStorey"){
                     pLenth=0;
                     for(var j=0;j<childnode.Children.length;j++){
+                        if (childnode.Children[j].Name == "IfcSpace")
+                            continue;
+
                         pLenth=pLenth+childnode.Children[j].Children.length;
                         lenthTxt=" - ("+pLenth+")";
                     }

@@ -39,7 +39,7 @@ BIMVIZ.UI.DefaultDomainControl.prototype.onProjectLoaded = function(project){
                                     </div>\
                                     <div style="float:right;padding-top:10px;">\
                                         <label class="switch switch-primary switch-round">\
-                                            <input type="checkbox" class="bv_domaincheckbox" checked="" style="width:30px;">\
+                                            <input type="checkbox" class="bv_domaincheckbox" {4} style="width:30px;">\
                                             <span class="switch-label" data-on="" data-off="">\</span>\
                                         </label>\
                                     </div>\
@@ -76,7 +76,10 @@ BIMVIZ.UI.DefaultDomainControl.prototype.onProjectLoaded = function(project){
                 defaulticon = imagepath + icondict[name];
             }
 
-            var text = template.format(key, name, meshnumber, defaulticon);
+            var text = template.format(key, name, meshnumber, defaulticon, 'checked=""');
+            if (key == 'IfcSpace'){
+                text = template.format(key, name, meshnumber, defaulticon, '');
+            }
 
             treecontainer.append(text);
         }

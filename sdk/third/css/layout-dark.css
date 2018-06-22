@@ -1853,3 +1853,10 @@ div.toggle.active > label:before {
 .music-album-song-list li {
 	background-color: rgba(0,0,0,0.2);
 }
+
+.svghover{
+    fill:none;
+    stroke: #00FF00;
+    stroke-opacity: 0.8;
+	stroke-width: 0.1;
+}

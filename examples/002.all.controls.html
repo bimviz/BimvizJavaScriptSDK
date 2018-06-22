@@ -14,6 +14,7 @@
     <link href="../sdk/viz/ui/default.css" rel="stylesheet" type="text/css" />
     <link href="../sdk/third/css/jquery-ui-1.10.4.custom.css" rel="stylesheet" />
     <link href="../sdk/third/toolbar/jquery.toolbar.css" rel="stylesheet" />
+	<link href="../sdk/third/colpick/css/colpick.css" rel="stylesheet" />
 
     <script src="../sdk/third/jquery-1.10.2.min.js"></script>
     <script src="../sdk/third/jquery-ui.min.js"></script>
@@ -22,6 +23,11 @@
     <script src="../sdk/third/jstree/jstree.js"></script>
     <script src="../sdk/third/jquery-slider/jquery-ui-slider-pips.min.js"></script>
     <script src="../sdk/third/toolbar/jquery.toolbar.js"></script>
+	<script src="../sdk/third/jCanvas.js"></script>
+	<script src="../sdk/third/html2canvas-1.0.0/html2canvas.min.js"></script>
+	<script src="../sdk/third/colpick/js/colpick.js"></script>
+	<script src="../sdk/third/d3/d3.v4.min.js"></script>
+	<script src="../sdk/third/d3/d3-selection-multi.v0.4.min.js"></script>
 
     <script src="../sdk/viz/bimviz.js"></script>
 
@@ -45,6 +51,10 @@
 	<script src="../sdk/viz/ui/DefaultRectSelectControl.js"></script>
 	<script src="../sdk/viz/ui/DefaultHtmlMarkerControl.js"></script>
 	<script src="../sdk/viz/ui/DefaultFileLoadControl.js"></script>
+	<script src="../sdk/viz/ui/DefaultBimSpaceControl.js"></script>
+	<script src="../sdk/viz/ui/DefaultMarkupControl.js"></script>
+	<script src="../sdk/viz/ui/DefaultPlanViewControl.js"></script>
+	<script src="../sdk/viz/ui/DefaultStoreyGridControl.js"></script>
 
 </head>
 <body >
@@ -140,6 +150,22 @@
 		// 文件动态加载控件
 		var customTreeControl = new BIMVIZ.UI.DefaultFileLoadControl("自定义树", "fa fa-files-o");
 		toolbar.addControl(customTreeControl);
+		
+		// 轴网显示控件
+		var floorGridControl = new BIMVIZ.UI.DefaultStoreyGridControl("轴网显示", "fa fa-table");
+		toolbar.addControl(floorGridControl);
+
+		// space显示控件
+		var bimSpaceControl = new BIMVIZ.UI.DefaultBimSpaceControl("Space显示", "fa fa-cube");
+		toolbar.addControl(bimSpaceControl);
+
+		//二维图纸控件
+		var planViewControl = new BIMVIZ.UI.DefaultPlanViewControl("二维图纸", "fa fa-newspaper-o");
+		toolbar.addControl(planViewControl);
+
+		//批注控件
+		var markupControl = new BIMVIZ.UI.DefaultMarkupControl("批注", "fa fa-pencil");
+		toolbar.addControl(markupControl);
 			
         // 开始加载数据
         bimEngine.start();

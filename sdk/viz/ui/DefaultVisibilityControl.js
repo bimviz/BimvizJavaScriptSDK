@@ -27,6 +27,7 @@ BIMVIZ.UI.DefaultVisibilityControl.prototype.onProjectLoaded = function(project)
 
     var treecontainer = $('#bv_DefaultVisibilityTree');
     var inAntiCheckMode = false;
+
 	function create() {
         treecontainer.jstree({
             'core': {
@@ -64,7 +65,8 @@ BIMVIZ.UI.DefaultVisibilityControl.prototype.onProjectLoaded = function(project)
         }
         else{
             node.Children.forEach(function(subnode, index){
-                collectElements(subnode, vis);
+                if (subnode.Level != "Group" || subnode.Name != "IfcSpace")
+                    collectElements(subnode, vis);
             });
         }
     }
@@ -76,6 +78,9 @@ BIMVIZ.UI.DefaultVisibilityControl.prototype.onProjectLoaded = function(project)
             var nodes = [];
             for (var i = 0; i < childs.length; i++) {
                 var childnode = childs[i];
+                if (childnode.Level == "Group" && childnode.Name == "IfcSpace")
+                    continue;
+
                 var pLenth=childnode.Children.length;
                 var lenthTxt=" - ("+pLenth+")";
                 if(childnode.Children.length==0){
@@ -84,6 +89,9 @@ BIMVIZ.UI.DefaultVisibilityControl.prototype.onProjectLoaded = function(project)
                 if(childnode.IfcType=="IfcBuildingStorey"){
                     pLenth=0;
                     for(var j=0;j<childnode.Children.length;j++){
+                        if (childnode.Children[j].Name == "IfcSpace")
+                            continue;
+
                         pLenth=pLenth+childnode.Children[j].Children.length;
                         lenthTxt=" - ("+pLenth+")";
                     }
@@ -110,6 +118,9 @@ BIMVIZ.UI.DefaultVisibilityControl.prototype.onProjectLoaded = function(project)
         uitree.check_all(true);
         for(var i=0, iLen = bimScene.ElementList.length; i < iLen; i++){
             var element = bimScene.ElementList[i];
+            if (element.IfcType == "IfcSpace")
+                continue;
+
             element.Parent.Visible = true;
             element.Parent.Parent.Visible = true;
             scope.engine.setElementVisible(element.Id, true);
@@ -121,6 +132,9 @@ BIMVIZ.UI.DefaultVisibilityControl.prototype.onProjectLoaded = function(project)
         uitree.uncheck_all(true);
         for(var i=0, iLen = bimScene.ElementList.length; i < iLen; i++){
             var element = bimScene.ElementList[i];
+            if (element.IfcType == "IfcSpace")
+                continue;
+
             element.Parent.Visible = false;
             element.Parent.Parent.Visible = false;
             scope.engine.setElementVisible(element.Id, false);
@@ -145,6 +159,9 @@ BIMVIZ.UI.DefaultVisibilityControl.prototype.onProjectLoaded = function(project)
 
         for(var i=0, iLen = bimScene.ElementList.length; i < iLen; i++){
             var element = bimScene.ElementList[i];
+            if (element.IfcType == "IfcSpace")
+                continue;
+
             scope.engine.setElementVisible(element.Id, !element.Visible);
         }
     });

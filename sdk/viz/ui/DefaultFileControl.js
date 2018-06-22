@@ -62,6 +62,7 @@ BIMVIZ.UI.DefaultFileControl.prototype.onProjectLoaded = function(project){
         var modelid = $(this).parents('.bv_modelitem').attr("rel");
         var ch = $(this).prop("checked");
         scope.engine.showFile(modelid, ch);
+        scope.engine.showType('IfcSpace', false);
     });
 
     $('#bv_file_check_all').click(function (e) {
@@ -69,6 +70,7 @@ BIMVIZ.UI.DefaultFileControl.prototype.onProjectLoaded = function(project){
             var modelid = $(this).parents('.bv_modelitem').attr("rel");
             $(this).prop("checked", true);
             scope.engine.showFile(modelid, true);
+            scope.engine.showType('IfcSpace', false);
         });
     });
 
@@ -86,6 +88,7 @@ BIMVIZ.UI.DefaultFileControl.prototype.onProjectLoaded = function(project){
             var ch = !$(this).prop("checked");
             $(this).prop("checked", ch);
             scope.engine.showFile(modelid, ch);
+            scope.engine.showType('IfcSpace', false);
         });
     });
 

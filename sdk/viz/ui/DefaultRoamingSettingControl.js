@@ -45,13 +45,40 @@ BIMVIZ.UI.DefaultRoamingSettingControl.prototype.onProjectLoaded = function (pro
           </div>\
         </div>\
         <hr style="margin:5px;">\
-        <div id="bv_panspeed" class="list-item-font padding-10">\
+        <div id="bv_keymovementspeed" class="list-item-font padding-10">\
             <div class="margin-bottom-20">\
-                <label for="txtspeed">漫游飞行速度（倍数）</label>\
+                <label for="txtspeed">键盘飞行速度（倍数）</label>\
                 <input type="text" id="txtspeed" class="form-control">\
              </div>\
              <div class="slider-wrapper black-slider">\
                         <div id="bv_sliderspeed"></div>\
+             </div>\
+        </div>\
+        <div id="bv_panspeed" class="list-item-font padding-10">\
+            <div class="margin-bottom-20">\
+                <label for="txtpanspeed">相机平移速度（倍数）</label>\
+                <input type="text" id="txtpanspeed" class="form-control">\
+             </div>\
+             <div class="slider-wrapper black-slider">\
+                        <div id="bv_sliderpanspeed"></div>\
+             </div>\
+        </div>\
+         <div id="bv_zoomspeed" class="list-item-font padding-10">\
+            <div class="margin-bottom-20">\
+                <label for="txtzoomspeed">相机缩放速度（倍数）</label>\
+                <input type="text" id="txtzoomspeed" class="form-control">\
+             </div>\
+             <div class="slider-wrapper black-slider">\
+                        <div id="bv_sliderzoomspeed"></div>\
+             </div>\
+        </div>\
+        <div id="bv_rotatespeed" class="list-item-font padding-10">\
+            <div class="margin-bottom-20">\
+                <label for="txtrotatespeed">相机旋转速度（倍数）</label>\
+                <input type="text" id="txtrotatespeed" class="form-control">\
+             </div>\
+             <div class="slider-wrapper black-slider">\
+                        <div id="bv_sliderrotatespeed"></div>\
              </div>\
         </div>\
         <div class="padding-10 input-group">\
@@ -140,6 +167,86 @@ BIMVIZ.UI.DefaultRoamingSettingControl.prototype.onProjectLoaded = function (pro
         $(this).val(value);
         $("#bv_sliderspeed").slider("value", value);
         scope.engine.setKeyControlMovementSpeed(value * rate);
+    });
+
+    $("#bv_sliderpanspeed").slider({
+        value: scope.engine.getCameraPanSpeed(),
+        animate: true,
+        min: 0.1,
+        max: 10,
+        step: 0.1,
+        range: "min",
+        slide: function (event, ui) {
+            $("#txtpanspeed").val(ui.value);
+            scope.engine.setCameraPanSpeed(ui.value);
+        }
+    });
+
+    $("#txtpanspeed").val($("#bv_sliderpanspeed").slider("value"));
+    $("#txtpanspeed").change(function () {
+        var value = $(this).val();
+        if (value <= 0.1)
+            value = 0.1;
+
+        if (value >= 10)
+            value = 10;
+
+        $(this).val(value);
+        $("#bv_sliderpanspeed").slider("value", value);
+        scope.engine.setCameraPanSpeed(value);
+    });
+
+    $("#bv_sliderzoomspeed").slider({
+        value: scope.engine.getCameraZoomSpeed(),
+        animate: true,
+        min: 0.1,
+        max: 10,
+        step: 0.1,
+        range: "min",
+        slide: function (event, ui) {
+            $("#txtzoomspeed").val(ui.value);
+            scope.engine.setCameraZoomSpeed(ui.value);
+        }
+    });
+
+    $("#txtzoomspeed").val($("#bv_sliderzoomspeed").slider("value"));
+    $("#txtzoomspeed").change(function () {
+        var value = $(this).val();
+        if (value <= 0.1)
+            value = 0.1;
+
+        if (value >= 10)
+            value = 10;
+
+        $(this).val(value);
+        $("#bv_sliderzoomspeed").slider("value", value);
+        scope.engine.setCameraZoomSpeed(value);
+    });
+
+    $("#bv_sliderrotatespeed").slider({
+        value: scope.engine.getCameraRotateSpeed(),
+        animate: true,
+        min: 0.1,
+        max: 10,
+        step: 0.1,
+        range: "min",
+        slide: function (event, ui) {
+            $("#txtrotatespeed").val(ui.value);
+            scope.engine.setCameraRotateSpeed(ui.value);
+        }
+    });
+    $("#txtrotatespeed").val($("#bv_sliderrotatespeed").slider("value"));
+    $("#txtrotatespeed").change(function () {
+        var value = $(this).val();
+        if (value <= 0.1)
+            value = 0.1;
+
+        if (value >= 10)
+            value = 10;
+
+        $(this).val(value);
+        $("#bv_sliderrotatespeed").slider("value", value);
+        scope.engine.setCameraRotateSpeed(value);
     });
 
     $("#bv_pickWithCameraMove").change(function () {
