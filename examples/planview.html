@@ -1,0 +1,255 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1, user-scalable=no" />
+    <link href="../sdk/third/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+
+    <!-- THEME CSS -->
+    <link href="../sdk/third/css/essentials.css" rel="stylesheet" />
+    <link href="../sdk/third/css/layout-dark.css" rel="stylesheet" />
+    <link href="../sdk/third/jstree/themes/proton/style.min.css" rel="stylesheet" />
+    <link href="../sdk/viz/ui/default.css" rel="stylesheet" type="text/css" />
+    <link href="../sdk/third/css/jquery-ui-1.10.4.custom.css" rel="stylesheet" />
+    <link href="../sdk/third/toolbar/jquery.toolbar.css" rel="stylesheet" />
+	<link href="../sdk/third/colpick/css/colpick.css" rel="stylesheet" />
+
+    <script src="../sdk/third/jquery-1.10.2.min.js"></script>
+    <script src="../sdk/third/jquery-ui.min.js"></script>
+    <script src="../sdk/third/jquery-dialog.js"></script>
+    <script src="../sdk/third/bootstrap.min.js"></script>
+    <script src="../sdk/third/jstree/jstree.js"></script>
+    <script src="../sdk/third/jquery-slider/jquery-ui-slider-pips.min.js"></script>
+    <script src="../sdk/third/toolbar/jquery.toolbar.js"></script>
+	<script src="../sdk/third/jCanvas.js"></script>
+	<script src="../sdk/third/html2canvas-1.0.0/html2canvas.min.js"></script>
+	<script src="../sdk/third/colpick/js/colpick.js"></script>
+	<script src="../sdk/third/d3/d3.v4.min.js"></script>
+	<script src="../sdk/third/d3/d3-selection-multi.v0.4.min.js"></script>
+
+    <script src="../sdk/viz/bimviz.js"></script>
+
+    <script src="../sdk/viz/ui/DefaultMessageControl.js"></script>
+    <script src="../sdk/viz/ui/DefaultToolBar.js"></script>
+    <script src="../sdk/viz/ui/DefaultFileControl.js"></script>
+    <script src="../sdk/viz/ui/DefaultTreesVisibilityControl.js"></script>
+    <script src="../sdk/viz/ui/DefaultDomainControl.js"></script>
+    <script src="../sdk/viz/ui/DefaultPropertyControl.js"></script>
+    <script src="../sdk/viz/ui/DefaultSearchControl.js"></script>
+    <script src="../sdk/viz/ui/DefaultMarkControl.js"></script>
+    <script src="../sdk/viz/ui/DefaultMarkSimpleListControl.js"></script>
+    <script src="../sdk/viz/ui/DefaultBuildingStoreyControl.js"></script>
+    <script src="../sdk/viz/ui/DefaultRoamingSettingControl.js"></script>
+    <script src="../sdk/viz/ui/DefaultTreesHighlightControl.js"></script>
+    <script src="../sdk/viz/ui/DefaultSelectionSetControl.js"></script>
+    <script src="../sdk/viz/ui/DefaultDatabaseQueryControl.js"></script>
+    <script src="../sdk/viz/ui/DefaultCameraBookmarkControl.js"></script>
+    <script src="../sdk/viz/ui/DefaultFixedClipControl.js"></script>
+	<script src="../sdk/viz/ui/DefaultMeasureControl.js"></script>
+	<script src="../sdk/viz/ui/DefaultRectSelectControl.js"></script>
+	<script src="../sdk/viz/ui/DefaultHtmlMarkerControl.js"></script>
+	<script src="../sdk/viz/ui/DefaultFileLoadControl.js"></script>
+	<script src="../sdk/viz/ui/DefaultBimSpaceControl.js"></script>
+	<script src="../sdk/viz/ui/DefaultMarkupControl.js"></script>
+	<script src="../sdk/viz/ui/DefaultPlanViewControl.js"></script>
+	<script src="../sdk/viz/ui/DefaultStoreyGridControl.js"></script>
+
+</head>
+<body >
+     <div id="main">
+        <div style="float:left;  width:50%;height:100%;border: 2px solid grey;" id="planview"></div>
+        <div style="float:right;  width:50%;height:100%;border: 2px solid grey;" id="viewport">
+            <div id="messages"></div>
+        </div>
+    </div>
+        <script>
+
+            var itemTemplate = "<div class='planview_item' rel='{0}'>\
+                                <div class='planview_item_thumbnail'><img src='{2}'style='width: 140px;'/></div>\
+                                <p class='planview_item_name'>{1}</p>\
+                              </div>";
+
+            var pid = '';
+            var bimEngine = new BIMVIZ.RenderEngine({
+                projectId: pid,
+                renderDomId: 'viewport',
+                ip: "",
+                port: ,
+                key: '',
+                resourcePath: '../sdk/viz/data/',
+                https: false,
+                groundShadow: true,              
+                planviewRenderDomId: 'planview'
+            });
+
+              // 消息输出控件，包括调试信息，进度信息
+        var msgControl = new BIMVIZ.UI.DefaultMessageControl(bimEngine, 'messages');
+
+        // 工具栏
+        var toolbar = new BIMVIZ.UI.DefaultToolBar(bimEngine);
+
+        // 添加文件控件
+        var fileControl = new BIMVIZ.UI.DefaultFileControl("文件", "fa-file-o");
+        toolbar.addControl(fileControl);
+      
+        // 添加场景树控件
+        var spaceControl = new BIMVIZ.UI.DefaultTreesHighlightControl("场景树", "fa-tree");
+        toolbar.addControl(spaceControl);
+
+        // 添加类型控件
+        var domainControl = new BIMVIZ.UI.DefaultDomainControl("类型", "fa-map-o");
+        toolbar.addControl(domainControl);
+
+        // 添加属性控件
+        var propertyControl = new BIMVIZ.UI.DefaultPropertyControl("属性", "fa-info-circle");
+        toolbar.addControl(propertyControl);
+
+        // 添加搜索控件
+        var searchControl = new BIMVIZ.UI.DefaultSearchControl("搜索", "fa-search");
+        toolbar.addControl(searchControl);
+
+        // 添加标注控件
+        // 或者可以调用带编辑功能的版本 BIMVIZ.UI.DefaultMarkControl
+        var markControl = new BIMVIZ.UI.DefaultMarkControl("标注", "fa-map-marker");
+        toolbar.addControl(markControl);
+
+        // 添加楼层控件
+        var storeyControl = new BIMVIZ.UI.DefaultBuildingStoreyControl("楼层", "fa-list");
+        toolbar.addControl(storeyControl);
+
+        // 场景浏览参数设置
+        var roamingControl = new BIMVIZ.UI.DefaultRoamingSettingControl("漫游控制", "fa-send");
+        toolbar.addControl(roamingControl);
+
+        // 数据查询分析
+        var queryControl = new BIMVIZ.UI.DefaultDatabaseQueryControl("分析查询", "fa-database");
+        toolbar.addControl(queryControl);
+
+        // 添加场景树控件
+        var visibleControl = new BIMVIZ.UI.DefaultTreesVisibilityControl("可见树", "fa-sitemap");
+        toolbar.addControl(visibleControl);
+
+        // 添加选择集控件
+        var selectionSetControl = new BIMVIZ.UI.DefaultSelectionSetControl("选择集", "fa-th-large");
+        toolbar.addControl(selectionSetControl);
+
+        // 相机书签控件
+        var cameraBookmarkControl = new BIMVIZ.UI.DefaultCameraBookmarkControl("相机书签", "fa-camera");
+        toolbar.addControl(cameraBookmarkControl);
+
+        // 常规剖切控件
+        var fixedClipControl = new BIMVIZ.UI.DefaultFixedClipControl("常规剖切", "fa fa-columns");
+        toolbar.addControl(fixedClipControl);
+		
+		//测量控件
+		var measureControl = new BIMVIZ.UI.DefaultMeasureControl("测量", "fa fa-object-ungroup");
+		toolbar.addControl(measureControl);
+		
+		// 框选控件
+		var rectSelectControl = new BIMVIZ.UI.DefaultRectSelectControl("框选", "fa fa-hand-stop-o");
+		toolbar.addControl(rectSelectControl);
+		
+		// HTML标记控件
+		var htmlMarkerControl = new BIMVIZ.UI.DefaultHtmlMarkerControl("HTML标记","fa fa-flag");
+		toolbar.addControl(htmlMarkerControl);
+
+		// 文件动态加载控件
+		var customTreeControl = new BIMVIZ.UI.DefaultFileLoadControl("自定义树", "fa fa-files-o");
+		toolbar.addControl(customTreeControl);
+		
+		// 轴网显示控件
+		var floorGridControl = new BIMVIZ.UI.DefaultStoreyGridControl("轴网显示", "fa fa-table");
+		toolbar.addControl(floorGridControl);
+
+		// space显示控件
+		var bimSpaceControl = new BIMVIZ.UI.DefaultBimSpaceControl("Space显示", "fa fa-cube");
+		toolbar.addControl(bimSpaceControl);
+		
+		//批注控件
+		var markupControl = new BIMVIZ.UI.DefaultMarkupControl("批注", "fa fa-pencil");
+		toolbar.addControl(markupControl);
+
+            $(window).resize(function () {
+                $('#planview').height($(window).height());
+                $('#viewport').height($(window).height());
+
+                bimEngine.resize($('#viewport').width(), $('#viewport').height());
+            });
+
+            $('#planview').height($(window).height());
+            $('#viewport').height($(window).height());
+
+            bimEngine.addListener(BIMVIZ.EVENT.ProjectOverviewLoaded, function (evt) {
+                var manager = bimEngine.getPlanViewManager();
+                var highlightMgr = bimEngine.getHighlightManager();
+
+                if (manager) {
+                    var container = $('#' + manager.ContainerId);
+
+                    function addItemToUi(item) {
+                        var control = $('#planviewList');
+                        var text = itemTemplate.format(item.id, item.name, item.thumbnailurl);
+                        control.append(text);
+
+                        // For Click
+                        $('.planview_item[rel=' + item.id + ']').click(function (e) {
+                            manager.switchPlanView(item.id);
+                        });
+                    }
+
+                    bimEngine.addListener(BIMVIZ.EVENT.OnPickElement, function (evt) {
+                        manager.jumpToElement(evt.args.elementId);
+                    });
+
+                    bimEngine.addListener(BIMVIZ.EVENT.OnPlanViewPickElement, function (evt) {
+                        if (evt.args.elementId) {
+                            highlightMgr.clearHighlightElementList();
+                            highlightMgr.highlightElement(evt.args.elementId);
+                            bimEngine.flyToElement(evt.args.elementId);
+                        }
+                    });
+
+                    function init() {
+                        var createHtml = "<div id='planviewpanel' class='planview_panel'>\
+                                    <div id='planviewList'  style='overflow:auto;width:160px;'>\
+                                         <div class='pull-left' style='width:100%;height:45px;background-color:rgba(0, 0, 0, 0.7);'>\
+                                            <label style='width:100%;margin:10px 10px 5px 10px;'>\
+                                                <span id='sp_planview_summary' style='color:white;'> 图纸张数：0 </span>\
+                                            </label>\
+                                         </div>\
+                                    </div>\
+                               </div>";
+                        container.append(createHtml);
+                        var planviewsPanel = $('#planviewpanel');
+                        planviewsPanel.height(container.height() - 20);
+
+                        $(window).resize(function () {
+                            planviewsPanel.height(container.height() - 20);
+                        });
+
+                        manager.getList(function (success, list) {
+                            if (success) {
+                                if (list.length > 0){
+                                    list.forEach(function (item) {
+                                        addItemToUi(item);
+                                    });
+                                    
+                                    manager.switchPlanView(list[0].id);
+                                }                                
+
+                                $('#sp_planview_summary').html(' 图纸张数：' + list.length);                               
+                            }
+                        });
+                    }
+
+                    init();
+                }
+            });
+
+            // 开始加载数据
+            bimEngine.start();
+        </script>
+</body>
+</html>

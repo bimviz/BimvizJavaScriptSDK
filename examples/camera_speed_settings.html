@@ -1,0 +1,122 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1, user-scalable=no" />
+    <link href="../sdk/third/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+
+    <!-- THEME CSS -->
+    <link href="../sdk/third/css/essentials.css" rel="stylesheet" />
+    <link href="../sdk/third/css/layout-dark.css" rel="stylesheet" />
+    <link href="../sdk/third/jstree/themes/proton/style.min.css" rel="stylesheet" />
+    <link href="../sdk/viz/ui/default.css" rel="stylesheet" type="text/css" />
+    <link href="../sdk/third/css/jquery-ui-1.10.4.custom.css" rel="stylesheet" />
+    <link href="../sdk/third/toolbar/jquery.toolbar.css" rel="stylesheet" />
+
+    <script src="../sdk/third/jquery-1.10.2.min.js"></script>
+    <script src="../sdk/third/jquery-ui.min.js"></script>
+    <script src="../sdk/third/jquery-dialog.js"></script>
+    <script src="../sdk/third/bootstrap.min.js"></script>
+    <script src="../sdk/third/jstree/jstree.js"></script>
+    <script src="../sdk/third/jquery-slider/jquery-ui-slider-pips.min.js"></script>
+    <script src="../sdk/third/toolbar/jquery.toolbar.js"></script>
+
+    <script src="../sdk/viz/bimviz.js"></script>
+
+    <script src="../sdk/viz/ui/DefaultMessageControl.js"></script>
+
+</head>
+<body >
+    
+        <div id="viewport"> </div>
+        <div id="messages"></div>
+
+    <script>
+
+		function detectmobile() {
+            if (navigator.userAgent.match(/Android/i)
+            || navigator.userAgent.match(/webOS/i)
+            || navigator.userAgent.match(/iPhone/i)
+            || navigator.userAgent.match(/iPad/i)
+            || navigator.userAgent.match(/iPod/i)
+            || navigator.userAgent.match(/BlackBerry/i)
+            || navigator.userAgent.match(/Windows Phone/i)
+            ) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+		
+		var zoomSpeed = 1;
+        var panSpeed = 1;
+        var rotateSpeed = 1;
+        if (detectmobile()) {
+            zoomSpeed = 0.4;
+            panSpeed = 0.8;
+            rotateSpeed = 0.7;
+        }
+
+        var projId = "";
+        var bimEngine = new BIMVIZ.RenderEngine({
+            projectId: projId,
+            renderDomId: 'viewport',
+            ip: "",
+            port: ,
+            key: '',
+            resizeMode: 'fullpage',
+            resourcePath:'../sdk/viz/data/',
+            camera:{
+                zoomSpeed: zoomSpeed,
+                rotateSpeed: rotateSpeed,
+                panSpeed: panSpeed
+            }
+        });
+
+        var msgControl = new BIMVIZ.UI.DefaultMessageControl(bimEngine, 'messages');
+
+        bimEngine.start();
+
+        bimEngine.addListener(BIMVIZ.EVENT.OnSceneLoadCompleted,function(){
+            var html="<ul style='position: absolute;left: 10px;top: 100px;z-index: 2000;list-style: none;border: 1px solid green;padding: 10px;'>" +
+                "<li><label>场景的缩放速度（灵敏度）</label><br /><input name='zoomSpeed'/></li><br />" +
+                "<li><label>场景的旋转速度（灵敏度）</label><br /><input name='rotateSpeed'/></li><br />" +
+                "<li><label>场景的平移速度（灵敏度）</label><br /><input name='panSpeed'/></li><br />" +
+                "<li><button id='ok' style='padding: 5px 10px;background: green;color: #ffffff;border-radius: 5px;'>确定</button></li>" +
+                "</ul>";
+            $("#viewport").append(html);
+            $("#ok").click(function(){
+                var zoomSpeed=$("[name='zoomSpeed']").val();
+                var rotateSpeed=$("[name='rotateSpeed']").val();
+                var panSpeed=$("[name='panSpeed']").val();
+
+                if(zoomSpeed!=""){
+                    bimEngine.setCameraZoomSpeed(zoomSpeed);
+                }
+                if(rotateSpeed!=""){
+                    bimEngine.setCameraRotateSpeed(rotateSpeed);
+                }
+                if(panSpeed!=""){
+                    bimEngine.setCameraPanSpeed(panSpeed);
+                }
+                alert("设置成功！");
+                getCurrentSpeed(bimEngine);
+            });
+        });
+
+        function getCurrentSpeed(bimEngine){
+            var currentCameraZoomSpeed=bimEngine.getCameraZoomSpeed();
+            var currentCameraRotateSpeed=bimEngine.getCameraRotateSpeed();
+            var currentCameraPanSpeed=bimEngine.getCameraPanSpeed();
+            console.log("CameraZoomSpeed："+currentCameraZoomSpeed);
+            console.log("CameraRotateSpeed："+currentCameraRotateSpeed);
+            console.log("CameraPanSpeed："+currentCameraPanSpeed);
+        }
+
+       
+    </script>
+</body>
+</html>
