@@ -7,4 +7,4 @@ For development, you can also visit http://cloud.bimviz.io
 The current version is V1.6.6
 
 ChangeLog:
-http://cloud.bimviz.io:8088/help/2018/06/14/changelog-1-6-6/
+http://cloud.bimviz.io:8088/help/2018/07/09/changelog-1-6-6-5/ 

@@ -6,6 +6,11 @@ BIMVIZ.UI.DefaultMarkupControl.prototype = Object.create(BIMVIZ.UI.DefaultContro
 BIMVIZ.UI.DefaultMarkupControl.constructor = BIMVIZ.UI.DefaultMarkupControl;
 
 BIMVIZ.UI.DefaultMarkupControl.prototype.onProjectLoaded = function(project){
+    var init={
+        borderWidth:2,
+        borderColor:"#FF2A2A",
+        fontSize:18
+    };
     var scope = this;
     var $body=$("body");
     var mgr = scope.engine.getMarkupManager();
@@ -16,9 +21,9 @@ BIMVIZ.UI.DefaultMarkupControl.prototype.onProjectLoaded = function(project){
     var layerArray=[];
     var undoLayerArray=[];
     var visualAngleArray=[]; // visualAngle
-    var borderWidth=2;
-    var borderColor="#FF2A2A";
-    var fontSize=18;
+    var borderWidth=init.borderWidth;
+    var borderColor=init.borderColor;
+    var fontSize=init.fontSize;
     var thumbnail;
     var position;
     var target;
@@ -102,7 +107,7 @@ BIMVIZ.UI.DefaultMarkupControl.prototype.onProjectLoaded = function(project){
                                                 <span class='copllese'><i class='ico-light fa fa-caret-down' aria-hidden='true'></i></span>\
                                                 <ul id='LineTools' class='tools'>\
                                                     <li id='drawArrow'><i class='fa fa-long-arrow-up' aria-hidden='true' style='transform: rotate(45deg);margin:12px -5px 0 0;font-size: 24px;color: #DCDCDC;'></i></li>\
-                                                    <li id='drawLine'><img src='../sdk/viz/data/images/markup/line-white.png' alt=''></li>\
+                                                    <li id='drawLine'><i class='fa fa-minus' aria-hidden='true' style='transform: rotate(-45deg);margin: 20px -5px 0 0;font-size: 24px;color: #DCDCDC;'></i></li>\
                                                 </ul>\
                                             </li>\
                                             <li data-flag='painterLis'>\
@@ -199,7 +204,7 @@ BIMVIZ.UI.DefaultMarkupControl.prototype.onProjectLoaded = function(project){
                                                 <button id='editMarkupBtn' data-id='\"+dataid+\"'><i class='fa fa-check' style='margin-right: 10px'></i>确定</button>\
                                                 <button id='editMarkupCancel'><i class='fa fa-trash' style='margin-right: 10px'></i>取消</button>\
                                             </div>\
-                                            <div id='changeMarkupmarker' class='changeMarkupmarker' flag='0'><button>更新批阅标签</button></div>\
+                                            <div id='changeMarkupmarker' class='changeMarkupmarker' flag='0'><button>替换批阅标签</button></div>\
                                         </div>\
                                     </div>";
             $body.append(editTemplateDialog);
@@ -280,8 +285,9 @@ BIMVIZ.UI.DefaultMarkupControl.prototype.onProjectLoaded = function(project){
         item.position=position;
         item.target=target;
         mgr.update(item, function(){
+            console.log(item);
             $("#markupImgLists").find("#"+item.id).find(".markup-item-name").html(name);
-            $("#markupImgLists").find("#"+item.id).find(".markup-item-thumbnail-img").attr("background",url);
+            $("#markupImgLists").find("#"+item.id).find(".markup-item-thumbnail-img img").attr("src",url);
             $("#markupImgLists").find("#"+item.id).find(".markup-item-description").html(description);
         });
     };
@@ -1564,6 +1570,9 @@ BIMVIZ.UI.DefaultMarkupControl.prototype.onProjectLoaded = function(project){
             layerArray=[];
             layer=0;
             $("#markupPanel").remove();
+            borderWidth=init.borderWidth;
+            borderColor=init.borderColor;
+            fontSize=init.fontSize;
         });
         $body.find("#saved").unbind().click(function(){
             layerArray=[];
@@ -1628,6 +1637,9 @@ BIMVIZ.UI.DefaultMarkupControl.prototype.onProjectLoaded = function(project){
                         }
                         $body.find("#createMarkupDialogWarpper").remove();
                         $("#markupPanel").remove();
+                        borderWidth=init.borderWidth;
+                        borderColor=init.borderColor;
+                        fontSize=init.fontSize;
                     }
                 });
             });
