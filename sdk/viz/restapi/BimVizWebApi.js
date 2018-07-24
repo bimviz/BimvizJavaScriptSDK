@@ -12,6 +12,7 @@
     this.RESTTOKEN="";
 
     var keytext = parameters.key;
+	var clinetauth = BIMVIZ.API.createClientCertificate();
     this.APIURL = _this.RESTHOST + "/api/";
 
     function init() {
@@ -41,7 +42,8 @@
             data: {
                 grant_type: 'restapi',
                 username: 'devkey',
-                password: keytext
+                password: keytext,
+				tokenstamp:clinetauth
             },
             dataType: 'json',
             success: function (result) {
