@@ -1,7 +1,9 @@
 ﻿
 BIMVIZ.ProjectState = {
+	NotStart:-1,
     Processing: 0,
-    Finished: 1
+    Finished: 1,
+	Failed:2
 };
 
 BIMVIZ.SceneBackgroundStyle = {

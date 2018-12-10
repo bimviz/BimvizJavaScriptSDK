@@ -55,6 +55,7 @@
 	<script src="../sdk/viz/ui/DefaultMarkupControl.js"></script>
 	<script src="../sdk/viz/ui/DefaultPlanViewControl.js"></script>
 	<script src="../sdk/viz/ui/DefaultStoreyGridControl.js"></script>
+	<script src="../sdk/viz/ui/DefaultRoamPathControl.js"></script>
 
 </head>
 <body >
@@ -166,6 +167,10 @@
 		//批注控件
 		var markupControl = new BIMVIZ.UI.DefaultMarkupControl("批注", "fa fa-pencil");
 		toolbar.addControl(markupControl);
+		
+		//路径漫游
+		var roamPathControl = new BIMVIZ.UI.DefaultRoamPathControl("路径漫游", "fa fa-stumbleupon");
+        toolbar.addControl(roamPathControl);
 			
         // 开始加载数据
         bimEngine.start();

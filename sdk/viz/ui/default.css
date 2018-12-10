@@ -1,3 +1,5 @@
+* { touch-action: auto; }
+
 body{
     margin: 0;
     padding: 0;
@@ -89,6 +91,7 @@ a:hover, a:focus{
 
 .bimviz_toolbar_panel{
     background-color:rgba(0, 0, 0, 0.66);
+    /*background-color:rgba(0, 0, 0, 0.78);*/
     border:1px solid #cacaca;
     height: 100%;
     display:none;
@@ -96,17 +99,19 @@ a:hover, a:focus{
     overflow:auto;
 }
 
-.bimviz_toolbar_panel::-webkit-scrollbar-track
-{
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-    background-color: #F5F5F5;
-    border-radius: 10px;
-}
+/*.bimviz_toolbar_panel::-webkit-scrollbar-track*/
+/*{*/
+    /*-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);*/
+    /*background-color: #F5F5F5;*/
+    /*border-radius: 10px;*/
+/*}*/
 
 .bimviz_toolbar_panel::-webkit-scrollbar
 {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
     width: 5px;
     background-color: #F5F5F5;
+    border-radius: 10px;
 }
 
 .planview_panel::-webkit-scrollbar-thumb
@@ -127,8 +132,8 @@ a:hover, a:focus{
 .list-item-fontsmall{  
     font-size:12px;
     color: #fcfcfc;
-    text-decoration: none;
-} 
+text-decoration: none;
+}
 
 .resultSelectedBackground{
     background-color:#333333;
@@ -638,7 +643,6 @@ a:hover, a:focus{
     position: absolute;
     z-index:1000;
 }
-* { touch-action: none; }
 
 #canvasContainer textarea{
     width: 100%;
@@ -885,4 +889,239 @@ a:hover, a:focus{
 .planview_item_thumbnail:hover{
     border:1px dotted   #fff;
 }
+
+
+/*漫游路径*/
+#createPathNamePanel{
+    width: 400px;
+    display:none;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-top: -111px;
+    margin-left: -200px;
+    z-index: 10000;
+    background: #000000;
+    color: #ffffff;
+    border-radius: 2px;
+}
+.createPathNamePanel-title{
+    color: #ffffff;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+#roamPathList li{
+    list-style: none;
+}
+#roamPathList .roamPath-item-click{
+    background: rgba(0,0,0,0.56);
+}
+
+#roamPathList .roamPath-item-click .roamPath-item-warpper{
+    height: 60px;
+    line-height: 60px;
+    padding: 0 15px;
+}
+
+
+.li-border-bottom{
+    border-bottom: 1px solid #666666;
+}
+.li-active{
+    background: #000000 !important;
+}
+
+.roamPath-item-name{
+    display: inline-block;
+    width: 173px;
+    margin-right: 10px;
+}
+
+.roamitem-btns{
+    display: inline-block;
+    width: 100px;
+    float: right;
+    margin-top: 16px;
+}
+
+.roamitem-btns span{
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    float: right;
+    cursor: pointer;
+    position: relative;
+    color: #ccc;
+}
+
+.roamitem-btns span:hover{
+    color: #ffffff;
+}
+
+.roamitem-btns span i{
+    display: inline-block;
+    position: absolute;
+    left: 5px;
+    top: 6px;
+}
+.icon-active{
+    color: #ffffff !important;
+}
+
+#roamPathPanel{
+    padding: 1px 20px 60px 20px;
+    display: none;
+    background: rgba(62,62,62,0.5);
+    border-bottom: 1px solid #666666;
+}
+
+.roamPath-item{
+    margin: 20px 0;
+}
+
+.path-item-title{
+    color: #FFFFFF;
+}
+
+.path-item-input{
+    width: 100%;
+    border-radius: 3px;
+    background: rgba(0,0,0,0);
+    border: 1px solid #666666;
+    padding: 9px 10px;
+    color: #ffffff;
+    margin-top: 10px;
+}
+
+.check-div{
+    position: absolute;
+    right: 0px;
+    top: -2px;
+}
+
+/************ checkbox */
+.checkbox-warpper{
+    display: inline-block;
+}
+
+.checkbox-warpper input{
+    width: 16px;
+    height: 16px;
+}
+
+.checkbox-warpper span {
+    position: relative;
+}
+
+.checkbox-warpper .checkbox-input {
+    position: absolute;
+    visibility: hidden;
+}
+
+.checkbox-warpper .checkbox-input+label {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 1px solid #ffffff;
+    cursor: pointer;
+}
+.checkbox-warpper .roamline-checkbox:checked+label:after {
+    content: "";
+    position: absolute;
+    left: 2px;
+    width: 16px;
+    height: 8px;
+    border: 2px solid #ffffff;
+    border-top-color: transparent;
+    border-right-color: transparent;
+    -ms-transform: rotate(-60deg);
+    -moz-transform: rotate(-60deg);
+    -webkit-transform: rotate(-60deg);
+    transform: rotate(-45deg);
+}
+
+.roadLine-text{
+    position: relative;
+    top: -8px;
+}
+
+.visualAngle-btns{
+    display: inline-block;
+}
+
+.visualAngle-btns a{
+    text-decoration:underline;
+    color: #FFFFFF;
+}
+
+.path-item-btn{
+    color: #ffffff;
+    padding: 4px 8px;
+    border: 1px solid #FFFFFF;
+    border-radius: 5px;
+    margin: 7px 7px 7px 0px;
+    font-size: 12px;
+    cursor: pointer;
+}
+.path-item-btn:hover{
+    background: #333;
+}
+
+.roamPath-roadLine{
+    margin: 10px 0;
+}
+
+.path-item-roadLine{
+    color: #ffffff;
+    padding-left: 15px;
+    height: 30px;
+    line-height: 30px;
+    font-size: 12px;
+}
+
+.roadLine-para{
+    float: right;
+    text-align: right;
+    height: 30px;
+    width: 100px;
+    background: rgba(0,0,0,0);
+    border: 1px solid #666666;
+    color: #ffffff;
+    padding: 0 5px;
+}
+
+.roamPath-item-footerBtns{
+    margin-top: 30px;
+}
+
+.roamPath-item-footerBtns button{
+    float: right;
+    padding: 5px 20px;
+    border-radius: 3px;
+    color: #ffffff;
+}
+
+#roamPathPanelOKBtn{
+    border: 1px solid #ffffff;
+}
+#roamPathPanelOKBtn:hover{
+    background: #333;
+}
+
+.bottom-active{
+    background: #000 !important;
+    color: #ffffff !important;
+}
+
+.text-ellipsis{
+    text-overflow:ellipsis; /*让截断的文字显示为点点。还有一个值是clip意思是截断不显示点点*/
+    white-space: nowrap; /*让文字不换行*/
+    overflow: hidden; /*超出要隐藏*/
+}
+/*漫游路径*/
+
+
+
+
 

@@ -8,11 +8,18 @@
     this.KEY = parameters.key;
     this.HOST = "http://" + parameters.ip + ":" + parameters.port;
     this.RESTHOST="http://" + parameters.ip + ":" + parameters.restport;
+	
+	var url = window.location.href.toLowerCase();
+	var https = url.indexOf("https") >= 0;
+	if (https == true) {
+	    this.HOST = "https://" + parameters.ip + ":" + parameters.port;
+		this.RESTHOST="https://" + parameters.ip + ":" + parameters.restport;
+	}
+	
     this.TOKEN = "";
     this.RESTTOKEN="";
 
     var keytext = parameters.key;
-	var clinetauth = BIMVIZ.API.createClientCertificate();
     this.APIURL = _this.RESTHOST + "/api/";
 
     function init() {
@@ -42,8 +49,7 @@
             data: {
                 grant_type: 'restapi',
                 username: 'devkey',
-                password: keytext,
-				tokenstamp:clinetauth
+                password: keytext
             },
             dataType: 'json',
             success: function (result) {
