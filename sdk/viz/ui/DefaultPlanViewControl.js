@@ -73,7 +73,7 @@ BIMVIZ.UI.DefaultPlanViewControl.prototype.onProjectLoaded = function (project) 
                                 </div>\
                             </div>';
 
-        parentContainer = $('#'+bimEngine.ContainerId);
+        parentContainer = $('#'+scope.engine.ContainerId);
         buttonPanelDiv = $('#bv_DefaultToolBar_Button');
 
         var width = parentContainer.width() - 20;

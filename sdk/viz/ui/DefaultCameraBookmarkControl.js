@@ -13,7 +13,7 @@ BIMVIZ.UI.DefaultCameraBookmarkControl.prototype.onProjectLoaded = function(proj
 	var mgr = scope.engine.getCameraBookmarkManager();
 	var height = 200;
 	var itemlist = [];
-    var sceneContainer = $('#'+bimEngine.ContainerId);
+    var sceneContainer = $('#'+scope.engine.ContainerId);
     var control = null;
 
     var itemTemplate = '<div class="bimviz_camera_bookmark_item" rel="{0}">\

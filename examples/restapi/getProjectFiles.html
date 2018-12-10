@@ -33,6 +33,15 @@
 <button id="btn" style="background: green;padding: 10px;margin: 10px;color: #ffffff;border-radius: 5px;">获取单个文件的相关信息</button>
 <div id="pannel" style="margin: 10px;padding: 10px;"></div>
 <script>
+
+    // note start
+    //     请先填写参数，再浏览该案例文件，参数如下：
+    //         ip：bimviz服务器地址，若使用的是公有云，ip为cloud.bimviz.io，使用的是私有云，ip为私有云服务器地址
+    //         port：公有云端口是80，私有云默认端口7004
+    //         restport：公有云端口是10001，私有云默认端口7005
+    //         key：用户的key值
+    // note end
+
     $(document).ready(function(){
         $("#btn").click(function(){
             var webApi = new BIMVIZ.WebApi({
