@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1, user-scalable=no" />
+    <link href="../../sdk/third/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+
+    <!-- THEME CSS -->
+    <link href="../../sdk/third/css/essentials.css" rel="stylesheet" />
+    <link href="../../sdk/third/css/layout-dark.css" rel="stylesheet" />
+    <link href="../../sdk/third/jstree/themes/proton/style.min.css" rel="stylesheet" />
+    <link href="../../sdk/viz/ui/default.css" rel="stylesheet" type="text/css" />
+    <link href="../../sdk/third/css/jquery-ui-1.10.4.custom.css" rel="stylesheet" />
+    <link href="../../sdk/third/toolbar/jquery.toolbar.css" rel="stylesheet" />
+
+    <script src="../../sdk/third/jquery-1.10.2.min.js"></script>
+    <script src="../../sdk/third/jquery-ui.min.js"></script>
+    <script src="../../sdk/third/jquery-dialog.js"></script>
+    <script src="../../sdk/third/bootstrap.min.js"></script>
+    <script src="../../sdk/third/jstree/jstree.js"></script>
+    <script src="../../sdk/third/jquery-slider/jquery-ui-slider-pips.min.js"></script>
+    <script src="../../sdk/third/toolbar/jquery.toolbar.js"></script>
+
+    <script src="../../sdk/viz/bimviz.js"></script>
+    <script src="../../sdk/viz/restapi/modelprojectmanager.js"></script>
+    <script src="../../sdk/viz/restapi/projectbuildmanager.js"></script>
+    <script src="../../sdk/viz/restapi/BimVizWebApi.js"></script>
+
+</head>
+<body>
+
+    <button id="btn" style="background: green;padding: 10px;margin: 10px;color: #ffffff;border-radius: 5px;">根据ID获取项目信息</button>
+    <div id="pannel" style="margin: 10px;padding: 10px;"></div>
+
+    <script>
+        $(document).ready(function(){
+            $("#btn").click(function(){
+                var webApi = new BIMVIZ.WebApi({
+                    ip:"",   //web ip，公有云试用：cloud.bimviz.io
+                    port: ,   //web 端口号，公有云试用：80
+                    key: ""   //操作用户的开发key，公有云试用key
+                });
+                var modelPrjMgr = webApi.getModelProjectManager();
+                var username="";
+                var pid = "";
+                modelPrjMgr.getProjectById(username, pid, function (project) {
+                    console.log(project);
+                    $("#pannel").html("项目名称：" + project.Project.Name + "；项目Guid：" + project.Project.Guid);
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
