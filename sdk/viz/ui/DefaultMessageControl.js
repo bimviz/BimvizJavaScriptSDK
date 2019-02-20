@@ -81,10 +81,17 @@
         $('#bv_div_loadmessages').hide();
         $('#bv_div_progress').hide();
         
-        console.log("ALL Memory Need:", (data.sceneMemorySize/1024/1024).toFixed(0), " MB");
-        console.log("Allowed Memory:", (data.maxAllowedSize/1024/1024).toFixed(0), " MB");
-        console.log("Used Memory:", (data.usedMemorySize/1024/1024).toFixed(0), " MB");
+        console.log("ALL Memory Need:", (data.sceneMemorySize/1024/1024).toFixed(1), " MB");
+        console.log("Allowed Memory:", (data.maxAllowedSize/1024/1024).toFixed(1), " MB");
+        console.log("Used Memory:", (data.usedMemorySize/1024/1024).toFixed(1), " MB");
         console.log("Mobile:", data.mobile);
+
+        if(data.sceneMemorySize > data.maxAllowedSize){
+            var msgformat = "警告:场景没有完全加载！\n场景预计需要内存为 {0} MB\n项目设置最大允许内存为 {1} MB\n请确认并继续浏览,您可以修改后台配置增加最大允许内存。\n";
+            var msg = msgformat.format((data.sceneMemorySize/1024/1024).toFixed(1),(data.maxAllowedSize/1024/1024).toFixed(1));
+            console.warn(msg);
+            alert(msg);
+        }
     };
 
     function onServerDisconnected(evt){
