@@ -21,6 +21,7 @@
 
     var keytext = parameters.key;
     this.APIURL = _this.RESTHOST + "/api/";
+	var clinetauth = BIMVIZ.API.createClientCertificate();
 
     function init() {
         $.ajax({
@@ -49,7 +50,8 @@
             data: {
                 grant_type: 'restapi',
                 username: 'devkey',
-                password: keytext
+                password: keytext,
+				tokenstamp:clinetauth
             },
             dataType: 'json',
             success: function (result) {
